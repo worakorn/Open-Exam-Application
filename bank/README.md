@@ -75,4 +75,7 @@ This JSON structure can be used for:
 * The example JSON contains questions from "HTML Basics" domain, which is not accounted for in the DomainPercentages object.
 
 This README provides a clear understanding of the JSON data structure and its intended use.
-```
+
+### Disclaimer
+
+All of contents are AI Generated for educational purpose.
