@@ -1,0 +1,61 @@
+{
+    "Exam Name": "My Custom Exam",
+    "Number of Questions": 5,
+    "Default Time": 5,
+    "Instructions": "These are custom instructions for this specific exam bank.  Read them carefully!",
+    "DomainPercentages": {
+        "JavaScript Basics": 60,
+        "DOM Manipulation": 40
+    },
+    "Questions": [
+      {
+            "DomainOfKnowledge": "JavaScript Basics",
+            "Question": "What is the output of console.log(2 + '2');",
+            "Choices": ["22", "4", "0", "Error"],
+            "AnswerKey": "22",
+            "Explaination": "2 + '2' use string then it equals 22."
+        },
+        {
+            "DomainOfKnowledge": "JavaScript Basics",
+            "Question": "Which keyword declares a const variable?",
+            "Choices": ["define", "variable", "var", "let", "const"],
+            "AnswerKey": "const",
+            "Explaination": "'var', 'let', or 'const'."
+        },
+         {
+            "DomainOfKnowledge": "DOM Manipulation",
+            "Question": "Method to select by ID?",
+            "Choices": ["getElementByClass", "querySelector", "getElementById"],
+            "AnswerKey": "getElementById",
+            "Explaination": "getElementById() selects by ID."
+         },
+        {
+            "DomainOfKnowledge": "JavaScript Basics",
+            "Question": "Which is NOT a JavaScript data type?",
+            "Choices": ["Number", "String", "Boolean", "Character"],
+            "AnswerKey": "Character",
+            "Explaination": "JavaScript does not have a 'Character' data type."
+        },
+        {
+            "DomainOfKnowledge": "DOM Manipulation",
+            "Question": "How do you add a class to an element?",
+            "Choices": ["element.addClass('new-class')", "element.className = 'new-class'", "element.setAttribute('class', 'new-class')"],
+            "AnswerKey": "element.setAttribute('class', 'new-class')",
+            "Explaination": "Both .className and setAttribute work, but setAttribute is generally preferred for setting attributes."
+        },
+        {
+             "DomainOfKnowledge": "HTML Basics",
+             "Question": "Which tag is used to create a hyperlink?",
+             "Choices": ["<a>", "<link>", "<href>", "<img>"],
+             "AnswerKey": "<a>",
+             "Explaination": "The <a> tag defines a hyperlink."
+         },
+         {
+              "DomainOfKnowledge": "HTML Basics",
+              "Question": "What does HTML stand for?",
+              "Choices": ["Hyperlinks and Text Markup Language", "Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks Tool Markup Language"],
+              "AnswerKey": "Hyper Text Markup Language",
+              "Explaination": "HTML stands for Hyper Text Markup Language."
+          }
+    ]
+}
