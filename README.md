@@ -11,7 +11,10 @@ This Open Exam Application is AI-Generated software based on HTML and JavaScript
 *   **Custom Test Bank:** You may able create your own test bank in JSON that was allowed to load as a question bank.
 *   **Exam Taking:** Allow users to take exams and receive results.
 *   **Result Tracking:** Track user performance on exams.
-
+## Download
+*   ** exam.html ** stable version
+*   ** next-exam.html ** add time average per question
+*   ** next-exam2.html ** add time average per question and some confidence score.
 ## Disclaimer
 
 Please be aware that the content of this README, as well as the application itself, is generated with the assistance of AI. While efforts have been made to ensure accuracy and functionality, there may be limitations or unexpected behaviors. Use this application and its documentation with discretion.
