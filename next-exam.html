@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exam System</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+
+#exam-container {
+  width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+#question-container {
+  margin-bottom: 20px;
+}
+/* Added spacing */
+#question {
+    margin-bottom: 15px;
+}
+
+#timer {
+  margin-bottom: 10px;
+}
+
+.choice {
+  margin-bottom: 10px; /* Increased spacing */
+}
+
+.explanation {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+#results-container {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.review-link {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.review-list-item {
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.review-list-item:hover {
+  background-color: #f9f9f9;
+}
+
+/* Style for ALL review list (both during and post-exam) */
+.review-list-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.review-list-item:hover {
+    background-color: #f9f9f9;
+}
+/* Style for review details (both during and post-exam, initially hidden) */
+.review-details {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+}
+
+
+.domain-result {
+    margin-bottom: 5px;
+}
+
+#start-button {
+  margin-top: 20px; /* Add spacing above the button */
+  padding: 10px 20px;
+  font-size: 1.2em;
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+#start-button:hover{
+    background-color: #45a049;
+}
+
+#time-limit-message {
+  margin-bottom: 10px;
+  /*font-weight: bold;*/ /* Removed bold */
+}
+
+.nav-button {
+    padding: 8px 16px;
+    font-size: 1em;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 5px; /* Add some spacing around buttons */
+}
+.nav-button:hover {
+    background-color: #0056b3;
+}
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#submit-button {
+    background-color: #28a745; /* Green for submit */
+}
+#submit-button:hover{
+     background-color: #218838;
+}
+
+/* Progress Bar Styles */
+#progress-bar-container {
+    width: 100%;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden; /* Ensure rounded corners for inner bar */
+}
+
+#progress-bar {
+    width: 0%;
+    height: 10px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+     transition: width 0.5s ease; /* Smooth transition */
+}
+
+#progress-text {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="exam-container">
+  <h1 id="exam-title">Open Exam Application</h1> <!-- Changed title -->
+   <p id="welcome-message"></p>
+  <div id="instructions">
+    <!-- Welcome message -->
+    <p id="custom-instructions"></p>
+    <div id="default-instructions">
+      <p>Instructions:</p>
+      <ul>
+        <li>Click 'Start Exam' to begin.</li>
+        <li>Answer each question carefully.</li>
+        <li>Use the 'Next' and 'Back' buttons to navigate.</li>
+        <li>The exam will automatically submit when the timer runs out (if a timer is set).</li>
+        <li>You will see your grade after submitting.</li>
+        <li>Questions are presented in a random order.</li>
+        <li>You'll see results grouped by knowledge domain.</li>
+        <li>The review will group results by domain.</li>
+      </ul>
+     </div>
+    <label for="json-url">Load from URL (optional):</label>
+    <input type="text" id="json-url">
+    <button id="load-url-button">Load from URL</button>
+    <br>
+    <label for="json-file">Load from Local File (optional):</label>
+    <input type="file" id="json-file">
+    <button id="load-file-button">Load from File</button>
+    <br>
+     <label for="timer-duration-input">Exam Duration (minutes, 0 for unlimited):</label>
+    <input type="number" id="timer-duration-input" value="60">
+    <p id="time-limit-message"></p> <!-- Time limit message -->
+    <p id="question-count-message"></p> <!-- Question count -->
+     <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+    <p id="progress-text"></p>
+    <button id="start-button">Start Exam</button>
+  </div>
+
+  <div id="question-container" style="display: none;">
+    <div id="question"></div>
+      <!-- Choices will be added dynamically here -->
+    <button id="back-button" class="nav-button" disabled>Back</button>
+    <button id="next-button" class="nav-button">Next</button>
+    <!-- Removed review-during-button -->
+    <button id="submit-button" class="nav-button" style="display: none;">Submit</button>
+  </div>
+
+  <div id="timer" style="display: none;">Time Remaining: <span id="time-remaining"></span></div>
+
+  <div id="results-container" style="display: none;">
+    <h2>Results</h2>
+    <p>Correct Answers: <span id="correct-answers"></span></p>
+    <p>Incorrect Answers: <span id="incorrect-answers"></span></p>
+    <p>Percentage: <span id="percentage"></span>%</p>
+     <p>Average Time per Question: <span id="average-time"></span></p> <!-- Average time -->
+
+    <h3>Results by Domain</h3>
+    <div id="domain-results">
+        <!-- Domain-specific results will be displayed here -->
+    </div>
+
+    <p>Review Questions:</p>
+    <p>Correct: <span id="correct-review" class="review-link"></span></p>
+    <p>Incorrect: <span id="incorrect-review" class="review-link"></span></p>
+  </div>
+
+  <div id="review-container" style="display: none;">
+    <h3>Review Questions</h3>
+    <div id="review-list">
+        <!-- Questions will be listed here -->
+    </div>
+    <button id="review-submit-button" class="nav-button">Submit Exam</button> <!-- Submit in review -->
+    <button id="review-return-button" class="nav-button">Return to Results</button>
+  </div>
+</div>
+
+<script>
+// Default exam data (for demo mode)
+const defaultExamData = {
+  "Exam Name": "Demo Exam",
+  "Number of Questions": 3,
+  "Default Time": 1, //in minutes
+  "Questions": [
+    {
+        "DomainOfKnowledge": "JavaScript Basics",
+        "Question": "What is the output of console.log(2 + 2);",
+        "Choices": ["22", "4", "0", "Error"],
+        "AnswerKey": "4",
+        "Explaination": "2 + 2 equals 4."
+    },
+    {
+        "DomainOfKnowledge": "JavaScript Basics",
+        "Question": "Which keyword declares a variable?",
+        "Choices": ["define", "variable", "var"],
+        "AnswerKey": "var",
+        "Explaination": "'var', 'let', or 'const'."
+    },
+     {
+        "DomainOfKnowledge": "DOM Manipulation",
+        "Question": "Method to select by ID?",
+        "Choices": ["getElementByClass", "querySelector", "getElementById"],
+        "AnswerKey": "getElementById",
+        "Explaination": "getElementById() selects by ID."
+     }
+  ]
+};
+
+let examData = null; // Global variable to store loaded exam data
+
+const instructionsDiv = document.getElementById('instructions');
+const questionContainer = document.getElementById('question-container');
+const questionElement = document.getElementById('question');
+const backButton = document.getElementById('back-button');
+const nextButton = document.getElementById('next-button');
+const submitButton = document.getElementById('submit-button');
+const timerDiv = document.getElementById('timer');
+const timeRemainingSpan = document.getElementById('time-remaining');
+const resultsContainer = document.getElementById('results-container');
+const correctAnswersSpan = document.getElementById('correct-answers');
+const incorrectAnswersSpan = document.getElementById('incorrect-answers');
+const percentageSpan = document.getElementById('percentage');
+const startButton = document.getElementById('start-button');
+const correctReviewSpan = document.getElementById('correct-review');
+const incorrectReviewSpan = document.getElementById('incorrect-review');
+const reviewContainer = document.getElementById('review-container');
+const reviewListDiv = document.getElementById('review-list');
+const reviewReturnButton = document.getElementById('review-return-button');
+const domainResultsDiv = document.getElementById('domain-results');
+const loadUrlButton = document.getElementById('load-url-button');
+const jsonUrlInput = document.getElementById('json-url');
+const loadFileButton = document.getElementById('load-file-button');
+const jsonFileInput = document.getElementById('json-file');
+const examTitle = document.getElementById('exam-title');
+const customInstructions = document.getElementById('custom-instructions');
+const defaultInstructions = document.getElementById('default-instructions');
+const welcomeMessage = document.getElementById('welcome-message');
+const timeLimitMessage = document.getElementById('time-limit-message');
+const reviewSubmitButton = document.getElementById('review-submit-button');
+const timerDurationInput = document.getElementById('timer-duration-input');
+const questionCountMessage = document.getElementById('question-count-message'); // Question count
+const progressBarContainer = document.getElementById('progress-bar-container');
+const progressBar = document.getElementById('progress-bar');
+const progressText = document.getElementById('progress-text');
+const averageTimeSpan = document.getElementById('average-time'); // Average time
+
+
+let currentQuestionIndex = 0;
+let userAnswers = {};
+let correctAnswers = 0;
+let incorrectAnswers = 0;
+let timerInterval;
+let timeRemaining;
+let startTime; // To calculate elapsed time
+let timerDuration; // In minutes
+let correctQuestionsList = [];
+let incorrectQuestionsList = [];
+let randomizedExamData = [];  // Store the randomized question order
+
+startButton.addEventListener('click', startExam);
+backButton.addEventListener('click', goBack);
+nextButton.addEventListener('click', goNext);
+submitButton.addEventListener('click', submitExam);
+
+// Hide result review after submit
+correctReviewSpan.style.display = 'none'; //hide correct review span
+incorrectReviewSpan.style.display = 'none'; //hide correct review span
+
+reviewReturnButton.addEventListener('click', returnToResults); // Return to exam, not result page
+loadUrlButton.addEventListener('click', loadExamDataFromUrl);
+loadFileButton.addEventListener('click', loadExamDataFromFile);
+/* Removed reviewDuringButton event listener */
+reviewSubmitButton.addEventListener('click', submitExam); // Submit from review
+timerDurationInput.addEventListener('input', updateTimeLimitMessage); // Listen for changes
+
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function validateExamData(data) {
+    if (!data) {
+        alert("Error: Exam data is null or undefined.");
+        return false;
+    }
+    if (!data["Exam Name"]) {
+        alert("Error: 'Exam Name' is missing.");
+        return false;
+    }
+    if (typeof data["Number of Questions"] !== 'number' || data["Number of Questions"] <= 0) {
+      alert("Error: 'Number of Questions' must be a positive number.");
+      return false;
+    }
+     if (typeof data["Default Time"] !== 'number' || data["Default Time"] < 0) {
+        alert("Error: 'Default Time' must be a non-negative number.");
+        return false;
+    }
+    if (!Array.isArray(data.Questions) || data.Questions.length === 0) {
+        alert("Error: 'Questions' must be a non-empty array.");
+        return false;
+    }
+
+    for (const question of data.Questions) {
+       if (!question.DomainOfKnowledge || !question.Question || !question.Choices || !question.AnswerKey || !question.Explaination) {
+          alert("Error: A question is missing required fields (DomainOfKnowledge, Question, Choices, AnswerKey, Explaination).");
+          return false;
+        }
+       if (!Array.isArray(question.Choices) || question.Choices.length < 2) {
+            alert("Error: Each question must have at least two choices.");
+            return false;
+       }
+       if (!question.Choices.includes(question.AnswerKey)) {
+        alert(`Error: The AnswerKey '${question.AnswerKey}' is not present in the Choices for the question: ${question.Question}`);
+        return false;
+       }
+    }
+
+    //Check domain percentage (optional field)
+    if (data.DomainPercentages) {
+        if (typeof data.DomainPercentages !== 'object')
+        {
+            alert("Error: DomainPercentages must be an object");
+        }
+        let totalPercentage = 0;
+        for (const domain in data.DomainPercentages) {
+            const percentage = data.DomainPercentages[domain];
+            if (typeof percentage !== 'number' || percentage < 0 || percentage > 100) {
+                alert(`Error: Invalid percentage for domain '${domain}'.  Percentages must be between 0 and 100.`);
+                return false;
+            }
+            totalPercentage += percentage;
+        }
+
+        if (totalPercentage > 100) {
+          alert("Error: Total domain percentages exceed 100%.");
+          return false;
+        }
+    }
+
+    return true; // All checks passed
+}
+
+function prepareExamQuestions(data) {
+  const numQuestionsToSelect = data["Number of Questions"];
+  let selectedQuestions = [];
+
+  if (data.DomainPercentages) {
+    const domains = Object.keys(data.DomainPercentages);
+    let remainingPercentage = 100;
+    let remainingQuestions = numQuestionsToSelect;
+
+
+    // Select questions based on specified percentages.
+    for (const domain of domains) {
+        const percentage = data.DomainPercentages[domain];
+        remainingPercentage -= percentage;  // Keep track for the "remainder"
+        const numQuestionsForDomain = Math.round((percentage / 100) * numQuestionsToSelect);
+        remainingQuestions -= numQuestionsForDomain;
+
+        const domainQuestions = data.Questions.filter(q => q.DomainOfKnowledge === domain);
+        shuffleArray(domainQuestions);
+        selectedQuestions = selectedQuestions.concat(domainQuestions.slice(0, numQuestionsForDomain));
+    }
+
+     // Randomly select questions for the remaining percentage.
+    if (remainingPercentage > 0 && remainingQuestions >0) {
+        const otherQuestions = data.Questions.filter(q => !domains.includes(q.DomainOfKnowledge));
+        shuffleArray(otherQuestions);
+        selectedQuestions = selectedQuestions.concat(otherQuestions.slice(0, remainingQuestions));
+    }
+
+
+  } else {
+    // If no percentages specified, select randomly from all questions.
+    const allQuestions = [...data.Questions]; //copy array
+    shuffleArray(allQuestions);
+    selectedQuestions = allQuestions.slice(0, numQuestionsToSelect);
+  }
+
+    //Final shuffle
+    shuffleArray(selectedQuestions);
+    return selectedQuestions;
+
+}
+
+
+function loadExamDataFromUrl() {
+    const url = jsonUrlInput.value.trim();
+    if (!url) {
+        alert("Please enter a URL.");
+        return;
+    }
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (validateExamData(data)) {
+                examData = data;
+                onExamDataLoaded(); // Call the function to update the UI
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+            alert(`Failed to load exam data from URL.  Error: ${error.message}`);
+        });
+}
+function loadExamDataFromFile() {
+  const file = jsonFileInput.files[0];
+  if (!file) {
+    alert("Please select a file.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (validateExamData(data)) {
+          examData = data;
+           onExamDataLoaded(); // Call the function to update the UI
+      }
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      alert("Failed to load or parse JSON file. Make sure it's a valid JSON file.  Error: " + error.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function onExamDataLoaded() {
+    // Hide the file and URL input fields and buttons
+    jsonUrlInput.style.display = 'none';
+    loadUrlButton.style.display = 'none';
+    jsonFileInput.style.display = 'none';
+    loadFileButton.style.display = 'none';
+    document.querySelector("label[for='json-url']").style.display = 'none';  // Hide label
+    document.querySelector("label[for='json-file']").style.display = 'none';
+
+     // Set the default value for the timer input
+     timerDurationInput.value = examData["Default Time"];
+
+    // Update the welcome message
+    welcomeMessage.innerText = `Exam: ${examData["Exam Name"]}`;
+
+    // Update instructions if present in the loaded data
+    if (examData.Instructions) {
+        customInstructions.innerText = examData.Instructions;
+        defaultInstructions.style.display = 'none'; // Hide default
+    } else {
+        customInstructions.innerText = ''; // Clear any previous
+        defaultInstructions.style.display = 'block';
+    }
+    updateTimeLimitMessage(); // Initial time limit message
+
+    // Display the number of questions in the exam bank
+    const numQuestionsInBank = examData.Questions.length;
+    questionCountMessage.innerText = `This exam will have ${examData["Number of Questions"]} questions out of ${numQuestionsInBank} questions in the bank.`;
+}
+
+function updateTimeLimitMessage() {
+    const duration = parseInt(timerDurationInput.value, 10);
+     if (isNaN(duration) || duration < 0) {
+        alert("Please enter a valid duration (non-negative number).");
+        timerDurationInput.value = examData ? examData["Default Time"] : 0; //reset to default value
+        return;
+    }
+    if (duration > 0) {
+      timeLimitMessage.innerText = `You have ${duration} minutes to complete the exam.`;
+    } else {
+      timeLimitMessage.innerText = "This exam has no time limit.";
+    }
+}
+
+function startExam() {
+    // Use default data if no data loaded.
+    if (!examData) {
+        examData = defaultExamData;
+        onExamDataLoaded(); //call to change welcome message, time limit, instruction
+        alert("Running in demo mode with default exam data.");
+    }
+
+    // Get timer duration from input field
+    timerDuration = parseInt(timerDurationInput.value, 10);
+     if (isNaN(timerDuration) || timerDuration < 0) {
+        alert("Please enter a valid duration (non-negative number).");
+        return; // Prevent starting the exam
+    }
+
+
+    instructionsDiv.style.display = 'none';
+    questionContainer.style.display = 'block';
+    timerDiv.style.display = 'block';
+    examTitle.innerText = examData["Exam Name"];  // Update the exam title
+
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctQuestionsList = [];
+    incorrectQuestionsList = [];
+
+    // Prepare the questions (randomize and select based on percentages)
+    randomizedExamData = prepareExamQuestions(examData);
+    startTime = Date.now(); // Record the start time
+
+    if (timerDuration > 0) {
+        timeRemaining = timerDuration * 60; // Convert minutes to seconds
+        updateTimerDisplay();
+        startTimer();
+    } else {
+        timeRemainingSpan.innerText = "Unlimited";
+    }
+
+    showQuestion();
+    updateProgress();
+}
+//Add this function to update progress bar and text
+function updateProgress() {
+    const totalQuestions = randomizedExamData.length;
+    const answeredQuestions = Object.keys(userAnswers).length; // Count answered questions
+    const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+
+    progressBar.style.width = `${progressPercentage}%`;
+    progressText.innerText = `${answeredQuestions} / ${totalQuestions} Questions Answered`;
+}
+
+function showQuestion() {
+  const questionData = randomizedExamData[currentQuestionIndex];
+  questionElement.innerText = `${currentQuestionIndex + 1}. ${questionData.Question}`;
+
+  // Clear previous choices
+  const choicesContainer = document.querySelector('#question-container'); //get container
+  choicesContainer.querySelectorAll('.choice').forEach(el => el.remove()); //remove all .choice
+
+  // Dynamically create choice radio buttons
+    questionData.Choices.forEach((choice, index) => {
+        const choiceDiv = document.createElement('div');
+        choiceDiv.classList.add('choice');
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'answer';
+        radio.value = choice;
+        radio.id = `choice${index + 1}`; //create unique ID
+        const label = document.createElement('label');
+        label.htmlFor = `choice${index + 1}`; //connect label to the ID
+        label.innerText = choice;
+
+        choiceDiv.appendChild(radio);
+        choiceDiv.appendChild(label);
+        choicesContainer.insertBefore(choiceDiv, backButton); //Insert before navigation button
+    });
+
+
+
+  // Restore user's previous answer
+  if (userAnswers[currentQuestionIndex] !== undefined) {
+    const answer = userAnswers[currentQuestionIndex];
+    const radio = document.querySelector(`input[name="answer"][value="${answer}"]`);
+    if (radio) { //check if not null (possible when choice change)
+       radio.checked = true;
+    }
+
+  }
+
+    backButton.disabled = currentQuestionIndex === 0;
+    //nextButton.disabled = currentQuestionIndex === randomizedExamData.length - 1; // No need to disable
+
+    if (currentQuestionIndex === randomizedExamData.length - 1) {
+        nextButton.style.display = 'none';
+        submitButton.style.display = 'inline-block';
+    } else {
+        nextButton.style.display = 'inline-block';
+        submitButton.style.display = 'none';
+    }
+    updateProgress(); // Update the progress bar
+}
+
+
+function goNext() {
+  saveAnswer();
+  currentQuestionIndex++;
+  showQuestion();
+}
+
+function goBack() {
+  saveAnswer();
+  currentQuestionIndex--;
+  showQuestion();
+}
+
+function saveAnswer() {
+  const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+  if (selectedAnswer) {
+    userAnswers[currentQuestionIndex] = selectedAnswer.value;
+  }
+  updateProgress(); //update after save
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    updateTimerDisplay();
+
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      submitExam();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(timeRemaining / 60);
+  const seconds = timeRemaining % 60;
+  timeRemainingSpan.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function submitExam() {
+    saveAnswer();
+    clearInterval(timerInterval);
+
+    questionContainer.style.display = 'none';
+    timerDiv.style.display = 'none';
+    resultsContainer.style.display = 'block';
+    submitButton.style.display = 'none';
+    nextButton.style.display = 'none';
+    backButton.style.display = 'none';
+
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctQuestionsList = [];
+    incorrectQuestionsList = [];
+
+     // Calculate elapsed time
+    const endTime = Date.now();
+    const elapsedTimeInSeconds = (endTime - startTime) / 1000;
+    const numQuestionsAnswered = Object.keys(userAnswers).length; // Use this for average
+    const averageTimePerQuestion = numQuestionsAnswered > 0
+        ? (elapsedTimeInSeconds / numQuestionsAnswered).toFixed(2)
+        : 0;
+
+    averageTimeSpan.innerText = `${averageTimePerQuestion} seconds`;
+
+
+    // Grade by Domain
+    const domainResults = {};
+
+    for (let i = 0; i < randomizedExamData.length; i++) {
+        const questionData = randomizedExamData[i];
+        const correctAnswer = questionData.AnswerKey;
+        const userAnswer = userAnswers[i];
+        const domain = questionData.DomainOfKnowledge;
+
+        if (!domainResults[domain]) {
+            domainResults[domain] = { correct: 0, total: 0 };
+        }
+
+        domainResults[domain].total++;
+
+        if (userAnswer === correctAnswer) {
+            domainResults[domain].correct++;
+            correctAnswers++;
+            correctQuestionsList.push(i);
+        } else {
+            incorrectAnswers++;
+            incorrectQuestionsList.push(i);
+        }
+    }
+
+    const percentage = (correctAnswers / randomizedExamData.length) * 100;
+
+    correctAnswersSpan.innerText = `${correctAnswers}/${randomizedExamData.length}`;
+    incorrectAnswersSpan.innerText = `${incorrectAnswers}/${randomizedExamData.length}`;
+    percentageSpan.innerText = percentage.toFixed(2);
+
+    // Display Domain Results
+    domainResultsDiv.innerHTML = '';
+    for (const domain in domainResults) {
+        const { correct, total } = domainResults[domain];
+        const domainPercentage = (correct / total) * 100;
+        const domainResultElement = document.createElement('div');
+        domainResultElement.classList.add('domain-result');
+        domainResultElement.innerText = `${domain}: ${correct}/${total} (${domainPercentage.toFixed(2)}%)`;
+        domainResultsDiv.appendChild(domainResultElement);
+    }
+
+    // Conditionally show the Review Section After the exam has been submitted
+    if (correctQuestionsList.length === 0) {
+        correctReviewSpan.style.display = 'none';
+    } else {
+      correctReviewSpan.style.display = 'inline';
+      correctReviewSpan.innerText = `Correct Questions (${correctQuestionsList.length})`;
+      correctReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(correctQuestionsList); });
+    }
+
+    if (incorrectQuestionsList.length === 0) {
+        incorrectReviewSpan.style.display = 'none';
+    } else {
+        incorrectReviewSpan.style.display = 'inline';
+        incorrectReviewSpan.innerText = `Incorrect Questions (${incorrectQuestionsList.length})`;
+        incorrectReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(incorrectQuestionsList); });
+    }
+
+}
+// Modified reviewQuestionsByDomain function
+function reviewQuestionsByDomain(questionList) {
+    //No check for during the exam because now all review show the answer.
+    if (questionList.length === 0) {
+        alert("No questions to review in this category.");
+        return;
+    }
+
+    questionContainer.style.display = 'none';
+    timerDiv.style.display = 'none';
+    resultsContainer.style.display = 'none';
+    reviewContainer.style.display = 'block';
+    reviewListDiv.innerHTML = '';
+
+    // Always show details (answers, explanations), grouped by domain
+
+    const domainGroups = {};
+    questionList.forEach(questionIndex => {
+        const questionData = randomizedExamData[questionIndex];
+        const domain = questionData.DomainOfKnowledge;
+
+        if (!domainGroups[domain]) {
+            domainGroups[domain] = [];
+        }
+        domainGroups[domain].push(questionIndex);
+    });
+
+    for (const domain in domainGroups) {
+        const domainQuestions = domainGroups[domain];
+        const domainHeader = document.createElement('h4');
+        domainHeader.innerText = domain;
+        reviewListDiv.appendChild(domainHeader);
+
+        domainQuestions.forEach(questionIndex => {
+            const questionData = randomizedExamData[questionIndex];
+            const userAnswer = userAnswers[questionIndex] || "Not Answered";
+            const listItem = document.createElement('div');
+            listItem.classList.add('review-list-item'); // Use the original class
+            listItem.innerHTML = `
+                Question ${questionIndex + 1}: ${questionData.Question}
+                <span style="float: right;">▾</span>
+                <div class="review-details">
+                    <p>Your Answer: ${userAnswer}</p>
+                    <p>Correct Answer: ${questionData.AnswerKey}</p>
+                    <p class="explanation">Explanation: ${questionData.Explaination}</p>
+                </div>`;
+
+            listItem.addEventListener('click', () => {
+                const details = listItem.querySelector('.review-details');
+                // Toggle display with "inline" for proper spacing.
+                details.style.display = details.style.display === 'inline' ? 'none' : 'inline';
+            });
+            reviewListDiv.appendChild(listItem);
+        });
+    }
+
+    reviewReturnButton.innerText = "Return to Results";
+    reviewSubmitButton.style.display = 'none'; // Hide submit button after exam.
+}
+
+function returnToExam() {
+    reviewContainer.style.display = 'none';
+    questionContainer.style.display = 'block';
+    timerDiv.style.display = 'block'; // Show timer again
+    showQuestion(); // Redisplay the current question
+}
+//add function
+function returnToResults() {
+  reviewContainer.style.display = 'none';
+  resultsContainer.style.display = 'block';
+}
+
+</script>
+
+</body>
+</html>
