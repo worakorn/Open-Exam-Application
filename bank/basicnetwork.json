@@ -1,0 +1,581 @@
+{
+    "Exam Name": "Basic Computer Network",
+    "Number of Questions": 50,
+    "Default Time": 50,
+    "Instructions": "These are custom instructions for this specific exam bank.  Read them carefully!",
+    "DomainPercentages": {
+        "Computer Network": 70,
+        "Troubleshooting": 20,
+        "NetworkDesign": 10
+    },
+    "Questions": [
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "อุปกรณ์ใดทำหน้าที่เป็นจุดเชื่อมต่อหลักในเครือข่าย LAN และส่งข้อมูลไปยังอุปกรณ์ปลายทางที่ถูกต้อง?",
+            "Choices": ["โมเด็ม (Modem)", "เราเตอร์ (Router)", "ฮับ (Hub)", "สวิตช์ (Switch)"],
+            "AnswerKey": "สวิตช์ (Switch)",
+            "Explaination": "สวิตช์เป็นอุปกรณ์หลักที่ใช้ในการเชื่อมต่ออุปกรณ์ใน LAN และส่งข้อมูลไปยังอุปกรณ์ปลายทางที่ถูกต้อง โดยใช้ MAC address ในการระบุ ในขณะที่ฮับจะกระจายข้อมูลไปยังทุกอุปกรณ์"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "โปรโตคอลใดใช้สำหรับการรับส่งอีเมลระหว่างเซิร์ฟเวอร์?",
+            "Choices": ["HTTP (Hypertext Transfer Protocol)", "FTP (File Transfer Protocol)", "SMTP (Simple Mail Transfer Protocol)", "TCP (Transmission Control Protocol)"],
+            "AnswerKey": "SMTP (Simple Mail Transfer Protocol)",
+            "Explaination": "SMTP เป็นโปรโตคอลหลักที่ใช้ในการรับส่งอีเมลระหว่างเซิร์ฟเวอร์ ในขณะที่โปรโตคอลอื่น ๆ มีหน้าที่แตกต่างกัน"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ที่อยู่ IP แบบใดที่ใช้สำหรับการสื่อสารภายในเครือข่ายส่วนตัว (Private Network)?",
+            "Choices": ["192.168.1.0", "172.16.0.0", "10.0.0.0", "ถูกทุกข้อ"],
+            "AnswerKey": "ถูกทุกข้อ",
+            "Explaination": "ที่อยู่ IP ทั้งสามช่วงเป็นที่อยู่ IP แบบส่วนตัวที่ใช้ในการสื่อสารภายในเครือข่าย LAN"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "อุปกรณ์ใดทำหน้าที่แปลงสัญญาณดิจิทัลจากคอมพิวเตอร์ให้เป็นสัญญาณแอนะล็อกเพื่อส่งผ่านสายโทรศัพท์?",
+            "Choices": ["เราเตอร์ (Router)", "สวิตช์ (Switch)", "โมเด็ม (Modem)", "ฮับ (Hub)"],
+            "AnswerKey": "โมเด็ม (Modem)",
+            "Explaination": "โมเด็มเป็นอุปกรณ์ที่ใช้ในการแปลงสัญญาณดิจิทัลเป็นแอนะล็อกและแปลงกลับ ในขณะที่อุปกรณ์อื่น ๆ มีหน้าที่แตกต่างกัน"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "เลเยอร์ใดในโมเดล OSI ที่รับผิดชอบในการจัดเส้นทางการรับส่งข้อมูลระหว่างเครือข่าย?",
+            "Choices": ["เลเยอร์ทรานสปอร์ต (Transport Layer)", "เลเยอร์เน็ตเวิร์ก (Network Layer)", "เลเยอร์ดาต้าลิงค์ (Data Link Layer)", "เลเยอร์แอปพลิเคชัน (Application Layer)"],
+            "AnswerKey": "เลเยอร์เน็ตเวิร์ก (Network Layer)",
+            "Explaination": "เลเยอร์เน็ตเวิร์กเป็นเลเยอร์ที่รับผิดชอบในการจัดเส้นทางและกำหนดที่อยู่ IP ในการรับส่งข้อมูลระหว่างเครือข่าย"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ข้อใดคือความแตกต่างหลักระหว่าง TCP และ UDP?",
+            "Choices": ["TCP เร็วกว่า UDP", "UDP มีการตรวจสอบข้อผิดพลาด ในขณะที่ TCP ไม่มี", "TCP มีการรับประกันการส่งข้อมูล ในขณะที่ UDP ไม่มี", "UDP ใช้สำหรับส่งอีเมล ในขณะที่ TCP ใช้สำหรับการสตรีมวิดีโอ"],
+            "AnswerKey": "TCP มีการรับประกันการส่งข้อมูล ในขณะที่ UDP ไม่มี",
+            "Explaination": "TCP มีการรับประกันการส่งข้อมูลที่ถูกต้องและครบถ้วน ในขณะที่ UDP ไม่มีการรับประกัน แต่มีความเร็วที่สูงกว่า"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "อุปกรณ์ใดทำหน้าที่ในการเชื่อมต่อเครือข่ายที่แตกต่างกัน และกำหนดเส้นทางการรับส่งข้อมูล?",
+            "Choices": ["สวิตช์ (Switch)", "ฮับ (Hub)", "เราเตอร์ (Router)", "โมเด็ม (Modem)"],
+            "AnswerKey": "เราเตอร์ (Router)",
+            "Explaination": "เราเตอร์ทำหน้าที่ในการเชื่อมต่อเครือข่ายที่แตกต่างกัน และกำหนดเส้นทางการรับส่งข้อมูลโดยใช้ IP address"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "โปรโตคอลใดใช้สำหรับการกำหนดที่อยู่ IP ให้กับอุปกรณ์ในเครือข่ายโดยอัตโนมัติ?",
+            "Choices": ["DNS (Domain Name System)", "DHCP (Dynamic Host Configuration Protocol)", "ARP (Address Resolution Protocol)", "ICMP (Internet Control Message Protocol)"],
+            "AnswerKey": "DHCP (Dynamic Host Configuration Protocol)",
+            "Explaination": "DHCP ทำหน้าที่ในการกำหนดที่อยู่ IP ให้กับอุปกรณ์ในเครือข่ายโดยอัตโนมัติ ทำให้ง่ายต่อการจัดการเครือข่าย"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ข้อใดคือประโยชน์หลักของการใช้ VPN (Virtual Private Network)?",
+            "Choices": ["เพิ่มความเร็วในการเชื่อมต่ออินเทอร์เน็ต", "เพิ่มความปลอดภัยและความเป็นส่วนตัวในการเชื่อมต่ออินเทอร์เน็ต", "ลดการใช้พลังงานของอุปกรณ์เครือข่าย", "เพิ่มจำนวนอุปกรณ์ที่สามารถเชื่อมต่อในเครือข่ายได้"],
+            "AnswerKey": "เพิ่มความปลอดภัยและความเป็นส่วนตัวในการเชื่อมต่ออินเทอร์เน็ต",
+            "Explaination": "VPN สร้างช่องทางการเชื่อมต่อที่ปลอดภัยและเข้ารหัส ทำให้ข้อมูลส่วนตัวไม่ถูกเปิดเผย"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "สายสัญญาณชนิดใดที่ใช้ในการส่งข้อมูลด้วยแสง?",
+            "Choices": ["สายคู่บิดเกลียว (Twisted-pair cable)", "สายโคแอกเชียล (Coaxial cable)", "สายใยแก้วนำแสง (Fiber-optic cable)", "สายโทรศัพท์ (Telephone line)"],
+            "AnswerKey": "สายใยแก้วนำแสง (Fiber-optic cable)",
+            "Explaination": "สายใยแก้วนำแสงใช้แสงในการส่งข้อมูล ทำให้มีความเร็วสูงและลดสัญญาณรบกวน"
+        },
+         {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "อุปกรณ์เครือข่ายใดที่ทำงานในเลเยอร์ที่ 2 ของโมเดล OSI?",
+            "Choices": ["เราเตอร์ (Router)", "สวิตช์ (Switch)", "ฮับ (Hub)","โมเด็ม (Modem)"],
+            "AnswerKey": "สวิตช์ (Switch)",
+            "Explaination": "สวิตช์ทำงานในเลเยอร์ที่ 2 (Data Link Layer) โดยใช้ MAC address ในการส่งข้อมูล"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ข้อใดคือหน้าที่หลักของ DNS (Domain Name System)?",
+            "Choices": ["กำหนดที่อยู่ IP ให้กับอุปกรณ์ในเครือข่าย", "แปลงชื่อโดเมนเป็นที่อยู่ IP", "จัดเส้นทางการรับส่งข้อมูลในเครือข่าย", "ตรวจสอบข้อผิดพลาดในการรับส่งข้อมูล"],
+            "AnswerKey": "แปลงชื่อโดเมนเป็นที่อยู่ IP",
+            "Explaination": "DNS ทำหน้าที่ในการแปลงชื่อโดเมน (เช่น google.com) เป็นที่อยู่ IP (เช่น 172.217.160.142)"
+        },
+           {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "โปรโตคอลใดใช้สำหรับการตรวจสอบความถูกต้องของข้อมูลที่รับส่งในเครือข่าย?",
+            "Choices": ["TCP (Transmission Control Protocol)", "UDP (User Datagram Protocol)", "ICMP (Internet Control Message Protocol)", "ARP (Address Resolution Protocol)"],
+            "AnswerKey": "TCP (Transmission Control Protocol)",
+            "Explaination": "TCP มีกลไกในการตรวจสอบความถูกต้องของข้อมูล ทำให้มั่นใจได้ว่าข้อมูลจะถูกส่งอย่างครบถ้วน"
+        },
+         {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ข้อใดคือความหมายของ \"subnet mask\"?",
+            "Choices": ["ที่อยู่ IP ของเราเตอร์", "ส่วนที่ระบุเครือข่ายและส่วนที่ระบุโฮสต์ในที่อยู่ IP", "ที่อยู่ MAC ของอุปกรณ์ในเครือข่าย", "ชื่อโดเมนของเว็บไซต์"],
+            "AnswerKey": "ส่วนที่ระบุเครือข่ายและส่วนที่ระบุโฮสต์ในที่อยู่ IP",
+            "Explaination": "Subnet mask ใช้เพื่อแบ่งส่วนที่อยู่ IP ว่าส่วนใดเป็นส่วนเครือข่ายและส่วนใดเป็นส่วนโฮสต์"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "บริษัทของคุณมีสำนักงาน 2 แห่ง ตั้งอยู่คนละเมือง และต้องการเชื่อมต่อเครือข่ายของทั้งสองสำนักงานเข้าด้วยกัน เพื่อให้พนักงานสามารถเข้าถึงข้อมูลและแอปพลิเคชันร่วมกันได้ เทคโนโลยีเครือข่ายใดที่เหมาะสมที่สุดในการเชื่อมต่อสำนักงานทั้งสองแห่ง?",
+            "Choices": ["LAN (Local Area Network)", "MAN (Metropolitan Area Network)", "WAN (Wide Area Network)", "VLAN (Virtual Local Area Network)"],
+            "AnswerKey": "WAN (Wide Area Network)",
+            "Explaination": "WAN เป็นเครือข่ายที่ครอบคลุมพื้นที่กว้างขวาง เหมาะสำหรับการเชื่อมต่อเครือข่ายที่อยู่ห่างไกลกัน"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "พนักงานในแผนกการตลาดของคุณแจ้งว่าไม่สามารถเข้าถึงเว็บไซต์บางแห่งได้ แต่เว็บไซต์อื่น ๆ ยังคงเข้าถึงได้ปกติ ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่ DNS Server", "ปัญหาที่ DHCP Server", "ปัญหาที่ Switch", "ปัญหาที่สาย Lan"],
+            "AnswerKey": "ปัญหาที่ DNS Server",
+            "Explaination": "DNS Server ทำหน้าที่แปลงชื่อโดเมนเป็น IP address หากมีปัญหา อาจทำให้เข้าถึงเว็บไซต์บางแห่งไม่ได้"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเพิ่มความปลอดภัยให้กับเครือข่าย Wi-Fi ในสำนักงานของคุณ โดยต้องการป้องกันไม่ให้ผู้ที่ไม่ได้รับอนุญาตเข้าถึงเครือข่าย การตั้งค่าใดที่คุณควรให้ความสำคัญมากที่สุด?",
+            "Choices": ["ตั้งค่า IP address แบบ static", "เปิดใช้งาน DHCP Server", "ตั้งค่ารหัสผ่าน Wi-Fi ที่แข็งแกร่ง", "เปิดใช้งาน File sharing"],
+            "AnswerKey": "ตั้งค่ารหัสผ่าน Wi-Fi ที่แข็งแกร่ง",
+            "Explaination": "รหัสผ่านที่แข็งแกร่งเป็นปราการด่านแรกในการป้องกันการเข้าถึงเครือข่าย Wi-Fi โดยไม่ได้รับอนุญาต"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณสังเกตเห็นว่าความเร็วอินเทอร์เน็ตในสำนักงานของคุณช้าลงอย่างมากในช่วงเวลาทำงานปกติ สาเหตุที่เป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่สาย Lan ชำรุด", "มีผู้ใช้จำนวนมากดาวน์โหลดไฟล์ขนาดใหญ่พร้อมกัน", "ปัญหาที่การตั้งค่า IP address", "อุปกรณ์ Hub ในระบบมีปัญหา"],
+            "AnswerKey": "มีผู้ใช้จำนวนมากดาวน์โหลดไฟล์ขนาดใหญ่พร้อมกัน",
+            "Explaination": "การดาวน์โหลดไฟล์ขนาดใหญ่พร้อมกันจะใช้แบนด์วิดท์จำนวนมาก ส่งผลให้ความเร็วอินเทอร์เน็ตช้าลง"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเชื่อมต่ออุปกรณ์ IoT (Internet of Things) จำนวนมากเข้ากับเครือข่ายในบ้านของคุณ เทคโนโลยีเครือข่ายไร้สายใดที่เหมาะสมที่สุดสำหรับอุปกรณ์ IoT?",
+            "Choices": ["Wi-Fi", "Bluetooth", "Zigbee", "Ethernet"],
+            "AnswerKey": "Zigbee",
+            "Explaination": "Zigbee เป็นเทคโนโลยีไร้สายที่ใช้พลังงานต่ำ เหมาะสำหรับอุปกรณ์ IoT ที่ต้องการอายุการใช้งานแบตเตอรี่ที่ยาวนาน"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการตรวจสอบว่าคอมพิวเตอร์ของคุณสามารถเชื่อมต่อกับเครื่องพิมพ์ในเครือข่ายได้หรือไม่ คำสั่งใดที่คุณสามารถใช้ใน Command Prompt เพื่อทดสอบการเชื่อมต่อ?",
+            "Choices": ["ipconfig", "tracert", "ping", "netstat"],
+            "AnswerKey": "ping",
+            "Explaination": "คำสั่ง ping จะส่งแพ็กเก็ตข้อมูลไปยังเครื่องพิมพ์และตรวจสอบว่าได้รับการตอบกลับหรือไม่"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการแบ่งกลุ่มผู้ใช้ในเครือข่าย LAN ของคุณออกเป็นกลุ่มย่อย ๆ เพื่อเพิ่มความปลอดภัยและประสิทธิภาพ เทคโนโลยีใดที่คุณควรใช้?",
+            "Choices": ["NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "VLAN (Virtual Local Area Network)", "VPN (Virtual Private Network)"],
+            "AnswerKey": "VLAN (Virtual Local Area Network)",
+            "Explaination": "VLAN ช่วยให้คุณสามารถแบ่งเครือข่าย LAN ออกเป็นกลุ่มย่อย ๆ ได้ โดยแต่ละกลุ่มจะมีโดเมนการออกอากาศแยกกัน"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเข้าถึงไฟล์และแอปพลิเคชันจากคอมพิวเตอร์ที่บ้านของคุณในขณะที่ทำงานจากสำนักงาน เทคโนโลยีใดที่คุณควรใช้เพื่อสร้างการเชื่อมต่อที่ปลอดภัย?",
+            "Choices": ["FTP (File Transfer Protocol)", "SSH (Secure Shell)", "VPN (Virtual Private Network)", "HTTP (Hypertext Transfer Protocol)"],
+            "AnswerKey": "VPN (Virtual Private Network)",
+            "Explaination": "VPN จะสร้างช่องทางการเชื่อมต่อที่ปลอดภัยและเข้ารหัสระหว่างคอมพิวเตอร์ที่บ้านและสำนักงานของคุณ"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ผู้ใช้ในเครือข่ายของคุณแจ้งว่าไม่สามารถเข้าถึงอินเทอร์เน็ตได้เลย ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่ Switch ในชั้นวางสายสื่อสาร", "ปัญหาที่ DNS Server", "ปัญหาที่ DHCP Server", "ปัญหาที่ Router ของทาง ISP"],
+            "AnswerKey": "ปัญหาที่ Router ของทาง ISP",
+            "Explaination": "หากเป็นปัญหาที่ router ของทาง ISP จะทำให้อุปกรณ์ทั้งหมดในเครือข่าย ไม่สามารถเชื่อมต่อออกไปใช้งานอินเตอร์เน็ตได้เลย"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเพิ่มความเร็วในการรับส่งข้อมูลในเครือข่าย LAN ของคุณ อุปกรณ์ใดที่คุณควรเปลี่ยนจากอุปกรณ์เก่าเพื่อเพิ่มประสิทธิภาพ?",
+            "Choices": ["ฮับ (Hub)", "เราเตอร์ (Router)", "โมเด็ม (Modem)", "เครื่องพิมพ์ (Printer)"],
+            "AnswerKey": "ฮับ (Hub)",
+            "Explaination": "เปลี่ยนจาก ฮับ (Hub) เป็น สวิตช์ (Switch) เพราะว่า Switch จะส่งข้อมูลไปยังปลายทางโดยตรง ไม่กระจายข้อมูลไปทุก Port ทำให้การรับส่งข้อมูลเร็วกว่า"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ในสำนักงานของคุณมีพนักงานหลายคนใช้คอมพิวเตอร์เชื่อมต่อกับเครือข่ายเดียวกัน แต่มีปัญหาเรื่องการแชร์ไฟล์และเครื่องพิมพ์ร่วมกันไม่สะดวก อุปกรณ์ใดที่เหมาะสมที่สุดในการจัดการการรับส่งข้อมูลในเครือข่ายนี้ เพื่อให้การแชร์ทรัพยากรเป็นไปอย่างมีประสิทธิภาพ?",
+            "Choices": ["ฮับ (Hub)", "โมเด็ม (Modem)", "เราเตอร์ (Router)", "สวิตช์ (Switch)"],
+            "AnswerKey": "สวิตช์ (Switch)",
+            "Explaination": "สวิตช์ช่วยจัดการการรับส่งข้อมูลได้ดีกว่าฮับ เพราะส่งข้อมูลไปยังปลายทางที่ต้องการเท่านั้น ลดการชนกันของข้อมูล ทำให้แชร์ทรัพยากรได้ดีขึ้น"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเชื่อมต่อเครือข่ายในบ้านของคุณเข้ากับอินเทอร์เน็ต แต่คุณต้องการให้มีการรักษาความปลอดภัยในการเชื่อมต่อด้วย อุปกรณ์ใดที่คุณควรใช้ในการเชื่อมต่อเครือข่ายบ้านของคุณกับอินเทอร์เน็ต และมีการรักษาความปลอดภัยในการเชื่อมต่อ?",
+            "Choices": ["ฮับ (Hub)", "สวิตช์ (Switch)", "เราเตอร์ (Router)", "โมเด็ม (Modem)"],
+            "AnswerKey": "เราเตอร์ (Router)",
+            "Explaination": "เราเตอร์มีฟังก์ชันไฟร์วอลล์ในตัว ช่วยป้องกันการเข้าถึงเครือข่ายจากภายนอกที่ไม่ได้รับอนุญาต"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการตรวจสอบว่าคอมพิวเตอร์ของคุณสามารถเชื่อมต่อกับเซิร์ฟเวอร์ปลายทางได้หรือไม่ และต้องการทราบเส้นทางที่ข้อมูลเดินทางไปถึงเซิร์ฟเวอร์ เครื่องมือใดที่คุณควรใช้ในการตรวจสอบการเชื่อมต่อและเส้นทางที่ข้อมูลเดินทาง?",
+            "Choices": ["ping", "ipconfig", "tracert", "nslookup"],
+            "AnswerKey": "tracert",
+            "Explaination": "tracert แสดงเส้นทางที่ข้อมูลเดินทางไปยังเซิร์ฟเวอร์ ทำให้ทราบว่ามีปัญหาเกิดขึ้นที่จุดใด"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการทราบที่อยู่ IP ของเว็บไซต์ \"www.example.com\" เพื่อตรวจสอบการเชื่อมต่อ เครื่องมือใดที่คุณควรใช้ในการแปลงชื่อโดเมนเป็นที่อยู่ IP?",
+            "Choices": ["ipconfig", "ping", "tracert", "nslookup"],
+            "AnswerKey": "nslookup",
+            "Explaination": "nslookup ช่วยแปลงชื่อโดเมนเป็น IP address ทำให้ทราบที่อยู่ของเซิร์ฟเวอร์"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการกำหนดที่อยู่ IP ให้กับคอมพิวเตอร์ในเครือข่ายของคุณโดยอัตโนมัติ เพื่อลดภาระในการจัดการ IP address โปรโตคอลใดที่คุณควรใช้ในการกำหนดที่อยู่ IP โดยอัตโนมัติ?",
+            "Choices": ["DNS (Domain Name System)", "DHCP (Dynamic Host Configuration Protocol)", "TCP (Transmission Control Protocol)", "UDP (User Datagram Protocol)"],
+            "AnswerKey": "DHCP (Dynamic Host Configuration Protocol)",
+            "Explaination": "DHCP ทำหน้าที่กำหนด IP address และข้อมูลเครือข่ายอื่น ๆ ให้กับอุปกรณ์โดยอัตโนมัติ"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "ผู้ใช้ในเครือข่ายของคุณแจ้งว่าไม่สามารถเข้าถึงเว็บไซต์บางแห่งได้ แต่เว็บไซต์อื่น ๆ ยังคงเข้าถึงได้ปกติ ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่ DNS Server", "ปัญหาที่ DHCP Server", "ปัญหาที่ Switch", "ปัญหาที่สาย Lan"],
+            "AnswerKey": "ปัญหาที่ DNS Server",
+            "Explaination": "หาก DNS Server มีปัญหา อาจทำให้ไม่สามารถแปลงชื่อโดเมนบางแห่งเป็น IP address ได้"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการตรวจสอบว่าคอมพิวเตอร์ของคุณได้รับที่อยู่ IP อะไรจากเครือข่าย เพื่อแก้ไขปัญหาการเชื่อมต่อ คำสั่งใดที่คุณควรใช้ใน Command Prompt เพื่อแสดงข้อมูลการตั้งค่า IP ของคอมพิวเตอร์ของคุณ?",
+            "Choices": ["ping", "tracert", "ipconfig", "nslookup"],
+            "AnswerKey": "ipconfig",
+            "Explaination": "ipconfig แสดงข้อมูล IP address, subnet mask, default gateway และข้อมูลอื่น ๆ ที่เกี่ยวข้อง"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการสร้างเครือข่ายเสมือน (Virtual LAN) เพื่อแบ่งกลุ่มผู้ใช้ในเครือข่ายของคุณ และเพิ่มความปลอดภัยในการสื่อสาร เทคโนโลยีใดที่คุณควรใช้ในการสร้างเครือข่ายเสมือน?",
+            "Choices": ["VPN (Virtual Private Network)", "VLAN (Virtual LAN)", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)"],
+            "AnswerKey": "VLAN (Virtual LAN)",
+            "Explaination": "VLAN ช่วยแบ่งกลุ่มผู้ใช้ในเครือข่ายเดียวกันให้เหมือนกับว่าอยู่ในเครือข่ายแยกกัน เพิ่มความปลอดภัยและการจัดการ"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการเชื่อมต่อเครือข่ายสำนักงานสาขาเข้ากับเครือข่ายสำนักงานใหญ่ผ่านอินเทอร์เน็ตอย่างปลอดภัย เพื่อแลกเปลี่ยนข้อมูล เทคโนโลยีใดที่คุณควรใช้ในการสร้างการเชื่อมต่อที่ปลอดภัยผ่านอินเทอร์เน็ต?",
+            "Choices": ["VLAN (Virtual LAN)", "NAT (Network Address Translation)", "VPN (Virtual Private Network)", "DHCP (Dynamic Host Configuration Protocol)"],
+            "AnswerKey": "VPN (Virtual Private Network)",
+            "Explaination": "VPN สร้างช่องทางการเชื่อมต่อที่ปลอดภัยและเข้ารหัสผ่านอินเทอร์เน็ต"
+        },
+        {
+            "DomainOfKnowledge": "Computer Network",
+            "Question": "คุณต้องการควบคุมการเข้าถึงอินเทอร์เน็ตของอุปกรณ์บางเครื่องในเครือข่ายของคุณ เพื่อป้องกันการเข้าถึงเว็บไซต์ที่ไม่เหมาะสม อุปกรณ์ใดที่คุณควรใช้ในการกรองทราฟฟิกและควบคุมการเข้าถึงเครือข่าย?",
+            "Choices": ["Hub", "Switch", "Firewall", "Repeater"],
+            "AnswerKey": "Firewall",
+            "Explaination": "Firewall ทำหน้าที่กรองทราฟฟิกและควบคุมการเข้าถึงเครือข่ายตามกฎที่กำหนด"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้ในสำนักงานแจ้งว่าไม่สามารถเข้าถึงอินเทอร์เน็ตได้ แต่คอมพิวเตอร์เครื่องอื่น ๆ ในเครือข่ายยังคงใช้งานได้ปกติ ปัญหาที่น่าจะเป็นไปได้มากที่สุดสำหรับคอมพิวเตอร์เครื่องนั้นคืออะไร?",
+            "Choices": ["ปัญหาที่ Switch หลักของเครือข่าย", "ปัญหาที่การตั้งค่า IP Address ของเครื่องนั้น", "ปัญหาที่ Router ของ ISP", "ปัญหาที่สาย Lan ของเครื่องนั้น"],
+            "AnswerKey": "ปัญหาที่การตั้งค่า IP Address ของเครื่องนั้น",
+            "Explaination": "หากเป็นปัญหาที่ Switch หรือ Router จะส่งผลกระทบต่อผู้ใช้ทั้งหมดในเครือข่าย ดังนั้นปัญหาเฉพาะเครื่องมักมาจากการตั้งค่า IP Address"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าการเชื่อมต่ออินเทอร์เน็ตช้ามาก โดยเฉพาะอย่างยิ่งเมื่อดาวน์โหลดไฟล์ขนาดใหญ่ เครื่องมือใดที่เหมาะสมที่สุดในการตรวจสอบว่ามีโปรแกรมใดกำลังใช้แบนด์วิธจำนวนมาก?",
+            "Choices": ["ping", "tracert", "Task Manager/Activity Monitor", "ipconfig"],
+            "AnswerKey": "Task Manager/Activity Monitor",
+            "Explaination": "เครื่องมือเหล่านี้ช่วยแสดงโปรแกรมที่กำลังทำงานและปริมาณการใช้ทรัพยากร รวมถึงแบนด์วิธ"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ในเครือข่าย LAN พบว่ามีเครื่องคอมพิวเตอร์บางเครื่องไม่สามารถเชื่อมต่อกันได้ แต่เครื่องอื่น ๆ ยังสามารถสื่อสารกันได้ปกติ ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่ DNS Server", "ปัญหาที่ Switch Port ที่เครื่องเหล่านั้นเชื่อมต่ออยู่", "ปัญหาที่ Router หลัก", "ปัญหาที่สายสัญญาณภายนอกสำนักงาน"],
+            "AnswerKey": "ปัญหาที่ Switch Port ที่เครื่องเหล่านั้นเชื่อมต่ออยู่",
+            "Explaination": "ปัญหาที่ Port ของ Switch จะส่งผลกระทบต่อเฉพาะเครื่องที่เชื่อมต่อกับ Port นั้น ๆ"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าไม่สามารถเข้าถึงเว็บไซต์บางแห่งได้ แต่เว็บไซต์อื่น ๆ ยังคงเข้าถึงได้ปกติ เครื่องมือใดที่เหมาะสมที่สุดในการตรวจสอบว่าปัญหาเกิดจาก DNS หรือไม่?",
+            "Choices": ["ping", "tracert", "nslookup", "ipconfig"],
+            "AnswerKey": "nslookup",
+            "Explaination": "nslookup ใช้สำหรับตรวจสอบการทำงานของ DNS Server และแปลงชื่อโดเมนเป็น IP Address"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ในเครือข่าย Wi-Fi พบว่ามีสัญญาณอ่อนและหลุดบ่อย สิ่งที่ควรตรวจสอบเป็นอันดับแรกคืออะไร?",
+            "Choices": ["ตรวจสอบ Router หลักของ ISP", "ตรวจสอบการตั้งค่า Firewall ของเครื่อง", "ตรวจสอบตำแหน่งที่ตั้งของ Access Point และสัญญาณรบกวน", "ตรวจสอบการตั้งค่า IP Address"],
+            "AnswerKey": "ตรวจสอบตำแหน่งที่ตั้งของ Access Point และสัญญาณรบกวน",
+            "Explaination": "ปัญหา Wi-Fi ส่วนใหญ่มักเกิดจากสัญญาณรบกวนหรือตำแหน่งที่ตั้งของ Access Point ไม่เหมาะสม"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าไม่สามารถพิมพ์งานไปยังเครื่องพิมพ์เครือข่ายได้ สิ่งแรกที่ควรตรวจสอบคืออะไร?",
+            "Choices": ["ตรวจสอบ Router หลัก", "ตรวจสอบการเชื่อมต่อเครือข่ายของเครื่องพิมพ์", "ตรวจสอบ DNS Server", "ตรวจสอบสาย Lan ของทุกเครื่องในสำนักงาน"],
+            "AnswerKey": "ตรวจสอบการเชื่อมต่อเครือข่ายของเครื่องพิมพ์",
+            "Explaination": "ปัญหาการพิมพ์มักเกิดจากการเชื่อมต่อของเครื่องพิมพ์กับเครือข่าย"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าไม่สามารถเข้าถึงโฟลเดอร์ที่แชร์ในเครือข่ายได้ สิ่งที่ควรตรวจสอบคืออะไร?",
+            "Choices": ["ตรวจสอบ Switch หลัก", "ตรวจสอบสิทธิ์การเข้าถึงโฟลเดอร์และการตั้งค่าการแชร์", "ตรวจสอบ Modem", "ตรวจสอบสายโทรศัพท์"],
+            "AnswerKey": "ตรวจสอบสิทธิ์การเข้าถึงโฟลเดอร์และการตั้งค่าการแชร์",
+            "Explaination": "ปัญหาการเข้าถึงโฟลเดอร์มักเกิดจากสิทธิ์การเข้าถึงหรือการตั้งค่าการแชร์ที่ไม่ถูกต้อง"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าไม่สามารถเชื่อมต่อกับ VPN ได้ สิ่งที่ควรตรวจสอบคืออะไร?",
+            "Choices": ["ตรวจสอบ Switch ในสำนักงาน", "ตรวจสอบการตั้งค่า VPN ของผู้ใช้และการเชื่อมต่ออินเทอร์เน็ต", "ตรวจสอบ Modem ของทุกเครื่องในสำนักงาน", "ตรวจสอบสายไฟของเครื่องคอมพิวเตอร์"],
+            "AnswerKey": "ตรวจสอบการตั้งค่า VPN ของผู้ใช้และการเชื่อมต่ออินเทอร์เน็ต",
+            "Explaination": "ปัญหา VPN มักเกิดจากการตั้งค่าที่ไม่ถูกต้องหรือการเชื่อมต่ออินเทอร์เน็ตมีปัญหา"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ในเครือข่ายพบว่ามีเครื่องคอมพิวเตอร์บางเครื่องที่ได้รับ IP Address ซ้ำกัน ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": ["ปัญหาที่สาย Lan ชำรุด", "ปัญหาที่ DHCP Server", "ปัญหาที่ Router ของ ISP", "ปัญหาที่ DNS Server"],
+            "AnswerKey": "ปัญหาที่ DHCP Server",
+            "Explaination": "DHCP Server ทำหน้าที่กำหนด IP Address ให้กับอุปกรณ์ หากมีปัญหา อาจทำให้กำหนด IP Address ซ้ำกันได้"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่าการเชื่อมต่ออินเทอร์เน็ตหลุดบ่อยและไม่เสถียร สิ่งที่ควรตรวจสอบเป็นอันดับแรกคืออะไร?",
+            "Choices": ["ตรวจสอบการตั้งค่า firewall ในเครื่อง", "ตรวจสอบสายสัญญาณภายนอกอาคารและอุปกรณ์โมเด็ม/เราเตอร์", "ตรวจสอบการตั้งค่า IP address ทุกเครื่องในสำนักงาน", "ตรวจสอบ DNS Server"],
+            "AnswerKey": "ตรวจสอบสายสัญญาณภายนอกอาคารและอุปกรณ์โมเด็ม/เราเตอร์",
+            "Explaination": "ปัญหาการเชื่อมต่อที่ไม่เสถียรมักเกิดจากปัญหาทางกายภาพ เช่น สายสัญญาณ หรืออุปกรณ์โมเด็ม/เราเตอร์"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้ในสำนักงานแจ้งว่า \"อินเทอร์เน็ตใช้งานไม่ได้เลย\" แต่ไฟสถานะบนเราเตอร์ยังคงแสดงว่ามีการเชื่อมต่อ ขั้นตอนแรกในการตรวจสอบปัญหาควรทำอย่างไร?",
+            "Choices": [
+                "ตรวจสอบการตั้งค่า IP Address ของทุกเครื่อง",
+                "ตรวจสอบสาย Lan ทั้งหมดในสำนักงาน",
+                "รีสตาร์ทเราเตอร์และโมเด็ม",
+                "ตรวจสอบ DNS Server"
+            ],
+            "AnswerKey": "รีสตาร์ทเราเตอร์และโมเด็ม",
+            "Explaination": "การรีสตาร์ทอุปกรณ์เป็นขั้นตอนแรกที่ง่ายและมักแก้ไขปัญหาได้"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"เว็บไซต์บางแห่งเข้าไม่ได้ แต่เว็บไซต์อื่น ๆ ยังใช้งานได้\" ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": [
+                "ปัญหาที่ Switch หลัก",
+                "ปัญหาที่สาย Lan ของผู้ใช้",
+                "ปัญหาที่ DNS Server",
+                "ปัญหาที่การตั้งค่า IP Address"
+            ],
+            "AnswerKey": "ปัญหาที่ DNS Server",
+            "Explaination": "DNS Server ทำหน้าที่แปลงชื่อโดเมนเป็น IP Address หากมีปัญหา อาจทำให้เข้าถึงบางเว็บไซต์ไม่ได้"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"การเชื่อมต่อ Wi-Fi หลุดบ่อย\" สิ่งแรกที่ควรตรวจสอบคืออะไร?",
+            "Choices": [
+                "ตรวจสอบการตั้งค่า Firewall",
+                "ตรวจสอบตำแหน่ง Access Point และสัญญาณรบกวน",
+                "ตรวจสอบ DNS Server",
+                "ตรวจสอบ DHCP Server"
+            ],
+            "AnswerKey": "ตรวจสอบตำแหน่ง Access Point และสัญญาณรบกวน",
+            "Explaination": "สัญญาณรบกวนและตำแหน่ง Access Point เป็นสาเหตุหลักของปัญหา Wi-Fi ไม่เสถียร"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"เครื่องพิมพ์เครือข่ายใช้งานไม่ได้\" สิ่งแรกที่ควรตรวจสอบคืออะไร?",
+            "Choices": [
+                "ตรวจสอบ Switch หลัก",
+                "ตรวจสอบการเชื่อมต่อเครือข่ายของเครื่องพิมพ์",
+                "ตรวจสอบ Router หลัก",
+                "ตรวจสอบสายโทรศัพท์"
+            ],
+            "AnswerKey": "ตรวจสอบการเชื่อมต่อเครือข่ายของเครื่องพิมพ์",
+            "Explaination": "ปัญหาเครื่องพิมพ์มักเกิดจากการเชื่อมต่อกับเครือข่าย"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"ไม่สามารถเข้าถึงโฟลเดอร์ที่แชร์ในเครือข่ายได้\" สิ่งที่ควรตรวจสอบคืออะไร?",
+            "Choices": [
+                "ตรวจสอบสาย Lan ทั้งหมด",
+                "ตรวจสอบสิทธิ์การเข้าถึงโฟลเดอร์",
+                "ตรวจสอบ Router หลัก",
+                "ตรวจสอบการตั้งค่า IP Address"
+            ],
+            "AnswerKey": "ตรวจสอบสิทธิ์การเข้าถึงโฟลเดอร์",
+            "Explaination": "ปัญหาการเข้าถึงโฟลเดอร์มักเกิดจากสิทธิ์การเข้าถึงที่ไม่ถูกต้อง"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"การดาวน์โหลดไฟล์ช้ามาก\" เครื่องมือใดที่เหมาะสมที่สุดในการตรวจสอบการใช้แบนด์วิธ?",
+            "Choices": [
+                "ping",
+                "tracert",
+                "Task Manager/Activity Monitor",
+                "ipconfig"
+            ],
+            "AnswerKey": "Task Manager/Activity Monitor",
+            "Explaination": "เครื่องมือเหล่านี้แสดงโปรแกรมที่ใช้แบนด์วิธ"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"คอมพิวเตอร์ได้รับ IP Address ซ้ำกับเครื่องอื่น\" ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": [
+                "ปัญหาที่ Switch",
+                "ปัญหาที่ DHCP Server",
+                "ปัญหาที่ Router",
+                "ปัญหาที่ DNS Server"
+            ],
+            "AnswerKey": "ปัญหาที่ DHCP Server",
+            "Explaination": "DHCP Server กำหนด IP Address หากมีปัญหา อาจทำให้ IP Address ซ้ำกัน"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"ไม่สามารถเชื่อมต่อกับ VPN ได้\" สิ่งที่ควรตรวจสอบคืออะไร?",
+            "Choices": [
+                "ตรวจสอบ Switch หลัก",
+                "ตรวจสอบการตั้งค่า VPN ของผู้ใช้",
+                "ตรวจสอบ Modem",
+                "ตรวจสอบ DNS Server"
+            ],
+            "AnswerKey": "ตรวจสอบการตั้งค่า VPN ของผู้ใช้",
+            "Explaination": "ปัญหา VPN มักเกิดจากการตั้งค่าที่ไม่ถูกต้อง"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"การเชื่อมต่ออินเทอร์เน็ตไม่เสถียร\" สิ่งที่ควรตรวจสอบเป็นอันดับแรกคืออะไร?",
+            "Choices": [
+                "ตรวจสอบการตั้งค่า Firewall",
+                "ตรวจสอบสายสัญญาณภายนอกและอุปกรณ์โมเด็ม/เราเตอร์",
+                "ตรวจสอบการตั้งค่า IP Address",
+                "ตรวจสอบ DNS Server"
+            ],
+            "AnswerKey": "ตรวจสอบสายสัญญาณภายนอกและอุปกรณ์โมเด็ม/เราเตอร์",
+            "Explaination": "ปัญหาไม่เสถียรมักเกิดจากปัญหาทางกายภาพ"
+        },
+        {
+            "DomainOfKnowledge": "Troubleshooting",
+            "Question": "ผู้ใช้แจ้งว่า \"ไม่สามารถเข้าถึงเว็บไซต์ที่มีชื่อโดเมนใหม่ได้\" ปัญหาที่น่าจะเป็นไปได้มากที่สุดคืออะไร?",
+            "Choices": [
+                "ปัญหาที่สาย Lan",
+                "ปัญหาที่ DNS Server",
+                "ปัญหาที่ Switch",
+                "ปัญหาที่ IP address"
+            ],
+            "AnswerKey": "ปัญหาที่ DNS Server",
+            "Explaination": "DNS Server อาจยังไม่อัพเดทข้อมูลของโดเมนใหม่ ทำให้ไม่สามารถเข้าถึงได้"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทขนาดเล็กมีสำนักงาน 2 แห่ง ตั้งอยู่คนละอาคาร แต่ต้องการเชื่อมต่อเครือข่ายเพื่อให้พนักงานสามารถแชร์ไฟล์และทรัพยากรได้อย่างราบรื่น รูปแบบการเชื่อมต่อเครือข่ายใดที่เหมาะสมที่สุด?",
+            "Choices": ["เครือข่าย LAN (Local Area Network)", "เครือข่าย MAN (Metropolitan Area Network)", "เครือข่าย WAN (Wide Area Network)", "เครือข่าย PAN (Personal Area Network)"],
+            "AnswerKey": "เครือข่าย MAN (Metropolitan Area Network)",
+            "Explaination": "MAN เหมาะสำหรับการเชื่อมต่อเครือข่ายที่อยู่ในพื้นที่เมืองหรือเขตมหานครเดียวกัน"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "โรงเรียนต้องการติดตั้งเครือข่ายไร้สายในห้องเรียน เพื่อให้นักเรียนสามารถเข้าถึงแหล่งข้อมูลออนไลน์สำหรับการเรียนรู้ มาตรฐาน Wi-Fi ใดที่เหมาะสมที่สุดสำหรับการใช้งานในสภาพแวดล้อมที่มีผู้ใช้จำนวนมาก?",
+            "Choices": ["802.11a", "802.11b", "802.11g", "802.11ac/ax (Wi-Fi 5/6)"],
+            "AnswerKey": "802.11ac/ax (Wi-Fi 5/6)",
+            "Explaination": "802.11ac/ax มีความเร็วและความจุสูงกว่ามาตรฐานอื่น ๆ เหมาะสำหรับการใช้งานในสภาพแวดล้อมที่มีผู้ใช้จำนวนมาก"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายที่มีความปลอดภัยสูง สำหรับการจัดเก็บและประมวลผลข้อมูลที่สำคัญ เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความปลอดภัยในการเข้าถึงข้อมูลจากภายนอก?",
+            "Choices": ["NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "VPN (Virtual Private Network)", "DNS (Domain Name System)"],
+            "AnswerKey": "VPN (Virtual Private Network)",
+            "Explaination": "VPN สร้างช่องทางการเชื่อมต่อที่ปลอดภัยและเข้ารหัสสำหรับการเข้าถึงเครือข่ายจากภายนอก"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "สำนักงานขนาดใหญ่ต้องการแบ่งกลุ่มผู้ใช้ในเครือข่าย LAN ออกเป็นกลุ่มย่อย ๆ เพื่อเพิ่มความปลอดภัยและประสิทธิภาพ เทคโนโลยีใดที่ควรนำมาใช้ในการแบ่งกลุ่มผู้ใช้ในเครือข่าย LAN?",
+            "Choices": ["NAT (Network Address Translation)", "VLAN (Virtual Local Area Network)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "VLAN (Virtual Local Area Network)",
+            "Explaination": "VLAN ช่วยแบ่งเครือข่าย LAN ออกเป็นกลุ่มย่อย ๆ โดยแต่ละกลุ่มจะมีโดเมนการออกอากาศแยกกัน"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการเชื่อมต่อสำนักงานสาขาหลายแห่งเข้ากับสำนักงานใหญ่ เพื่อให้สามารถสื่อสารและแลกเปลี่ยนข้อมูลได้อย่างรวดเร็ว รูปแบบการเชื่อมต่อเครือข่ายใดที่เหมาะสมที่สุดสำหรับการเชื่อมต่อสำนักงานสาขาหลายแห่ง?",
+            "Choices": ["เครือข่าย LAN (Local Area Network)", "เครือข่าย MAN (Metropolitan Area Network)", "เครือข่าย WAN (Wide Area Network)", "เครือข่าย PAN (Personal Area Network)"],
+            "AnswerKey": "เครือข่าย WAN (Wide Area Network)",
+            "Explaination": "WAN เหมาะสำหรับการเชื่อมต่อเครือข่ายที่อยู่ห่างไกลกัน"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "โรงพยาบาลต้องการออกแบบเครือข่ายที่มีความเสถียรสูง สำหรับการใช้งานระบบสารสนเทศทางการแพทย์ เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความเสถียรของเครือข่าย?",
+            "Choices": ["Redundant Network Devices (อุปกรณ์เครือข่ายสำรอง)", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "Redundant Network Devices (อุปกรณ์เครือข่ายสำรอง)",
+            "Explaination": "การใช้อุปกรณ์เครือข่ายสำรองช่วยให้เครือข่ายยังคงทำงานได้แม้ว่าอุปกรณ์หลักจะล้มเหลว"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายไร้สายที่มีความปลอดภัยสูง สำหรับการใช้งานภายในองค์กร โปรโตคอลการเข้ารหัส Wi-Fi ใดที่ควรนำมาใช้เพื่อเพิ่มความปลอดภัย?",
+            "Choices": ["WEP (Wired Equivalent Privacy)", "WPA (Wi-Fi Protected Access)", "WPA2/WPA3 (Wi-Fi Protected Access 2/3)", "ไม่มีโปรโตคอลการเข้ารหัส"],
+            "AnswerKey": "WPA2/WPA3 (Wi-Fi Protected Access 2/3)",
+            "Explaination": "WPA2/WPA3 มีความปลอดภัยสูงกว่าโปรโตคอลอื่น ๆ"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "มหาวิทยาลัยต้องการออกแบบเครือข่ายสำหรับหอพักนักศึกษา ที่มีผู้ใช้จำนวนมากและต้องการความเร็วในการเชื่อมต่อสูง เทคโนโลยีสายสัญญาณใดที่เหมาะสมที่สุดสำหรับการเชื่อมต่อในหอพักนักศึกษา?",
+            "Choices": ["สายคู่บิดเกลียว (Twisted-pair cable)", "สายโคแอกเชียล (Coaxial cable)", "สายใยแก้วนำแสง (Fiber-optic cable)", "ไม่มีสายสัญญาณ"],
+            "AnswerKey": "สายใยแก้วนำแสง (Fiber-optic cable)",
+            "Explaination": "สายใยแก้วนำแสงมีความเร็วและความจุสูง เหมาะสำหรับการใช้งานที่มีผู้ใช้จำนวนมากและต้องการความเร็วสูง"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายที่มีความยืดหยุ่นสูง เพื่อรองรับการขยายตัวของธุรกิจในอนาคต เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความยืดหยุ่นของเครือข่าย?",
+            "Choices": ["Cloud Networking", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "Cloud Networking",
+            "Explaination": "Cloud Networking ช่วยให้สามารถปรับขนาดและจัดการเครือข่ายได้อย่างยืดหยุ่น"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "ศูนย์ข้อมูลต้องการออกแบบเครือข่ายที่มีความน่าเชื่อถือสูง สำหรับการให้บริการแอปพลิเคชันที่สำคัญ เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความน่าเชื่อถือของเครือข่าย?",
+            "Choices": ["Load Balancing", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "Load Balancing",
+            "Explaination": "Load Balancing ช่วยกระจายภาระงานไปยังเซิร์ฟเวอร์หลายเครื่อง ทำให้ระบบมีความน่าเชื่อถือสูง"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทสตาร์ทอัพขนาดเล็กมีพนักงาน 10 คน และต้องการระบบเครือข่ายที่เรียบง่ายและคุ้มค่าสำหรับการแชร์ไฟล์และทรัพยากรภายในสำนักงาน รูปแบบเครือข่ายใดที่เหมาะสมที่สุดสำหรับบริษัทนี้?",
+            "Choices": ["เครือข่าย Peer-to-Peer", "เครือข่าย Client-Server", "เครือข่าย Mesh", "เครือข่าย Hybrid"],
+            "AnswerKey": "เครือข่าย Peer-to-Peer",
+            "Explaination": "Peer-to-Peer เหมาะสำหรับเครือข่ายขนาดเล็กที่ต้องการความเรียบง่ายและต้นทุนต่ำ"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "โรงเรียนขนาดใหญ่มีห้องเรียนหลายห้องและต้องการเครือข่าย Wi-Fi ที่ครอบคลุมและมีความเร็วสูง เพื่อรองรับการใช้งานอินเทอร์เน็ตของนักเรียนและครู มาตรฐาน Wi-Fi ใดที่เหมาะสมที่สุดสำหรับการใช้งานในสภาพแวดล้อมที่มีผู้ใช้หนาแน่น?",
+            "Choices": ["802.11g", "802.11n", "802.11ac", "802.11ax (Wi-Fi 6)"],
+            "AnswerKey": "802.11ax (Wi-Fi 6)",
+            "Explaination": "Wi-Fi 6 มีความเร็วและความจุสูงกว่ามาตรฐานอื่น ๆ เหมาะสำหรับสภาพแวดล้อมที่มีผู้ใช้หนาแน่น"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายที่มีความปลอดภัยสูง เพื่อป้องกันการเข้าถึงข้อมูลลับจากภายนอก เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความปลอดภัยในการเข้าถึงเครือข่ายจากระยะไกล?",
+            "Choices": ["NAT (Network Address Translation)", "VPN (Virtual Private Network)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "VPN (Virtual Private Network)",
+            "Explaination": "VPN สร้างช่องทางการเชื่อมต่อที่ปลอดภัยและเข้ารหัสสำหรับการเข้าถึงเครือข่ายจากระยะไกล"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "โรงพยาบาลต้องการแบ่งกลุ่มผู้ใช้ในเครือข่าย LAN ออกเป็นกลุ่มย่อย ๆ เพื่อควบคุมการเข้าถึงข้อมูลของผู้ป่วย เทคโนโลยีใดที่ควรนำมาใช้ในการแบ่งกลุ่มผู้ใช้ในเครือข่าย LAN?",
+            "Choices": ["NAT (Network Address Translation)", "VLAN (Virtual Local Area Network)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "VLAN (Virtual Local Area Network)",
+            "Explaination": "VLAN ช่วยแบ่งเครือข่าย LAN ออกเป็นกลุ่มย่อย ๆ เพื่อควบคุมการเข้าถึงข้อมูล"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทที่มีสำนักงานสาขาหลายแห่งทั่วประเทศต้องการเชื่อมต่อเครือข่ายเพื่อให้พนักงานสามารถสื่อสารและแลกเปลี่ยนข้อมูลได้อย่างรวดเร็ว รูปแบบเครือข่ายใดที่เหมาะสมที่สุดสำหรับการเชื่อมต่อสำนักงานสาขาหลายแห่ง?",
+            "Choices": ["เครือข่าย LAN (Local Area Network)", "เครือข่าย MAN (Metropolitan Area Network)", "เครือข่าย WAN (Wide Area Network)", "เครือข่าย PAN (Personal Area Network)"],
+            "AnswerKey": "เครือข่าย WAN (Wide Area Network)",
+            "Explaination": "WAN เหมาะสำหรับการเชื่อมต่อเครือข่ายที่อยู่ห่างไกลกันทั่วประเทศ"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "ศูนย์ข้อมูลขนาดใหญ่ต้องการออกแบบเครือข่ายที่มีความพร้อมใช้งานสูง เพื่อรองรับการให้บริการแอปพลิเคชันที่สำคัญ เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความพร้อมใช้งานของเครือข่าย?",
+            "Choices": ["Load Balancing", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "Load Balancing",
+            "Explaination": "Load Balancing ช่วยกระจายภาระงานไปยังเซิร์ฟเวอร์หลายเครื่อง เพื่อเพิ่มความพร้อมใช้งาน"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่าย Wi-Fi ที่มีความปลอดภัยสูง สำหรับการใช้งานภายในองค์กร โปรโตคอลการเข้ารหัส Wi-Fi ใดที่ควรนำมาใช้เพื่อเพิ่มความปลอดภัย?",
+            "Choices": ["WEP (Wired Equivalent Privacy)", "WPA (Wi-Fi Protected Access)", "WPA2/WPA3 (Wi-Fi Protected Access 2/3)", "ไม่มีโปรโตคอลการเข้ารหัส"],
+            "AnswerKey": "WPA2/WPA3 (Wi-Fi Protected Access 2/3)",
+            "Explaination": "WPA2/WPA3 มีความปลอดภัยสูงกว่าโปรโตคอลอื่น ๆ"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "มหาวิทยาลัยต้องการออกแบบเครือข่ายสำหรับหอพักนักศึกษา ที่มีผู้ใช้จำนวนมากและต้องการความเร็วในการเชื่อมต่อสูง เทคโนโลยีสายสัญญาณใดที่เหมาะสมที่สุดสำหรับการเชื่อมต่อในหอพักนักศึกษา?",
+            "Choices": ["สายคู่บิดเกลียว (Twisted-pair cable)", "สายโคแอกเชียล (Coaxial cable)", "สายใยแก้วนำแสง (Fiber-optic cable)", "ไม่มีสายสัญญาณ"],
+            "AnswerKey": "สายใยแก้วนำแสง (Fiber-optic cable)",
+            "Explaination": "สายใยแก้วนำแสงมีความเร็วและความจุสูง เหมาะสำหรับการใช้งานที่มีผู้ใช้จำนวนมาก"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายที่มีความยืดหยุ่นสูง เพื่อรองรับการขยายตัวของธุรกิจในอนาคต เทคโนโลยีใดที่ควรนำมาใช้เพื่อเพิ่มความยืดหยุ่นของเครือข่าย?",
+            "Choices": ["Cloud Networking", "NAT (Network Address Translation)", "DHCP (Dynamic Host Configuration Protocol)", "DNS (Domain Name System)"],
+            "AnswerKey": "Cloud Networking",
+            "Explaination": "Cloud Networking ช่วยให้สามารถปรับขนาดและจัดการเครือข่ายได้อย่างยืดหยุ่น"
+        },
+        {
+            "DomainOfKnowledge": "NetworkDesign",
+            "Question": "บริษัทต้องการออกแบบเครือข่ายไร้สายสำหรับสำนักงานขนาดเล็ก ที่เน้นความสะดวกในการติดตั้งและใช้งาน อุปกรณ์เครือข่ายใดที่เหมาะสมที่สุดสำหรับการใช้งานในสำนักงานขนาดเล็ก?",
+            "Choices": ["Access Point แบบ Standalone", "Wireless Mesh System", "Wireless Controller", "Core Switch"],
+            "AnswerKey": "Wireless Mesh System",
+            "Explaination": "Wireless Mesh System ติดตั้งง่ายและขยายสัญญาณได้ครอบคลุม เหมาะสำหรับสำนักงานขนาดเล็ก"
+        }
+    ]
+}
