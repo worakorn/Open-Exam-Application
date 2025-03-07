@@ -8915,6 +8915,186 @@
             ],
             "AnswerKey": "Encrypting credit card data both in transit and at rest.",
             "Explaination": "Encryption is a fundamental security control for protecting the confidentiality of credit card data. PCI DSS mandates that credit card data be encrypted both while being transmitted and while stored."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following is the PRIMARY reason why organizations should be concerned about quantum computing in the context of cryptography?",
+            "Choices": [
+                "Quantum computers can execute all known encryption algorithms faster than classical computers.",
+                "Quantum computers have the potential to break many widely used public-key cryptographic algorithms.",
+                "Quantum-resistant algorithms are not yet mature enough to be implemented.",
+                "Quantum key distribution (QKD) is too expensive to implement."
+            ],
+            "AnswerKey": "Quantum computers have the potential to break many widely used public-key cryptographic algorithms.",
+            "Explaination": "While options A, C, and D might be concerns, the primary concern is the ability of quantum computers to break existing encryption.  This threatens the confidentiality and integrity of data protected by those algorithms."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "An organization is evaluating the potential impact of quantum computing on its long-term data security strategy. Which of the following should be the FIRST step in this evaluation process?",
+            "Choices": [
+                "Immediately migrate all systems to quantum-resistant algorithms.",
+                "Conduct a risk assessment to identify systems and data vulnerable to quantum attacks.",
+                "Implement quantum key distribution (QKD) across all critical networks.",
+                "Train all security personnel on the principles of quantum computing."
+            ],
+            "AnswerKey": "Conduct a risk assessment to identify systems and data vulnerable to quantum attacks.",
+            "Explaination": "As a manager, you need to assess the risk before taking action. A risk assessment will help prioritize efforts and allocate resources effectively."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following cryptographic techniques is MOST vulnerable to attacks from quantum computers?",
+            "Choices": [
+                "AES (Advanced Encryption Standard).",
+                "SHA-256 (Secure Hash Algorithm 256-bit).",
+                "RSA (Rivest-Shamir-Adleman).",
+                "HMAC (Hashed Message Authentication Code)."
+            ],
+            "AnswerKey": "RSA (Rivest-Shamir-Adleman).",
+            "Explaination": "RSA, along with other public-key algorithms like ECC, is highly susceptible to Shor's algorithm, which can be efficiently executed on a quantum computer. AES and SHA-256 are considered more resistant, though not entirely immune, to quantum attacks."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "A security manager is asked to implement a cryptographic solution that is resistant to attacks from both classical and quantum computers. Which of the following would be the BEST choice?",
+            "Choices": [
+                "Increase the key size of existing RSA encryption.",
+                "Implement a post-quantum cryptographic algorithm.",
+                "Use a combination of AES and SHA-256 with very long keys.",
+                "Implement a stronger hashing algorithm."
+            ],
+            "AnswerKey": "Implement a post-quantum cryptographic algorithm.",
+            "Explaination": "Post-quantum cryptography (PQC) is specifically designed to resist attacks from both classical and quantum computers. While the other options might improve security against classical attacks, they don't address the quantum threat."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following BEST describes the purpose of Quantum Key Distribution (QKD)?",
+            "Choices": [
+                "To encrypt data using quantum mechanics.",
+                "To securely distribute encryption keys using quantum mechanics.",
+                "To perform complex computations using quantum computers.",
+                "To create digital signatures that are resistant to quantum attacks."
+            ],
+            "AnswerKey": "To securely distribute encryption keys using quantum mechanics.",
+            "Explaination": "QKD focuses on the secure distribution of cryptographic keys, not the encryption of data itself. The security of QKD relies on the laws of quantum physics."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "An organization wants to ensure the confidentiality of its data transmitted over a public network. Which of the following security controls would BEST protect against eavesdropping, considering potential future quantum computing threats?",
+            "Choices": [
+                "Implementing TLS 1.3 with AES-256 encryption.",
+                "Utilizing IPsec VPN with RSA-2048 encryption.",
+                "Deploying a quantum key distribution (QKD) system alongside a symmetric encryption algorithm.",
+                "Enforcing strict password policies and multi-factor authentication."
+            ],
+            "AnswerKey": "Deploying a quantum key distribution (QKD) system alongside a symmetric encryption algorithm.",
+            "Explaination": "While TLS and IPsec provide encryption, RSA is vulnerable to quantum attacks. QKD, combined with symmetric encryption, offers a more robust solution for long-term confidentiality."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following is a key characteristic of quantum-resistant cryptographic algorithms?",
+            "Choices": [
+                "They rely on the principles of quantum superposition and entanglement.",
+                "They are based on mathematical problems that are difficult for both classical and quantum computers to solve.",
+                "They use shorter key lengths compared to classical algorithms, increasing processing speed.",
+                "They can only be implemented on quantum computers."
+            ],
+            "AnswerKey": "They are based on mathematical problems that are difficult for both classical and quantum computers to solve.",
+            "Explaination": "Quantum-resistant algorithms aim to be difficult for any computer to break. They don't necessarily rely on quantum principles themselves, and they can run on classical computers."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "A security architect is designing a new system that needs to be secure for the next 20 years. What is the MOST important consideration regarding cryptography in this design?",
+            "Choices": [
+                "Using the strongest classical encryption algorithms available today.",
+                "Implementing a flexible cryptographic architecture that can be easily upgraded to quantum-resistant algorithms.",
+                "Assuming that quantum computers will never be a practical threat.",
+                "Relying solely on physical security measures to protect the system."
+            ],
+            "AnswerKey": "Implementing a flexible cryptographic architecture that can be easily upgraded to quantum-resistant algorithms.",
+            "Explaination": "Given the long-term security requirement, it's crucial to anticipate the potential impact of quantum computing. A flexible architecture allows for a smooth transition to new algorithms as needed."
+        },
+         {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following BEST describes the role of NIST (National Institute of Standards and Technology) in the context of quantum computing and cryptography?",
+            "Choices": [
+                "To develop and deploy quantum computers for government use.",
+                "To standardize quantum-resistant cryptographic algorithms.",
+                "To promote the use of quantum key distribution (QKD) in critical infrastructure.",
+                "To regulate the development and sale of quantum computing technology."
+            ],
+            "AnswerKey": "To standardize quantum-resistant cryptographic algorithms.",
+            "Explaination": "NIST is leading the effort to identify and standardize post-quantum cryptographic algorithms to ensure the security of future communications."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "An organization is using a hybrid approach to cryptography, combining classical and quantum-resistant algorithms. What is the MOST likely reason for this approach?",
+            "Choices": [
+                 "To reduce the computational overhead of quantum-resistant algorithms.",
+                "To provide backward compatibility with older systems.",
+                "To increase the overall security posture while transitioning to new technologies.",
+                "To simplify key management processes."
+            ],
+            "AnswerKey": "To increase the overall security posture while transitioning to new technologies.",
+            "Explaination": "A hybrid approach allows organizations to leverage the strengths of both classical and quantum-resistant algorithms during a transition period, minimizing risk."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following is a DISADVANTAGE of Quantum Key Distribution (QKD) compared to traditional key exchange methods?",
+            "Choices": [
+                "QKD is vulnerable to man-in-the-middle attacks.",
+                "QKD requires specialized hardware and is typically limited in distance.",
+                "QKD relies on complex mathematical algorithms that are difficult to implement.",
+                "QKD is not effective against eavesdropping attacks."
+            ],
+            "AnswerKey": "QKD requires specialized hardware and is typically limited in distance.",
+            "Explaination": "QKD systems often require dedicated fiber optic cables and have distance limitations due to signal degradation."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "A security consultant is advising a client on how to protect against \"harvest now, decrypt later\" attacks. Which of the following recommendations would be MOST effective?",
+            "Choices": [
+                "Regularly change encryption keys.",
+                "Implement strong access control measures.",
+                "Migrate to quantum-resistant cryptographic algorithms.",
+                "Increase the frequency of security audits."
+            ],
+            "AnswerKey": "Migrate to quantum-resistant cryptographic algorithms.",
+            "Explaination": "\"Harvest now, decrypt later\" attacks involve an adversary collecting encrypted data today, with the intention of decrypting it once quantum computers become available.  Transitioning to quantum-resistant algorithms is the best long-term defense."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following is an example of a lattice-based cryptographic algorithm?",
+            "Choices": [
+                "RSA.",
+                "ECC (Elliptic Curve Cryptography).",
+                "McEliece.",
+                "NTRU."
+            ],
+            "AnswerKey": "NTRU.",
+            "Explaination": "NTRU is a well-known example of a lattice-based algorithm, which is a promising candidate for post-quantum cryptography."
+        },
+            {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "What is the PRIMARY benefit of using code-based cryptography like McEliece in a post-quantum world?",
+            "Choices": [
+                "Its ability to be implemented on existing hardware",
+                "Its resistance to known quantum computing attacks",
+                "Its simple key exchange methods",
+                "Its widespread adoption and standardization"
+            ],
+            "AnswerKey": "Its resistance to known quantum computing attacks",
+            "Explaination": "McEliece is valued for its robustness against quantum algorithms, making it a strong candidate for securing systems against future threats."
+        },
+        {
+            "DomainOfKnowledge": "Domain3",
+            "Question": "Which of the following strategies would BEST support an organization’s long-term transition to quantum-resistant cryptography?",
+            "Choices": [
+                "Immediately replace all existing cryptographic systems with the latest quantum-resistant algorithms.",
+                "Develop a cryptographic agility plan to allow for the easy replacement of algorithms as needed.",
+                "Wait for quantum computers to become a widespread threat before taking any action.",
+                "Focus solely on improving physical security and access controls."
+            ],
+            "AnswerKey": "Develop a cryptographic agility plan to allow for the easy replacement of algorithms as needed.",
+            "Explaination": "A cryptographic agility plan enables organizations to adapt quickly to new cryptographic standards and threats, ensuring long-term security and flexibility."
         }
     ]
 
