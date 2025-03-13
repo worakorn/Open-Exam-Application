@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Open Exam Application</title>
+<title>Exam System</title>
 <style>
 body {
   font-family: sans-serif;
@@ -156,7 +156,7 @@ body {
 <body>
 
 <div id="exam-container">
-  <h1 id="exam-title">Exam System</h1>
+  <h1 id="exam-title">Open Exam Application</h1> <!-- Changed title -->
    <p id="welcome-message"></p>
   <div id="instructions">
     <!-- Welcome message -->
@@ -209,6 +209,7 @@ body {
     <p>Correct Answers: <span id="correct-answers"></span></p>
     <p>Incorrect Answers: <span id="incorrect-answers"></span></p>
     <p>Percentage: <span id="percentage"></span>%</p>
+     <p>Average Time per Question: <span id="average-time"></span></p> <!-- Average time -->
 
     <h3>Results by Domain</h3>
     <div id="domain-results">
@@ -297,6 +298,7 @@ const questionCountMessage = document.getElementById('question-count-message'); 
 const progressBarContainer = document.getElementById('progress-bar-container');
 const progressBar = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
+const averageTimeSpan = document.getElementById('average-time'); // Average time
 
 
 let currentQuestionIndex = 0;
@@ -305,6 +307,7 @@ let correctAnswers = 0;
 let incorrectAnswers = 0;
 let timerInterval;
 let timeRemaining;
+let startTime; // To calculate elapsed time
 let timerDuration; // In minutes
 let correctQuestionsList = [];
 let incorrectQuestionsList = [];
@@ -397,46 +400,74 @@ function validateExamData(data) {
 }
 
 function prepareExamQuestions(data) {
-  const numQuestionsToSelect = data["Number of Questions"];
-  let selectedQuestions = [];
+    const numQuestionsToSelect = data["Number of Questions"];
+    let selectedQuestions = [];
 
-  if (data.DomainPercentages) {
-    const domains = Object.keys(data.DomainPercentages);
-    let remainingPercentage = 100;
-    let remainingQuestions = numQuestionsToSelect;
+    if (data.DomainPercentages) {
+        const domains = Object.keys(data.DomainPercentages);
+        const domainAllowances = {}; // Store calculated allowances per domain
+        const remainderDomains = []; // Store domains with fractional parts
+
+        // 1. Calculate initial allowances and identify domains with remainders
+        for (const domain of domains) {
+            const percentage = data.DomainPercentages[domain];
+            const questionsForDomain = (percentage / 100) * numQuestionsToSelect;
+            const integerPart = Math.floor(questionsForDomain); // Round down
+
+            domainAllowances[domain] = integerPart;
+
+            if (questionsForDomain - integerPart > 0) {
+                remainderDomains.push(domain);
+            }
+        }
+        //console.log("Initial Allowances:", domainAllowances);
+        //console.log("Remainder Domains", remainderDomains)
+
+        // 2 & 3.  (Already handled in step 1 - integerPart ensures this)
+
+        // 4. Create a pool for random selection from remainder domains.
+        // (No explicit pool needed, we'll use the remainderDomains array directly)
+
+        // 5. Distribute remaining questions.
+        let totalAllocated = Object.values(domainAllowances).reduce((sum, val) => sum + val, 0);
+        //console.log("Total allocated: ", totalAllocated)
+
+        while (totalAllocated < numQuestionsToSelect) {
+          if (remainderDomains.length === 0) {
+            // Handle the edge case where there were NO domains with remainders,
+            // so we randomly add from ALL domains.
+            const allDomains =  Object.keys(domainAllowances);
+            const randomDomain = allDomains[Math.floor(Math.random() * allDomains.length)];
+                domainAllowances[randomDomain]++;
+                totalAllocated++;
+
+          } else {
+            const randomDomain = remainderDomains[Math.floor(Math.random() * remainderDomains.length)];
+            domainAllowances[randomDomain]++;
+            totalAllocated++;
+          }
+
+        }
+        //console.log("Final Allowances", domainAllowances);
+
+        // Now, select the questions based on the calculated allowances.
+        for (const domain in domainAllowances) {
+            const numQuestionsForDomain = domainAllowances[domain];
+            const domainQuestions = data.Questions.filter(q => q.DomainOfKnowledge === domain);
+            shuffleArray(domainQuestions);
+            selectedQuestions = selectedQuestions.concat(domainQuestions.slice(0, numQuestionsForDomain));
+        }
 
 
-    // Select questions based on specified percentages.
-    for (const domain of domains) {
-        const percentage = data.DomainPercentages[domain];
-        remainingPercentage -= percentage;  // Keep track for the "remainder"
-        const numQuestionsForDomain = Math.round((percentage / 100) * numQuestionsToSelect);
-        remainingQuestions -= numQuestionsForDomain;
-
-        const domainQuestions = data.Questions.filter(q => q.DomainOfKnowledge === domain);
-        shuffleArray(domainQuestions);
-        selectedQuestions = selectedQuestions.concat(domainQuestions.slice(0, numQuestionsForDomain));
+    } else {
+        // If no percentages specified, select randomly from all questions.
+        const allQuestions = [...data.Questions];
+        shuffleArray(allQuestions);
+        selectedQuestions = allQuestions.slice(0, numQuestionsToSelect);
     }
 
-     // Randomly select questions for the remaining percentage.
-    if (remainingPercentage > 0 && remainingQuestions >0) {
-        const otherQuestions = data.Questions.filter(q => !domains.includes(q.DomainOfKnowledge));
-        shuffleArray(otherQuestions);
-        selectedQuestions = selectedQuestions.concat(otherQuestions.slice(0, remainingQuestions));
-    }
-
-
-  } else {
-    // If no percentages specified, select randomly from all questions.
-    const allQuestions = [...data.Questions]; //copy array
-    shuffleArray(allQuestions);
-    selectedQuestions = allQuestions.slice(0, numQuestionsToSelect);
-  }
-
-    //Final shuffle
-    shuffleArray(selectedQuestions);
+    shuffleArray(selectedQuestions);  // Final shuffle
     return selectedQuestions;
-
 }
 
 
@@ -675,81 +706,92 @@ function updateTimerDisplay() {
 }
 
 function submitExam() {
-  saveAnswer();
-  clearInterval(timerInterval); // Stop the timer
+    saveAnswer();
+    clearInterval(timerInterval); // Stop the timer
 
-  questionContainer.style.display = 'none';
-  timerDiv.style.display = 'none';
-  resultsContainer.style.display = 'block';
-  submitButton.style.display = 'none';
-  nextButton.style.display = 'none';
-  backButton.style.display = 'none';
+    questionContainer.style.display = 'none';
+    timerDiv.style.display = 'none';
+    resultsContainer.style.display = 'block';
+    submitButton.style.display = 'none';
+    nextButton.style.display = 'none';
+    backButton.style.display = 'none';
 
 
-  correctAnswers = 0;
-  incorrectAnswers = 0;
-  correctQuestionsList = [];
-  incorrectQuestionsList = [];
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctQuestionsList = [];
+    incorrectQuestionsList = [];
 
-  // Grade by Domain
-  const domainResults = {};
+     // Calculate elapsed time
+    const endTime = Date.now();
+    const elapsedTimeInSeconds = (endTime - startTime) / 1000;
+    const numQuestionsAnswered = Object.keys(userAnswers).length; // Use this for average
+    const averageTimePerQuestion = numQuestionsAnswered > 0
+        ? (elapsedTimeInSeconds / numQuestionsAnswered).toFixed(2)
+        : 0;
 
-  for (let i = 0; i < randomizedExamData.length; i++) {  // Iterate over randomized data
-    const questionData = randomizedExamData[i];
-    const correctAnswer = questionData.AnswerKey;
-    const userAnswer = userAnswers[i];
-    const domain = questionData.DomainOfKnowledge;
+    averageTimeSpan.innerText = `${averageTimePerQuestion} seconds`;
 
-    if (!domainResults[domain]) {
-      domainResults[domain] = { correct: 0, total: 0 };
+
+    // Grade by Domain
+    const domainResults = {};
+
+    for (let i = 0; i < randomizedExamData.length; i++) {  // Iterate over randomized data
+      const questionData = randomizedExamData[i];
+      const correctAnswer = questionData.AnswerKey;
+      const userAnswer = userAnswers[i];
+      const domain = questionData.DomainOfKnowledge;
+
+      if (!domainResults[domain]) {
+        domainResults[domain] = { correct: 0, total: 0 };
+      }
+
+      domainResults[domain].total++;
+
+      if (userAnswer === correctAnswer) {
+        domainResults[domain].correct++;
+        correctAnswers++;
+        correctQuestionsList.push(i);
+      } else {
+        incorrectAnswers++;
+        incorrectQuestionsList.push(i);
+      }
     }
 
-    domainResults[domain].total++;
+    const percentage = (correctAnswers / randomizedExamData.length) * 100;
 
-    if (userAnswer === correctAnswer) {
-      domainResults[domain].correct++;
-      correctAnswers++;
-      correctQuestionsList.push(i);
+    correctAnswersSpan.innerText = `${correctAnswers}/${randomizedExamData.length}`;
+    incorrectAnswersSpan.innerText = `${incorrectAnswers}/${randomizedExamData.length}`;
+    percentageSpan.innerText = percentage.toFixed(2);
+
+    // Display Domain Results
+    domainResultsDiv.innerHTML = ''; // Clear previous results
+    for (const domain in domainResults) {
+      const { correct, total } = domainResults[domain];
+      const domainPercentage = (correct / total) * 100;
+      const domainResultElement = document.createElement('div');
+      domainResultElement.classList.add('domain-result');
+      domainResultElement.innerText = `${domain}: ${correct}/${total} (${domainPercentage.toFixed(2)}%)`;
+      domainResultsDiv.appendChild(domainResultElement);
+    }
+
+      //Conditionally show the Review Section After the exam has been submitted
+    if (correctQuestionsList.length === 0) {
+        correctReviewSpan.style.display = 'none'; //hide correct review span
     } else {
-      incorrectAnswers++;
-      incorrectQuestionsList.push(i);
+        correctReviewSpan.style.display = 'inline';//Show it.
+        correctReviewSpan.innerText = `Correct Questions (${correctQuestionsList.length})`;
+        correctReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(correctQuestionsList); });  // Pass false for post-exam review
+
     }
-  }
 
-  const percentage = (correctAnswers / randomizedExamData.length) * 100;
-
-  correctAnswersSpan.innerText = `${correctAnswers}/${randomizedExamData.length}`;
-  incorrectAnswersSpan.innerText = `${incorrectAnswers}/${randomizedExamData.length}`;
-  percentageSpan.innerText = percentage.toFixed(2);
-
-  // Display Domain Results
-  domainResultsDiv.innerHTML = ''; // Clear previous results
-  for (const domain in domainResults) {
-    const { correct, total } = domainResults[domain];
-    const domainPercentage = (correct / total) * 100;
-    const domainResultElement = document.createElement('div');
-    domainResultElement.classList.add('domain-result');
-    domainResultElement.innerText = `${domain}: ${correct}/${total} (${domainPercentage.toFixed(2)}%)`;
-    domainResultsDiv.appendChild(domainResultElement);
-  }
-
-    //Conditionally show the Review Section After the exam has been submitted
-  if (correctQuestionsList.length === 0) {
-      correctReviewSpan.style.display = 'none'; //hide correct review span
-  } else {
-      correctReviewSpan.style.display = 'inline';//Show it.
-      correctReviewSpan.innerText = `Correct Questions (${correctQuestionsList.length})`;
-      correctReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(correctQuestionsList); });  // Pass false for post-exam review
-
-  }
-
-  if (incorrectQuestionsList.length === 0) {
-      incorrectReviewSpan.style.display = 'none'; //hide correct review span
-  } else {
-       incorrectReviewSpan.style.display = 'inline'; //show it
-       incorrectReviewSpan.innerText = `Incorrect Questions (${incorrectQuestionsList.length})`;
-       incorrectReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(incorrectQuestionsList); });
-  }
+    if (incorrectQuestionsList.length === 0) {
+        incorrectReviewSpan.style.display = 'none'; //hide correct review span
+    } else {
+        incorrectReviewSpan.style.display = 'inline'; //show it
+        incorrectReviewSpan.innerText = `Incorrect Questions (${incorrectQuestionsList.length})`;
+        incorrectReviewSpan.addEventListener('click', function() { reviewQuestionsByDomain(incorrectQuestionsList); });
+    }
 
 }
 // Modified reviewQuestionsByDomain function
@@ -767,6 +809,7 @@ function reviewQuestionsByDomain(questionList) {
     reviewListDiv.innerHTML = '';
 
     // Always show details (answers, explanations), grouped by domain
+
     const domainGroups = {};
     questionList.forEach(questionIndex => {
         const questionData = randomizedExamData[questionIndex];
