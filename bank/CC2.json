@@ -4761,7 +4761,7 @@
                 "Check the usernames being targeted for common typos, as suggested by the junior analyst."
             ],
             "AnswerKey": "Review the recent activity logs of the user associated with the originating IP address and correlate them with the SIEM alerts.",
-            "Explanation": "While the failed login attempts are suspicious, immediately blocking the IP might disrupt legitimate, albeit unusual, activity. Jumping directly to incident response might be premature without further information. Checking for typos addresses a less likely scenario given the volume and targeting of the attempts. The **most prudent initial step** is to **gather more context** by examining the activity of the user associated with the originating IP address to see if there are any other indicators of compromise that correlate with the SIEM alerts. This allows for a more informed decision on the appropriate course of action."
+            "Explaination": "While the failed login attempts are suspicious, immediately blocking the IP might disrupt legitimate, albeit unusual, activity. Jumping directly to incident response might be premature without further information. Checking for typos addresses a less likely scenario given the volume and targeting of the attempts. The **most prudent initial step** is to **gather more context** by examining the activity of the user associated with the originating IP address to see if there are any other indicators of compromise that correlate with the SIEM alerts. This allows for a more informed decision on the appropriate course of action."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4773,7 +4773,7 @@
                 "Implementation of least privilege."
             ],
             "AnswerKey": "Account revocation process.",
-            "Explanation": "Multifactor authentication would only protect the account if the credentials were still known. Vulnerability scanning identifies system weaknesses, not necessarily orphaned accounts. While the principle of least privilege aims to limit access, it doesn't guarantee timely removal of access upon departure. The **clear failure** is in the **account revocation process**, which should have ensured the termination of the administrator's account access immediately upon or shortly after their departure."
+            "Explaination": "Multifactor authentication would only protect the account if the credentials were still known. Vulnerability scanning identifies system weaknesses, not necessarily orphaned accounts. While the principle of least privilege aims to limit access, it doesn't guarantee timely removal of access upon departure. The **clear failure** is in the **account revocation process**, which should have ensured the termination of the administrator's account access immediately upon or shortly after their departure."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4785,7 +4785,7 @@
                 "Conducting a post-incident analysis to understand the attack vectors."
             ],
             "AnswerKey": "Restoring IT and communication systems from the most recent clean backups.",
-            "Explanation": "While all options are important at some stage, the **primary objective of a DRP** in this scenario is to **restore business operations as quickly as possible**. This is achieved by restoring systems and data from backups. Contacting legal and communicating with stakeholders are crucial but typically follow or occur in parallel with the initial restoration efforts. Post-incident analysis happens after recovery."
+            "Explaination": "While all options are important at some stage, the **primary objective of a DRP** in this scenario is to **restore business operations as quickly as possible**. This is achieved by restoring systems and data from backups. Contacting legal and communicating with stakeholders are crucial but typically follow or occur in parallel with the initial restoration efforts. Post-incident analysis happens after recovery."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4797,7 +4797,7 @@
                 "Prohibit BYOD altogether to eliminate any potential privacy issues."
             ],
             "AnswerKey": "Enforce security policies such as device encryption and strong passwords while clearly outlining the scope of monitoring, focusing solely on company data and access.",
-            "Explanation": "Option a raises significant privacy concerns and could increase employee resistance. Option b is insecure. Option d might be too restrictive and miss the benefits of BYOD. The **most balanced approach** is to **enforce necessary security measures** to protect company data while being **transparent about the monitoring scope**, ensuring it respects personal privacy and focuses on corporate assets and access."
+            "Explaination": "Option a raises significant privacy concerns and could increase employee resistance. Option b is insecure. Option d might be too restrictive and miss the benefits of BYOD. The **most balanced approach** is to **enforce necessary security measures** to protect company data while being **transparent about the monitoring scope**, ensuring it respects personal privacy and focuses on corporate assets and access."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4809,7 +4809,7 @@
                 "Perform a detailed analysis of the compromised system to understand the attack vector and scope of the breach."
             ],
             "AnswerKey": "Perform a detailed analysis of the compromised system to understand the attack vector and scope of the breach.",
-            "Explanation": "While eradication and recovery are necessary, understanding how the system was compromised is **crucial to prevent future incidents** and determine the extent of the damage. Post-incident review occurs after the incident is fully resolved. Analyzing the system helps in containing the incident effectively and ensuring complete eradication."
+            "Explaination": "While eradication and recovery are necessary, understanding how the system was compromised is **crucial to prevent future incidents** and determine the extent of the damage. Post-incident review occurs after the incident is fully resolved. Analyzing the system helps in containing the incident effectively and ensuring complete eradication."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4821,7 +4821,7 @@
                 "Regularly patching the operating system and web server software."
             ],
             "AnswerKey": "Implementing a web application firewall (WAF) with DDoS protection capabilities.",
-            "Explanation": "While HIDS and FIM enhance security, they don't directly address network-level DoS attacks. Regular patching is crucial for overall security but won't prevent a flood of malicious traffic. A **WAF with DDoS protection** is specifically designed to **filter malicious web traffic** and mitigate the impact of distributed denial-of-service attacks."
+            "Explaination": "While HIDS and FIM enhance security, they don't directly address network-level DoS attacks. Regular patching is crucial for overall security but won't prevent a flood of malicious traffic. A **WAF with DDoS protection** is specifically designed to **filter malicious web traffic** and mitigate the impact of distributed denial-of-service attacks."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4833,7 +4833,7 @@
                 "Deploy the system with the standard baseline and address any operational issues later."
             ],
             "AnswerKey": "Implement configuration tailoring, documenting the exceptions, justifications, and approvals for the deviations.",
-            "Explanation": "Ignoring the baseline is a security risk. Modifying the policy should only happen if the baseline is fundamentally flawed or needs a broader update. Deploying with the standard baseline and fixing issues later can lead to immediate operational problems. **Configuration tailoring** allows for **documented and approved exceptions** to the baseline for specific systems with unique needs, maintaining overall security governance."
+            "Explaination": "Ignoring the baseline is a security risk. Modifying the policy should only happen if the baseline is fundamentally flawed or needs a broader update. Deploying with the standard baseline and fixing issues later can lead to immediate operational problems. **Configuration tailoring** allows for **documented and approved exceptions** to the baseline for specific systems with unique needs, maintaining overall security governance."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4845,7 +4845,7 @@
                 "To flood the security team with data for better threat intelligence gathering."
             ],
             "AnswerKey": "To allow for timely analysis and potential containment of phishing attacks or malware distribution.",
-            "Explanation": "Option a is irrelevant. Option c is punitive and doesn't focus on security. Option d, while a byproduct, is not the primary reason. The **key benefit** of reporting suspicious emails is to **enable the security team to identify and respond quickly** to potential threats like phishing or malware before they can cause harm."
+            "Explaination": "Option a is irrelevant. Option c is punitive and doesn't focus on security. Option d, while a byproduct, is not the primary reason. The **key benefit** of reporting suspicious emails is to **enable the security team to identify and respond quickly** to potential threats like phishing or malware before they can cause harm."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4857,7 +4857,7 @@
                 "Data authenticity as the origin of data might be uncertain."
             ],
             "AnswerKey": "Data confidentiality if residual data is not securely wiped before reuse.",
-            "Explanation": "Data integrity is a concern, but the more direct risk is the potential for **residual sensitive data** from one client to be accessible by another if the underlying hardware is reused without proper sanitization. Data availability is a general cloud concern but not specific to hardware reuse. Data authenticity is related to data origin and integrity, not directly impacted by hardware reuse."
+            "Explaination": "Data integrity is a concern, but the more direct risk is the potential for **residual sensitive data** from one client to be accessible by another if the underlying hardware is reused without proper sanitization. Data availability is a general cloud concern but not specific to hardware reuse. Data authenticity is related to data origin and integrity, not directly impacted by hardware reuse."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4869,7 +4869,7 @@
                 "To ensure full system redundancy for all critical processes."
             ],
             "AnswerKey": "To define the maximum acceptable downtime for each critical process.",
-            "Explanation": "Identifying threats is part of risk assessment, which informs the BIA. Budget allocation is a consequence of BCP development. Full redundancy is a strategy, not the goal of RTOs. **RTOs directly specify the target recovery time** for each critical business function, guiding the selection and implementation of appropriate recovery strategies."
+            "Explaination": "Identifying threats is part of risk assessment, which informs the BIA. Budget allocation is a consequence of BCP development. Full redundancy is a strategy, not the goal of RTOs. **RTOs directly specify the target recovery time** for each critical business function, guiding the selection and implementation of appropriate recovery strategies."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4881,7 +4881,7 @@
                 "Traceability, providing a clear record of the path and source of events."
             ],
             "AnswerKey": "Traceability, providing a clear record of the path and source of events.",
-            "Explanation": "Accountability links actions to users. Auditability allows for broad review. Availability ensures access to logs. **Traceability** specifically refers to the ability to **follow the path of an event** back to its source, which is essential for investigating network traffic origins."
+            "Explaination": "Accountability links actions to users. Auditability allows for broad review. Availability ensures access to logs. **Traceability** specifically refers to the ability to **follow the path of an event** back to its source, which is essential for investigating network traffic origins."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4893,7 +4893,7 @@
                 "Utilizing intrusion detection systems (IDS) to monitor network traffic."
             ],
             "AnswerKey": "Installing CCTV cameras to monitor entry points.",
-            "Explanation": "Strong passwords are a technical control. Security awareness training is an administrative control. Intrusion detection systems are technical controls. **Physical security controls** involve **tangible measures** to protect physical assets, such as CCTV cameras."
+            "Explaination": "Strong passwords are a technical control. Security awareness training is an administrative control. Intrusion detection systems are technical controls. **Physical security controls** involve **tangible measures** to protect physical assets, such as CCTV cameras."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4905,7 +4905,7 @@
                 "Weakness."
             ],
             "AnswerKey": "Zero-day.",
-            "Explanation": "An exploit is the method used to take advantage of a vulnerability. An incident is an occurrence or event. A weakness is a general flaw. A **zero-day vulnerability** is a **previously unknown flaw** for which no patch is yet available, making it highly dangerous, especially when actively exploited."
+            "Explaination": "An exploit is the method used to take advantage of a vulnerability. An incident is an occurrence or event. A weakness is a general flaw. A **zero-day vulnerability** is a **previously unknown flaw** for which no patch is yet available, making it highly dangerous, especially when actively exploited."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4917,7 +4917,7 @@
                 "To generate a public relations statement minimizing the impact of the incident."
             ],
             "AnswerKey": "To identify the root cause of the incident, lessons learned, and areas for improvement in the incident response plan.",
-            "Explanation": "Punishing individuals is not the focus of post-incident analysis. Immediate restoration occurs during the recovery phase. Minimizing public impact is a communications concern. The **key goal** is to **learn from the incident** to prevent future occurrences and enhance the organization's security posture and incident response capabilities."
+            "Explaination": "Punishing individuals is not the focus of post-incident analysis. Immediate restoration occurs during the recovery phase. Minimizing public impact is a communications concern. The **key goal** is to **learn from the incident** to prevent future occurrences and enhance the organization's security posture and incident response capabilities."
         },
         {
             "DomainOfKnowledge": "Domain5",
@@ -4929,7 +4929,7 @@
                 "Assigning blame to the individual who implemented the unauthorized change."
             ],
             "AnswerKey": "Clearly identifying the steps needed to undo the change and revert to the previous stable state.",
-            "Explanation": "Mandatory vacations help detect fraud, not necessarily unauthorized changes. Increased security awareness is beneficial but doesn't directly address rollback procedures. Assigning blame doesn't improve the process. A **well-defined rollback plan** that **details the steps for reverting changes** is essential for mitigating the impact of failed or unauthorized changes and restoring system stability."
+            "Explaination": "Mandatory vacations help detect fraud, not necessarily unauthorized changes. Increased security awareness is beneficial but doesn't directly address rollback procedures. Assigning blame doesn't improve the process. A **well-defined rollback plan** that **details the steps for reverting changes** is essential for mitigating the impact of failed or unauthorized changes and restoring system stability."
         },
         {
             "DomainOfKnowledge": "Domain5",
