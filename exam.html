@@ -79,7 +79,7 @@ label.disabled-label {
 
 input[type="text"],
 input[type="number"],
-input[type="file"],
+/* input[type="file"], We hide the default file input */
 select {
     width: calc(100% - 24px);
     padding: 10px 12px;
@@ -97,9 +97,9 @@ select:focus {
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     outline: none;
 }
-input[type="file"] {
+/* input[type="file"] {
     padding: 8px;
-}
+} */
 select {
     width: auto;
     min-width: 150px;
@@ -321,10 +321,11 @@ input[type="number"].short-input {
      background-color: #117a65;
 }
 
-#load-url-button {
+#load-url-button, #browse-file-button {
     background-color: #5dade2;
+    margin-bottom: 5px; /* Adjust if needed near other elements */
 }
-#load-url-button:hover {
+#load-url-button:hover, #browse-file-button:hover {
     background-color: #4b9cce;
 }
 #run-demo-button {
@@ -333,6 +334,16 @@ input[type="number"].short-input {
 }
 #run-demo-button:hover {
     background-color: #e67e22;
+}
+
+#file-input-container {
+    margin-bottom: 15px;
+}
+#selected-file-name {
+    margin-left: 10px;
+    font-style: italic;
+    color: #555;
+    font-size: 0.9em;
 }
 
 
@@ -413,6 +424,13 @@ select option:disabled {
     color: #ccc;
     background-color: #f9f9f9;
 }
+#version-info {
+  text-align: center;
+  margin-top: 30px;
+  padding-bottom: 20px;
+  font-size: 0.85em;
+  color: #777;
+}
 
 </style>
 </head>
@@ -436,10 +454,17 @@ select option:disabled {
     <label for="json-url">Load from URL (optional):</label>
     <input type="text" id="json-url" placeholder="Enter JSON URL...">
     <button id="load-url-button" class="button-base">Load from URL</button>
-    <br>
-    <label for="json-file">Load from Local File (select a file to load automatically):</label>
-    <input type="file" id="json-file" accept=".json">
-    <br>
+
+    <div style="margin-top: 20px; margin-bottom: 15px;"> <!-- Increased top margin for better separation -->
+        <hr style="border: 0; border-top: 1px solid #e0e6ed;">
+    </div>
+
+    <div id="file-input-container">
+        <label for="browse-file-button">Load from Local File:</label> <!-- Label now points to the button for semantics -->
+        <input type="file" id="json-file" accept=".json" style="display: none;">
+        <button id="browse-file-button" class="button-base">Browse File</button>
+        <span id="selected-file-name">No file selected</span>
+    </div>
     <button id="run-demo-button" class="button-base">Run Demo Exam</button>
   </div>
 
@@ -507,13 +532,18 @@ select option:disabled {
     <div id="review-list"></div>
     <button id="review-return-button" class="nav-button button-base">Return to Results</button>
   </div>
-</div>
+</div> <!-- Closing exam-container -->
+
+<div id="version-info"></div>
 
 <script>
+const APP_VERSION = "1.0.0";
+
 const defaultExamData = {
   "Exam Name": "Demo Exam",
   "Number of Questions": 3,
-  "Default Time": 1, //in minutes
+  "Default Time": 1,
+  "BackNavigation": true,
   "Questions": [
     { "DomainOfKnowledge": "JavaScript Basics", "Question": "What is the output of console.log(2 + 2);", "Choices": ["22", "4", "0", "Error"], "AnswerKey": "4", "Explaination": "2 + 2 equals 4." },
     { "DomainOfKnowledge": "JavaScript Basics", "Question": "Which keyword declares a variable?", "Choices": ["define", "variable", "var"], "AnswerKey": "var", "Explaination": "'var', 'let', or 'const'." },
@@ -551,6 +581,8 @@ const incorrectAnswersSpan = document.getElementById('incorrect-answers');
 const percentageSpan = document.getElementById('percentage');
 const startButton = document.getElementById('start-button');
 const runDemoButton = document.getElementById('run-demo-button');
+const browseFileButton = document.getElementById('browse-file-button'); // New
+const selectedFileNameSpan = document.getElementById('selected-file-name'); // New
 const correctReviewSpan = document.getElementById('correct-review');
 const incorrectReviewSpan = document.getElementById('incorrect-review');
 const reviewContainer = document.getElementById('review-container');
@@ -559,7 +591,7 @@ const reviewReturnButton = document.getElementById('review-return-button');
 const domainResultsDiv = document.getElementById('domain-results');
 const loadUrlButton = document.getElementById('load-url-button');
 const jsonUrlInput = document.getElementById('json-url');
-const jsonFileInput = document.getElementById('json-file');
+const jsonFileInput = document.getElementById('json-file'); // The hidden one
 const examTitle = document.getElementById('exam-title');
 const customInstructionsTextP = document.getElementById('custom-instructions-text');
 const defaultInstructionsTextDiv = document.getElementById('default-instructions-text');
@@ -568,7 +600,9 @@ const progressBarContainer = document.getElementById('progress-bar-container');
 const progressBar = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
 const averageTimeSpan = document.getElementById('average-time');
+const versionInfoDiv = document.getElementById('version-info');
 
+// State Variables
 let currentQuestionIndex = 0;
 let userAnswers = {};
 let correctAnswersCount = 0;
@@ -580,6 +614,7 @@ let correctQuestionsList = [];
 let incorrectQuestionsList = [];
 let randomizedExamData = [];
 let maxQuestionsInBank = 0;
+let isBackNavigationDisabled = false;
 
 const TIME_PER_QUESTION_SECONDS = 90;
 const MIN_QUESTIONS_FOR_CUSTOM_SETUP = 5;
@@ -590,21 +625,45 @@ let currentExamSetup = {
     totalTimeMinutes: 0
 };
 
-// Event Listeners
-startButton.addEventListener('click', startActualExam);
-backButton.addEventListener('click', goBack);
-nextButton.addEventListener('click', goNext);
-submitButton.addEventListener('click', submitActualExam);
-reviewReturnButton.addEventListener('click', returnToResults);
-loadUrlButton.addEventListener('click', loadExamDataFromUrl);
-jsonFileInput.addEventListener('change', loadExamDataFromFile);
-runDemoButton.addEventListener('click', startDemoExam);
+// --- Event Listeners Setup ---
+function setupEventListeners() {
+    startButton.addEventListener('click', startActualExam);
+    backButton.addEventListener('click', goBack);
+    nextButton.addEventListener('click', goNext);
+    submitButton.addEventListener('click', submitActualExam);
+    reviewReturnButton.addEventListener('click', returnToResults);
+    loadUrlButton.addEventListener('click', loadExamDataFromUrl);
+    if (browseFileButton) { // Check existence for safety
+        browseFileButton.addEventListener('click', () => jsonFileInput.click());
+    }
+    jsonFileInput.addEventListener('change', handleFileSelectAndLoad);
+    runDemoButton.addEventListener('click', startDemoExam);
 
-setupDefaultRadio.addEventListener('change', handleSetupTypeChange);
-setupCustomNumberRadio.addEventListener('change', handleSetupTypeChange);
-customQuestionCountSelect.addEventListener('change', handleCustomCountChange);
-customQuestionCountInput.addEventListener('input', handleCustomCountChange);
-examDurationSetupInput.addEventListener('input', handleExamDurationChange);
+    setupDefaultRadio.addEventListener('change', handleSetupTypeChange);
+    setupCustomNumberRadio.addEventListener('change', handleSetupTypeChange);
+    customQuestionCountSelect.addEventListener('change', handleCustomCountChange);
+    customQuestionCountInput.addEventListener('input', handleCustomCountChange);
+    examDurationSetupInput.addEventListener('input', handleExamDurationChange);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    if (versionInfoDiv) {
+        versionInfoDiv.innerText = `Exam System v${APP_VERSION}`;
+    }
+    setupEventListeners();
+});
+
+
+// --- Core Logic Functions ---
+
+function handleFileSelectAndLoad(event) {
+    const file = event.target.files[0];
+    if (file) {
+        selectedFileNameSpan.textContent = file.name;
+        loadExamDataFromFile(file);
+    } else {
+        selectedFileNameSpan.textContent = "No file selected";
+    }
+}
 
 function handleExamDurationChange() {
     updateCurrentExamSetup();
@@ -626,27 +685,30 @@ function validateExamData(data) {
     if (typeof data["Default Time"] !== 'number' || data["Default Time"] < 0) {
         alert("Error: 'Default Time' must be a non-negative number."); return false;
     }
-    if (!Array.isArray(data.Questions)) { /* Allow empty initially */ }
+    if (data.BackNavigation !== undefined && typeof data.BackNavigation !== 'boolean') {
+        alert("Error: 'BackNavigation' must be a boolean (true or false) if present."); return false;
+    }
+    if (!Array.isArray(data.Questions)) { /* Allow empty */ }
     else {
         for (const question of data.Questions) {
            if (!question.DomainOfKnowledge || !question.Question || !question.Choices || !question.AnswerKey || !question.Explaination) {
-              alert("Error: A question is missing required fields (DomainOfKnowledge, Question, Choices, AnswerKey, Explaination)."); return false;
+              alert("Error: A question is missing required fields."); return false;
             }
            if (!Array.isArray(question.Choices) || question.Choices.length < 2) {
                 alert("Error: Each question must have at least two choices."); return false;
            }
            if (!question.Choices.includes(question.AnswerKey)) {
-            alert(`Error: The AnswerKey '${question.AnswerKey}' for question "${question.Question}" is not present in its Choices.`); return false;
+            alert(`Error: AnswerKey '${question.AnswerKey}' for Q "${question.Question}" not in Choices.`); return false;
            }
         }
     }
     if (data.DomainPercentages) {
         if (typeof data.DomainPercentages !== 'object'){ alert("Error: DomainPercentages must be an object"); return false; }
         let totalPercentage = 0;
-        for (const domain in data.DomainPercentages) { // Corrected loop
+        for (const domain in data.DomainPercentages) {
             const percentage = data.DomainPercentages[domain];
             if (typeof percentage !== 'number' || percentage < 0 || percentage > 100) {
-                alert(`Error: Invalid percentage for domain '${domain}'. Percentages must be between 0 and 100.`); return false;
+                alert(`Error: Invalid percentage for domain '${domain}'.`); return false;
             }
             totalPercentage += percentage;
         }
@@ -658,77 +720,25 @@ function validateExamData(data) {
 function prepareExamQuestionsInternal(sourceData, numQuestionsToSelect) {
     let selectedQuestions = [];
     const allQuestionsPool = JSON.parse(JSON.stringify(sourceData.Questions || []));
-
-    if (allQuestionsPool.length === 0 || numQuestionsToSelect === 0) {
-        return [];
-    }
-
+    if (allQuestionsPool.length === 0 || numQuestionsToSelect === 0) return [];
     const actualNumToSelect = Math.min(numQuestionsToSelect, allQuestionsPool.length);
-
     const questionsByDomain = {};
-    allQuestionsPool.forEach(q => {
-        if (!questionsByDomain[q.DomainOfKnowledge]) {
-            questionsByDomain[q.DomainOfKnowledge] = [];
-        }
-        questionsByDomain[q.DomainOfKnowledge].push(q);
-    });
+    allQuestionsPool.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
     for (const domain in questionsByDomain) shuffleArray(questionsByDomain[domain]);
-
     if (sourceData.DomainPercentages && Object.keys(sourceData.DomainPercentages).length > 0 && actualNumToSelect === sourceData["Number of Questions"]) {
-        const domainAllowances = {};
-        const remainderDomains = [];
-        for (const domain in sourceData.DomainPercentages) {
-            if (questionsByDomain[domain]) {
-                const percentage = sourceData.DomainPercentages[domain];
-                const questionsForDomainFloat = (percentage / 100) * actualNumToSelect;
-                domainAllowances[domain] = Math.floor(questionsForDomainFloat);
-                if (questionsForDomainFloat - domainAllowances[domain] > 0) remainderDomains.push(domain);
-            }
-        }
-        let totalIntegerAllocation = Object.values(domainAllowances).reduce((sum, val) => sum + val, 0);
-        let slotsToDistribute = actualNumToSelect - totalIntegerAllocation;
-        shuffleArray(remainderDomains);
-        let remainderIdx = 0;
-        while (slotsToDistribute > 0 && remainderDomains.length > 0) {
-            const domainToIncrement = remainderDomains[remainderIdx % remainderDomains.length];
-            domainAllowances[domainToIncrement] = (domainAllowances[domainToIncrement] || 0) + 1;
-            slotsToDistribute--; remainderIdx++;
-        }
-        if (slotsToDistribute > 0) {
-            const percentageDomains = Object.keys(sourceData.DomainPercentages).filter(d => questionsByDomain[d] && questionsByDomain[d].length > 0);
-            shuffleArray(percentageDomains);
-            let pdIdx = 0; let iterations = 0;
-            while (slotsToDistribute > 0 && percentageDomains.length > 0 && iterations < percentageDomains.length * 3) {
-                 const domainToIncrement = percentageDomains[pdIdx % percentageDomains.length];
-                 if(questionsByDomain[domainToIncrement] && questionsByDomain[domainToIncrement].length > 0){
-                    domainAllowances[domainToIncrement] = (domainAllowances[domainToIncrement] || 0) + 1;
-                    slotsToDistribute--;
-                 }
-                 pdIdx++; iterations++;
-            }
-        }
-        for (const domain in domainAllowances) {
-            const numToTakeForDomain = domainAllowances[domain];
-            if (questionsByDomain[domain] && numToTakeForDomain > 0) {
-                const canTake = Math.min(numToTakeForDomain, questionsByDomain[domain].length);
-                selectedQuestions.push(...questionsByDomain[domain].splice(0, canTake));
-            }
-        }
+        const domainAllowances = {}; const remainderDomains = [];
+        for (const domain in sourceData.DomainPercentages) { if (questionsByDomain[domain]) { const p = sourceData.DomainPercentages[domain]; const f = (p / 100) * actualNumToSelect; domainAllowances[domain] = Math.floor(f); if (f - domainAllowances[domain] > 0) remainderDomains.push(domain); }}
+        let totalIntAlloc = Object.values(domainAllowances).reduce((s, v) => s + v, 0); let slotsToDist = actualNumToSelect - totalIntAlloc;
+        shuffleArray(remainderDomains); let remIdx = 0; while (slotsToDist > 0 && remainderDomains.length > 0) { const dInc = remainderDomains[remIdx % remainderDomains.length]; domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; remIdx++; }
+        if (slotsToDist > 0) { const pDoms = Object.keys(sourceData.DomainPercentages).filter(d => questionsByDomain[d] && questionsByDomain[d].length > 0); shuffleArray(pDoms); let pIdx = 0; let iters = 0; while (slotsToDist > 0 && pDoms.length > 0 && iters < pDoms.length * 3) { const dInc = pDoms[pIdx % pDoms.length]; if(questionsByDomain[dInc] && questionsByDomain[dInc].length > 0){ domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; } pIdx++; iters++; }}
+        for (const domain in domainAllowances) { const numTake = domainAllowances[domain]; if (questionsByDomain[domain] && numTake > 0) { const canTake = Math.min(numTake, questionsByDomain[domain].length); selectedQuestions.push(...questionsByDomain[domain].splice(0, canTake)); }}
     }
     let deficit = actualNumToSelect - selectedQuestions.length;
-    if (deficit > 0) {
-        let remainingOverallPool = [];
-        for (const domain in questionsByDomain) remainingOverallPool.push(...questionsByDomain[domain]);
-        shuffleArray(remainingOverallPool);
-        selectedQuestions.push(...remainingOverallPool.slice(0, deficit));
-    }
-    if (selectedQuestions.length > actualNumToSelect) {
-        shuffleArray(selectedQuestions);
-        selectedQuestions = selectedQuestions.slice(0, actualNumToSelect);
-    }
-    shuffleArray(selectedQuestions);
-    return selectedQuestions;
+    if (deficit > 0) { let remPool = []; for (const domain in questionsByDomain) remPool.push(...questionsByDomain[domain]); shuffleArray(remPool); selectedQuestions.push(...remPool.slice(0, deficit)); }
+    if (selectedQuestions.length > actualNumToSelect) { shuffleArray(selectedQuestions); selectedQuestions = selectedQuestions.slice(0, actualNumToSelect); }
+    shuffleArray(selectedQuestions); return selectedQuestions;
 }
+
 
 function loadExamDataFromUrl() {
     const url = jsonUrlInput.value.trim();
@@ -739,22 +749,25 @@ function loadExamDataFromUrl() {
         .catch(error => { console.error('Error fetching JSON from URL:', error); alert(`Failed to load exam data from URL. Error: ${error.message}`); });
 }
 
-function loadExamDataFromFile() {
-  const file = jsonFileInput.files[0];
-  if (!file) return;
+function loadExamDataFromFile(selectedFile) { // Now accepts file directly
+  const file = selectedFile || jsonFileInput.files[0]; // Fallback if called directly (less likely now)
+  if (!file) {
+    selectedFileNameSpan.textContent = "No file selected";
+    return;
+  }
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
       if (validateExamData(data)) { examData = data; onExamDataLoaded(); }
-      else jsonFileInput.value = '';
+      else { jsonFileInput.value = ''; selectedFileNameSpan.textContent = "Invalid file. No file selected.";}
     } catch (error) {
       console.error("Error parsing JSON from file:", error);
-      alert("Failed to load or parse JSON file. Make sure it's a valid JSON file. Error: " + error.message);
-      jsonFileInput.value = '';
+      alert("Failed to load or parse JSON file. Error: " + error.message);
+      jsonFileInput.value = ''; selectedFileNameSpan.textContent = "Error. No file selected.";
     }
   };
-  reader.onerror = () => { alert('Error reading file.'); jsonFileInput.value = ''; };
+  reader.onerror = () => { alert('Error reading file.'); jsonFileInput.value = ''; selectedFileNameSpan.textContent = "Error reading file.";};
   reader.readAsText(file);
 }
 
@@ -763,18 +776,20 @@ function startDemoExam() {
     onExamDataLoaded();
     setupDefaultRadio.checked = true;
     handleSetupTypeChange();
-    updateCurrentExamSetup();
     alert("Demo Exam loaded. Please review settings and click 'Start Exam'.");
 }
 
 function onExamDataLoaded() {
     jsonUrlInput.style.display = 'none'; loadUrlButton.style.display = 'none';
-    jsonFileInput.style.display = 'none'; runDemoButton.style.display = 'none';
+    document.getElementById('file-input-container').style.display = 'none'; // Hide entire file input container
+    runDemoButton.style.display = 'none';
     document.querySelector("label[for='json-url']").style.display = 'none';
-    document.querySelector("label[for='json-file']").style.display = 'none';
+    // Label for file input is part of the hidden container
 
     welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
     examTitle.innerText = examData["Exam Name"];
+
+    isBackNavigationDisabled = (examData.BackNavigation === false);
 
     if (examData.Instructions) { customInstructionsTextP.innerHTML = examData.Instructions; defaultInstructionsTextDiv.style.display = 'none'; }
     else { customInstructionsTextP.innerText = ''; defaultInstructionsTextDiv.style.display = 'block'; }
@@ -785,8 +800,9 @@ function onExamDataLoaded() {
     const defaultNumQFromFile = examData["Number of Questions"];
     const defaultTimeM = examData["Default Time"];
     const actualDefaultNumQ = Math.min(defaultNumQFromFile, maxQuestionsInBank);
+    let backNavText = isBackNavigationDisabled ? " (Back navigation disabled)" : "";
 
-    defaultSettingsInfoDiv.innerText = `Default: ${actualDefaultNumQ} Qs (file: ${defaultNumQFromFile}), ${defaultTimeM > 0 ? defaultTimeM + ' min' : 'unlimited'}. (Bank: ${maxQuestionsInBank} Qs)`;
+    defaultSettingsInfoDiv.innerText = `Default: ${actualDefaultNumQ} Qs (file: ${defaultNumQFromFile}), ${defaultTimeM > 0 ? defaultTimeM + ' min' : 'unlimited'}. (Bank: ${maxQuestionsInBank} Qs)${backNavText}`;
 
     initialLoadInstructionsDiv.style.display = 'none';
     examSetupOptionsDiv.style.display = 'block';
@@ -810,11 +826,11 @@ function handleSetupTypeChange() {
     if (setupDefaultRadio.checked) {
         currentExamSetup.type = 'default';
         customNumberOptionsContainerDiv.style.display = 'none';
-        examDurationSetupInput.value = examData ? Math.max(0, examData["Default Time"]) : 60; // Ensure non-negative
+        examDurationSetupInput.value = examData ? Math.max(0, examData["Default Time"]) : 60;
     } else if (!setupCustomNumberRadio.disabled) {
         currentExamSetup.type = 'custom_number';
         customNumberOptionsContainerDiv.style.display = 'block';
-        handleCustomCountChange(); // This will also update examDurationSetupInput
+        handleCustomCountChange();
     } else {
         currentExamSetup.type = 'default';
         customNumberOptionsContainerDiv.style.display = 'none';
@@ -848,11 +864,14 @@ function handleCustomCountChange() {
     if (maxQuestionsInBank === 0) selectedCount = 0;
 
     currentExamSetup.numQuestions = selectedCount > 0 ? selectedCount : 0;
-    const autoCalculatedTimeMinutes = currentExamSetup.numQuestions > 0 ? Math.ceil((currentExamSetup.numQuestions * TIME_PER_QUESTION_SECONDS) / 60) : (examData ? examData["Default Time"] : 0);
-    examDurationSetupInput.value = Math.max(0, autoCalculatedTimeMinutes); // Ensure non-negative
+    const autoCalculatedTimeMinutes = currentExamSetup.numQuestions > 0
+        ? Math.ceil((currentExamSetup.numQuestions * TIME_PER_QUESTION_SECONDS) / 60)
+        : (examData ? examData["Default Time"] : 0);
+    examDurationSetupInput.value = Math.max(0, autoCalculatedTimeMinutes);
 
-    customSetupTimeInfoAutoP.innerText = currentExamSetup.numQuestions > 0 ? `Auto-suggested time: ~${autoCalculatedTimeMinutes} min.` : "";
-
+    customSetupTimeInfoAutoP.innerText = currentExamSetup.numQuestions > 0
+        ? `Auto-suggested time: ~${autoCalculatedTimeMinutes} min. (Editable below).`
+        : "";
     updateCurrentExamSetup();
 }
 
@@ -862,23 +881,19 @@ function updateCurrentExamSetup() {
     let numQ;
     if (currentExamSetup.type === 'default' || setupCustomNumberRadio.disabled) {
         numQ = Math.min(examData["Number of Questions"], maxQuestionsInBank);
-        // examDurationSetupInput.value should have been set correctly in handleSetupTypeChange
-    } else { // 'custom_number'
+    } else {
         numQ = Math.min(currentExamSetup.numQuestions, maxQuestionsInBank);
-        // examDurationSetupInput.value should have been set by handleCustomCountChange
     }
-    if (numQ < 0) numQ = 0;
-    currentExamSetup.numQuestions = numQ;
+    currentExamSetup.numQuestions = (numQ < 0) ? 0 : numQ;
 
     let timeM = parseInt(examDurationSetupInput.value, 10);
-    if (isNaN(timeM) || timeM < 0) {
-        timeM = 0;
-        examDurationSetupInput.value = 0;
-    }
+    if (isNaN(timeM) || timeM < 0) { timeM = 0; examDurationSetupInput.value = 0; }
     currentExamSetup.totalTimeMinutes = timeM;
 
+    let backNavStatusText = isBackNavigationDisabled ? " (Back navigation will be disabled)" : "";
+
     if (currentExamSetup.numQuestions > 0) {
-        effectiveSettingsSummaryP.innerHTML = `Exam will start with: <strong>${currentExamSetup.numQuestions} questions</strong>. <br>Time limit: <strong>${currentExamSetup.totalTimeMinutes > 0 ? currentExamSetup.totalTimeMinutes + ' minutes' : 'Unlimited'}</strong>.`;
+        effectiveSettingsSummaryP.innerHTML = `Exam will start with: <strong>${currentExamSetup.numQuestions} questions</strong>. <br>Time limit: <strong>${currentExamSetup.totalTimeMinutes > 0 ? currentExamSetup.totalTimeMinutes + ' minutes' : 'Unlimited'}</strong>.${backNavStatusText}`;
         startButton.disabled = false;
     } else {
         let reason = `(Bank: ${maxQuestionsInBank})`;
@@ -916,10 +931,15 @@ function startActualExam() {
 }
 
 function updateProgress() {
-    if (!randomizedExamData || randomizedExamData.length === 0) { progressBar.style.width='0%'; progressText.innerText='0/0 Qs'; return; }
-    const totalQuestions = randomizedExamData.length; const answeredQuestions = Object.keys(userAnswers).length;
-    const progressPercentage = totalQuestions > 0 ? (answeredQuestions/totalQuestions)*100 : 0;
-    progressBar.style.width=`${progressPercentage}%`; progressText.innerText=`${answeredQuestions}/${totalQuestions} Qs Answered`;
+    if (!randomizedExamData || randomizedExamData.length === 0) {
+        progressBar.style.width = '0%';
+        progressText.innerText = `Question 0 / 0`; return;
+    }
+    const totalQuestions = randomizedExamData.length;
+    const currentQNumber = Math.min(currentQuestionIndex + 1, totalQuestions);
+    const progressPercentage = totalQuestions > 0 ? (currentQNumber / totalQuestions) * 100 : 0;
+    progressBar.style.width = `${progressPercentage}%`;
+    progressText.innerText = `Question ${currentQNumber} / ${totalQuestions}`;
 }
 
 function showQuestion() {
@@ -938,19 +958,29 @@ function showQuestion() {
     const radio = choicesContainer.querySelector(`input[name="answer"][value="${CSS.escape(answer)}"]`);
     if (radio) radio.checked = true;
   }
-  backButton.disabled = currentQuestionIndex === 0;
+
+  if (isBackNavigationDisabled) {
+      backButton.disabled = true;
+      backButton.style.display = 'none';
+  } else {
+      backButton.disabled = currentQuestionIndex === 0;
+      backButton.style.display = 'inline-block';
+  }
+
   nextButton.style.display = currentQuestionIndex === randomizedExamData.length - 1 ? 'none' : 'inline-block';
   submitButton.style.display = currentQuestionIndex === randomizedExamData.length - 1 ? 'inline-block' : 'none';
   updateProgress();
 }
 
 function goNext() { saveAnswer(); currentQuestionIndex++; showQuestion(); }
-function goBack() { saveAnswer(); currentQuestionIndex--; showQuestion(); }
+function goBack() {
+    if (isBackNavigationDisabled) return;
+    saveAnswer(); currentQuestionIndex--; showQuestion();
+}
 
 function saveAnswer() {
-  const selectedAnswer = choicesContainer.querySelector('input[name="answer"]:checked');
-  if (selectedAnswer) userAnswers[currentQuestionIndex] = selectedAnswer.value;
-  updateProgress();
+  const selectedAnswerNode = choicesContainer.querySelector('input[name="answer"]:checked');
+  if (selectedAnswerNode) userAnswers[currentQuestionIndex] = selectedAnswerNode.value;
 }
 
 function startTimerInterval() {
@@ -989,14 +1019,13 @@ function submitActualExam() {
     correctAnswersSpan.innerText = `${correctAnswersCount}/${numQuestionsInExam}`;
     incorrectAnswersSpan.innerText = `${incorrectAnswersCount}/${numQuestionsInExam}`;
     percentageSpan.innerText = percentage.toFixed(2);
-
-    domainResultsDiv.innerHTML = ''; // Clear previous results
+    domainResultsDiv.innerHTML = '';
     for (const domain in domainResults) {
       const { correct, total } = domainResults[domain];
       const domPerc = total > 0 ? (correct / total) * 100 : 0;
       const el = document.createElement('div'); el.classList.add('domain-result');
       el.innerText = `${domain}: ${correct}/${total} (${domPerc.toFixed(2)}%)`;
-      domainResultsDiv.appendChild(el); // Corrected variable name here
+      domainResultsDiv.appendChild(el);
     }
     correctReviewSpan.style.display = correctQuestionsList.length === 0 ? 'none' : 'inline';
     if (correctQuestionsList.length > 0) { correctReviewSpan.innerText = `Review Correct (${correctQuestionsList.length})`; correctReviewSpan.onclick = () => reviewQuestionsByDomain(correctQuestionsList); }
@@ -1016,7 +1045,7 @@ function reviewQuestionsByDomain(questionIndicesList) {
         domainGroups[domain].forEach(qIdx => {
             const qData = randomizedExamData[qIdx]; const uAns = userAnswers[qIdx] !== undefined ? userAnswers[qIdx] : "Not Answered";
             const li = document.createElement('div'); li.classList.add('review-list-item');
-            const qTextDiv = document.createElement('div'); qTextDiv.style.cssText = 'display:flex;justify-content:space-between;align-items:center;';
+            const qTextDiv = document.createElement('div'); qTextDiv.style.cssText = 'display:flex;justify-content:space-between;align-items:center;cursor:pointer;';
             const qTitle = document.createElement('div'); qTitle.innerText = `Q${qIdx + 1}: ${qData.Question}`;
             const arrow = document.createElement('span'); arrow.classList.add('review-arrow'); arrow.innerHTML = '▾';
             qTextDiv.append(qTitle, arrow);
