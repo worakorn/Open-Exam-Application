@@ -2,7 +2,46 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
-## Version 1.6.0 (Current Release)
+## Version 1.7.0 (Current Release)
+
+**Summary:** This is a maintenance and refinement release that significantly overhauls the core question distribution logic to be more intelligent and mathematically sound. It introduces a new proportional distribution algorithm that better respects the `DomainPercentages` defined in the JSON file. This version also fixes a critical UI bug in the custom exam setup, enhances the results screen with more precise sorting, and includes a developer-focused debug mode for validating the new algorithm.
+
+**Key Features & Enhancements:**
+
+1.  **Advanced Proportional Question Distribution Algorithm:**
+    *   **Description:** The logic for selecting questions in the "Default Settings" mode has been rewritten to be more accurate and robust, using the **Largest Remainder Method** for proportional distribution.
+    *   **Implementation:**
+        *   The system now calculates the minimum number of questions required to assign at least one question to each topic defined in `DomainPercentages`.
+        *   If the user requests *fewer* questions than this minimum, the system intelligently **falls back to a simple random selection**, ensuring a valid exam can always be generated.
+        *   If the user requests *enough* questions, the new algorithm is used to distribute questions in a way that most accurately reflects the specified percentages.
+
+2.  **Enhanced Results Screen Sorting:**
+    *   **Description:** The sorting of the "Results by Domain" section has been refined to be more deterministic and logical.
+    *   **Implementation:** The results are now sorted primarily in **descending order by performance percentage**, with a secondary **alphabetical (ascending) sort by domain name** to break any ties.
+
+3.  **Developer Debug Mode:**
+    *   **Description:** To aid in testing and validation, a debug mode has been added.
+    *   **Implementation:** Setting the `DEBUG` constant at the top of the script to `true` will output detailed steps of the new question distribution algorithm to the browser's developer console.
+
+**Bug Fixes:**
+
+1.  **Fixed Custom Question Count Input:**
+    *   **Description:** A critical bug was identified where the text input field for a custom number of questions failed to appear when "Custom..." was selected from the dropdown in the "Quick Start" or "Custom Selection" modes.
+    *   **Implementation:** This has been corrected, and the input field now displays and functions as expected, allowing users to enter a specific number of questions.
+
+**Testing Notes for Version 1.7.0:**
+
+*   **Bug Fix Verification:** Verify that selecting "Custom..." in the question count dropdown now correctly displays the text input field for a custom number.
+*   **Algorithm Testing (Default Mode):**
+    *   Using a JSON with `DomainPercentages`, test with a question count *below* the minimum required (e.g., if 4 domains are specified, test with 3 questions). The result should be a random selection.
+    *   Test with a question count *above* the minimum. The result should respect the ratios.
+    *   Set `DEBUG = true` in the script and check the developer console to validate the algorithm's calculations during the "Default Mode" setup.
+*   **Results Sorting:** After an exam, confirm the "Results by Domain" are sorted with the highest percentage first. If two domains have the same percentage (e.g., both 90%), confirm they are sorted alphabetically (e.g., "Art (90%)" appears before "History (90%)").
+*   **Regression Testing:** Confirm that the "Quick Start" and "Custom Selection (By Domain)" modes still function correctly.
+
+---
+
+## Version 1.6.0
 
 **Summary:** This is a major feature release focused on providing powerful, user-driven exam customization. It introduces three distinct exam setup modes, including the ability to select questions from specific, sorted topics. This version also adds mobile responsiveness for a seamless experience on any device and enhances the results screen by sorting domain performance to provide clearer feedback.
 

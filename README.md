@@ -1,4 +1,4 @@
-# Open Exam Application (v1.6.0)
+# Open Exam Application (v1.7.0)
 
 ## Introduction
 
@@ -14,21 +14,23 @@ The "Open Exam Application" is a standalone, offline-capable exam system built e
     *   Load exam banks from a publicly accessible URL hosting a JSON file.
     *   Supports a defined [JSON schema](./bank/README.md) for creating custom exams, including domain-specific questions, answer explanations, and configurable exam parameters.
 *   **Advanced Exam Setup:**
-    *   **Default Settings Mode:** Uses the settings from the JSON file. It intelligently applies `DomainPercentages` only if the question count is sufficient, otherwise falling back to random selection.
+    *   **Default Settings Mode:** Uses the settings from the JSON file. It now uses a highly accurate **proportional distribution algorithm (Largest Remainder Method)** to strictly follow the `DomainPercentages`. If the requested question count is too low for the ratios, it intelligently falls back to a simple random selection.
     *   **Quick Start Mode:** Allows users to start an exam quickly with a specific number of questions chosen randomly from the entire question bank.
     *   **Custom Selection Mode:** Empowers users to build their own exam by:
         *   Selecting one or more specific topics (Domains of Knowledge) from an alphabetically sorted list.
-        *   Choosing the number of questions to be drawn randomly *only from the selected topics*.
+        *   Choosing the number of questions to be drawn randomly *only from the selected topics*. A bug preventing the custom number input field from appearing has been **fixed**.
 *   **Modern Exam Experience:**
-    *   Clean, responsive user interface that works on both **desktop and mobile devices**.
+    *   Clean, **responsive user interface** that works on both **desktop and mobile devices**.
     *   Multiple-choice questions presented one at a time.
     *   Optional, user-configurable timer with automatic submission when time expires.
     *   Navigation (Next/Back buttons), with an option in the JSON (`"BackNavigation": false`) to disable the "Back" button for a more restrictive exam.
     *   Progress bar indicating the user's current position in the exam (e.g., Question 5 / 20).
 *   **Immediate Results & Enhanced Review:**
     *   Instant scoring upon submission, including overall percentage and average time per question.
-    *   Results are broken down by knowledge domain and **sorted by performance (best to worst)** to provide clear insights.
+    *   Results are broken down by knowledge domain and **sorted by performance** (best to worst, with alphabetical sorting for any ties) to provide clear insights.
     *   Option to review correctly and incorrectly answered questions, showing the user's answer, the correct answer, and the explanation.
+*   **Developer Debug Mode:**
+    *   A `DEBUG` flag is available in the script to output detailed logs of the new question distribution algorithm to the developer console for validation.
 *   **Demo Mode:** Includes a built-in demo exam for quick testing and demonstration of all features.
 
 ## How to Use
@@ -41,7 +43,7 @@ The "Open Exam Application" is a standalone, offline-capable exam system built e
     *   **Run Demo:** Click "Run Demo Exam" to use the built-in sample questions.
 4.  **Configure Your Exam:** Once an exam bank is loaded, choose your preferred setup:
     *   **Default Settings:** The simplest option, using the configuration from the exam file.
-    *   **Quick Start:** Select for a random assortment of questions.
+    *   **Quick Start:** Select for a random assortment of questions from all topics.
     *   **Custom Selection:** Check the boxes for the topics you want to be tested on.
     *   For Quick Start and Custom modes, you can also specify the number of questions and the time limit.
 5.  **Start Exam:** Click the "Start Exam" button.
