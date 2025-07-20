@@ -9,13 +9,14 @@ body {
   color: #333;
   line-height: 1.6;
   margin: 0;
-  padding: 20px;
+  padding: 10px;
 }
 
 #exam-container {
-  width: 800px;
+  max-width: 800px;
+  width: 95%;
   margin: 20px auto;
-  padding: 30px;
+  padding: 20px;
   border: none;
   border-radius: 8px;
   background-color: #ffffff;
@@ -28,7 +29,7 @@ h1, h2, h3, h4 {
 }
 
 h1#exam-title {
-  font-size: 2.2em;
+  font-size: 1.8em;
   margin-bottom: 25px;
   text-align: center;
   color: #34495e;
@@ -36,7 +37,7 @@ h1#exam-title {
 
 #welcome-message {
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: #34495e;
     margin-bottom: 20px;
 }
@@ -79,9 +80,9 @@ label.disabled-label {
 
 input[type="text"],
 input[type="number"],
-/* input[type="file"], We hide the default file input */
 select {
-    width: calc(100% - 24px);
+    width: 100%;
+    max-width: 400px;
     padding: 10px 12px;
     margin-bottom: 15px;
     border: 1px solid #cbd5e0;
@@ -97,9 +98,6 @@ select:focus {
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     outline: none;
 }
-/* input[type="file"] {
-    padding: 8px;
-} */
 select {
     width: auto;
     min-width: 150px;
@@ -107,6 +105,7 @@ select {
 }
 input[type="number"].short-input {
     width: 80px !important;
+    max-width: none;
     margin-left: 10px;
     margin-bottom: 5px;
     display: inline-block;
@@ -323,7 +322,7 @@ input[type="number"].short-input {
 
 #load-url-button, #browse-file-button {
     background-color: #5dade2;
-    margin-bottom: 5px; /* Adjust if needed near other elements */
+    margin-bottom: 5px;
 }
 #load-url-button:hover, #browse-file-button:hover {
     background-color: #4b9cce;
@@ -391,21 +390,27 @@ input[type="number"].short-input {
 #exam-setup-options > div {
     margin-bottom: 15px;
 }
-#default-settings-info,
-#custom-number-options-container div,
-#custom-number-options-container p,
-#custom-number-options-container label[for="custom-question-count-select"]
- {
+.setup-option-group {
+    margin-bottom: 15px;
+}
+.setup-details {
     margin-left: 25px;
     font-size: 0.9em;
     color: #555;
     margin-top: 5px;
 }
-#custom-number-options-container > select,
-#custom-number-options-container > input.short-input {
-    margin-left: 25px;
+#custom-domain-selection {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fff;
 }
-
+.domain-checkbox-item {
+    display: block;
+    margin-bottom: 5px;
+}
 
 #custom-setup-warning {
     color: #c0392b;
@@ -432,6 +437,45 @@ select option:disabled {
   color: #777;
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    #exam-container {
+        padding: 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    h1#exam-title {
+        font-size: 1.5em;
+    }
+    .button-base, select, input[type="text"], input[type="number"] {
+        font-size: 16px; /* Prevent iOS auto-zoom */
+    }
+    .choice {
+        padding: 10px;
+    }
+    .choice label {
+        font-size: 0.95em;
+    }
+    #load-url-button, #browse-file-button, #run-demo-button {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    #file-input-container {
+        display: flex;
+        flex-direction: column;
+    }
+    #selected-file-name {
+        margin-left: 0;
+        margin-top: 5px;
+        text-align: center;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -455,12 +499,12 @@ select option:disabled {
     <input type="text" id="json-url" placeholder="Enter JSON URL...">
     <button id="load-url-button" class="button-base">Load from URL</button>
 
-    <div style="margin-top: 20px; margin-bottom: 15px;"> <!-- Increased top margin for better separation -->
+    <div style="margin-top: 20px; margin-bottom: 15px;">
         <hr style="border: 0; border-top: 1px solid #e0e6ed;">
     </div>
 
     <div id="file-input-container">
-        <label for="browse-file-button">Load from Local File:</label> <!-- Label now points to the button for semantics -->
+        <label for="browse-file-button">Load from Local File:</label>
         <input type="file" id="json-file" accept=".json" style="display: none;">
         <button id="browse-file-button" class="button-base">Browse File</button>
         <span id="selected-file-name">No file selected</span>
@@ -470,16 +514,28 @@ select option:disabled {
 
   <div id="exam-setup-options" style="display: none;">
     <h4>Exam Setup</h4>
-    <div>
+    <div class="setup-option-group">
         <input type="radio" id="setup-default" name="exam-setup-type" value="default" checked>
         <label for="setup-default" class="inline-label">Use default settings from exam file</label>
-        <div id="default-settings-info"></div>
+        <div id="default-settings-info" class="setup-details"></div>
     </div>
-    <div>
-        <input type="radio" id="setup-custom-number" name="exam-setup-type" value="custom_number">
-        <label for="setup-custom-number" class="inline-label">Customize number of questions</label>
-        <div id="custom-number-options-container" style="display: none;">
-            <label for="custom-question-count-select">Select or enter number of questions:</label>
+    <div class="setup-option-group">
+        <input type="radio" id="setup-quick" name="exam-setup-type" value="quick">
+        <label for="setup-quick" class="inline-label">Quick Start (Random questions from all topics)</label>
+    </div>
+    <div class="setup-option-group">
+        <input type="radio" id="setup-custom-domain" name="exam-setup-type" value="custom_domain">
+        <label for="setup-custom-domain" class="inline-label">Custom Selection (Choose specific topics)</label>
+        <div id="custom-domain-options-container" class="setup-details" style="display: none;">
+            <p>Select one or more topics:</p>
+            <div id="custom-domain-selection"></div>
+        </div>
+    </div>
+
+    <div id="custom-exam-common-options" style="display: none;">
+        <hr style="border: 0; border-top: 1px solid #e0e6ed;">
+        <div>
+            <label for="custom-question-count-select">Number of Questions:</label>
             <select id="custom-question-count-select">
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -489,17 +545,18 @@ select option:disabled {
                 <option value="custom">Custom...</option>
             </select>
             <input type="number" id="custom-question-count-input" min="1" class="short-input" style="display: none;" placeholder="Qty">
-            <p id="custom-setup-time-info-auto"></p>
-            <p id="custom-setup-warning"></p>
         </div>
+        <div>
+            <label for="exam-duration-setup-input">Time Limit (minutes, 0 for unlimited):</label>
+            <input type="number" id="exam-duration-setup-input" min="0" value="60">
+        </div>
+        <p id="custom-setup-warning"></p>
     </div>
-    <div style="margin-top: 15px;">
-        <label for="exam-duration-setup-input">Set Time Limit (minutes, 0 for unlimited):</label>
-        <input type="number" id="exam-duration-setup-input" min="0" value="60">
-    </div>
+
     <p id="effective-settings-summary"></p>
     <button id="start-button" class="button-base">Start Exam</button>
   </div>
+
 
   <div id="progress-bar-container" style="display: none;">
         <div id="progress-bar"></div>
@@ -520,7 +577,7 @@ select option:disabled {
     <p>Incorrect Answers: <span id="incorrect-answers"></span></p>
     <p>Percentage: <span id="percentage"></span>%</p>
     <p>Average Time per Question: <span id="average-time"></span></p>
-    <h3>Results by Domain</h3>
+    <h3>Results by Domain (Best to Worst)</h3>
     <div id="domain-results"></div>
     <p>Review Questions:</p>
     <p>Correct: <span id="correct-review" class="review-link"></span></p>
@@ -532,12 +589,12 @@ select option:disabled {
     <div id="review-list"></div>
     <button id="review-return-button" class="nav-button button-base">Return to Results</button>
   </div>
-</div> <!-- Closing exam-container -->
+</div>
 
 <div id="version-info"></div>
 
 <script>
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.6.0"; // Finalized version number for this build
 
 const defaultExamData = {
   "Exam Name": "Demo Exam",
@@ -557,12 +614,14 @@ let examData = null;
 const initialLoadInstructionsDiv = document.getElementById('initial-load-instructions');
 const examSetupOptionsDiv = document.getElementById('exam-setup-options');
 const setupDefaultRadio = document.getElementById('setup-default');
-const setupCustomNumberRadio = document.getElementById('setup-custom-number');
+const setupQuickRadio = document.getElementById('setup-quick');
+const setupCustomDomainRadio = document.getElementById('setup-custom-domain');
 const defaultSettingsInfoDiv = document.getElementById('default-settings-info');
-const customNumberOptionsContainerDiv = document.getElementById('custom-number-options-container');
+const customDomainOptionsContainerDiv = document.getElementById('custom-domain-options-container');
+const customDomainSelectionDiv = document.getElementById('custom-domain-selection');
+const customExamCommonOptionsDiv = document.getElementById('custom-exam-common-options');
 const customQuestionCountSelect = document.getElementById('custom-question-count-select');
 const customQuestionCountInput = document.getElementById('custom-question-count-input');
-const customSetupTimeInfoAutoP = document.getElementById('custom-setup-time-info-auto');
 const customSetupWarningP = document.getElementById('custom-setup-warning');
 const examDurationSetupInput = document.getElementById('exam-duration-setup-input');
 const effectiveSettingsSummaryP = document.getElementById('effective-settings-summary');
@@ -581,8 +640,8 @@ const incorrectAnswersSpan = document.getElementById('incorrect-answers');
 const percentageSpan = document.getElementById('percentage');
 const startButton = document.getElementById('start-button');
 const runDemoButton = document.getElementById('run-demo-button');
-const browseFileButton = document.getElementById('browse-file-button'); // New
-const selectedFileNameSpan = document.getElementById('selected-file-name'); // New
+const browseFileButton = document.getElementById('browse-file-button');
+const selectedFileNameSpan = document.getElementById('selected-file-name');
 const correctReviewSpan = document.getElementById('correct-review');
 const incorrectReviewSpan = document.getElementById('incorrect-review');
 const reviewContainer = document.getElementById('review-container');
@@ -591,7 +650,7 @@ const reviewReturnButton = document.getElementById('review-return-button');
 const domainResultsDiv = document.getElementById('domain-results');
 const loadUrlButton = document.getElementById('load-url-button');
 const jsonUrlInput = document.getElementById('json-url');
-const jsonFileInput = document.getElementById('json-file'); // The hidden one
+const jsonFileInput = document.getElementById('json-file');
 const examTitle = document.getElementById('exam-title');
 const customInstructionsTextP = document.getElementById('custom-instructions-text');
 const defaultInstructionsTextDiv = document.getElementById('default-instructions-text');
@@ -617,12 +676,13 @@ let maxQuestionsInBank = 0;
 let isBackNavigationDisabled = false;
 
 const TIME_PER_QUESTION_SECONDS = 90;
-const MIN_QUESTIONS_FOR_CUSTOM_SETUP = 5;
+const MIN_QUESTIONS_FOR_CUSTOM_SETUP = 1;
 
 let currentExamSetup = {
     type: 'default',
     numQuestions: 0,
-    totalTimeMinutes: 0
+    totalTimeMinutes: 0,
+    selectedDomains: []
 };
 
 // --- Event Listeners Setup ---
@@ -633,17 +693,16 @@ function setupEventListeners() {
     submitButton.addEventListener('click', submitActualExam);
     reviewReturnButton.addEventListener('click', returnToResults);
     loadUrlButton.addEventListener('click', loadExamDataFromUrl);
-    if (browseFileButton) { // Check existence for safety
-        browseFileButton.addEventListener('click', () => jsonFileInput.click());
-    }
+    if (browseFileButton) browseFileButton.addEventListener('click', () => jsonFileInput.click());
     jsonFileInput.addEventListener('change', handleFileSelectAndLoad);
     runDemoButton.addEventListener('click', startDemoExam);
 
-    setupDefaultRadio.addEventListener('change', handleSetupTypeChange);
-    setupCustomNumberRadio.addEventListener('change', handleSetupTypeChange);
-    customQuestionCountSelect.addEventListener('change', handleCustomCountChange);
-    customQuestionCountInput.addEventListener('input', handleCustomCountChange);
-    examDurationSetupInput.addEventListener('input', handleExamDurationChange);
+    document.querySelectorAll('input[name="exam-setup-type"]').forEach(radio => {
+        radio.addEventListener('change', handleSetupTypeChange);
+    });
+    customQuestionCountSelect.addEventListener('change', updateCurrentExamSetup);
+    customQuestionCountInput.addEventListener('input', updateCurrentExamSetup);
+    examDurationSetupInput.addEventListener('input', updateCurrentExamSetup);
 }
 document.addEventListener('DOMContentLoaded', () => {
     if (versionInfoDiv) {
@@ -657,16 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function handleFileSelectAndLoad(event) {
     const file = event.target.files[0];
-    if (file) {
-        selectedFileNameSpan.textContent = file.name;
-        loadExamDataFromFile(file);
-    } else {
-        selectedFileNameSpan.textContent = "No file selected";
-    }
-}
-
-function handleExamDurationChange() {
-    updateCurrentExamSetup();
+    if (file) { selectedFileNameSpan.textContent = file.name; loadExamDataFromFile(file); }
+    else { selectedFileNameSpan.textContent = "No file selected"; }
 }
 
 function shuffleArray(array) {
@@ -679,27 +730,15 @@ function shuffleArray(array) {
 function validateExamData(data) {
     if (!data) { alert("Error: Exam data is null or undefined."); return false; }
     if (!data["Exam Name"]) { alert("Error: 'Exam Name' is missing."); return false; }
-    if (typeof data["Number of Questions"] !== 'number' || data["Number of Questions"] <= 0) {
-      alert("Error: 'Number of Questions' must be a positive number."); return false;
-    }
-    if (typeof data["Default Time"] !== 'number' || data["Default Time"] < 0) {
-        alert("Error: 'Default Time' must be a non-negative number."); return false;
-    }
-    if (data.BackNavigation !== undefined && typeof data.BackNavigation !== 'boolean') {
-        alert("Error: 'BackNavigation' must be a boolean (true or false) if present."); return false;
-    }
+    if (typeof data["Number of Questions"] !== 'number' || data["Number of Questions"] <= 0) { alert("Error: 'Number of Questions' must be a positive number."); return false; }
+    if (typeof data["Default Time"] !== 'number' || data["Default Time"] < 0) { alert("Error: 'Default Time' must be a non-negative number."); return false; }
+    if (data.BackNavigation !== undefined && typeof data.BackNavigation !== 'boolean') { alert("Error: 'BackNavigation' must be a boolean (true or false) if present."); return false; }
     if (!Array.isArray(data.Questions)) { /* Allow empty */ }
     else {
         for (const question of data.Questions) {
-           if (!question.DomainOfKnowledge || !question.Question || !question.Choices || !question.AnswerKey || !question.Explaination) {
-              alert("Error: A question is missing required fields."); return false;
-            }
-           if (!Array.isArray(question.Choices) || question.Choices.length < 2) {
-                alert("Error: Each question must have at least two choices."); return false;
-           }
-           if (!question.Choices.includes(question.AnswerKey)) {
-            alert(`Error: AnswerKey '${question.AnswerKey}' for Q "${question.Question}" not in Choices.`); return false;
-           }
+           if (!question.DomainOfKnowledge || !question.Question || !question.Choices || !question.AnswerKey || !question.Explaination) { alert("Error: A question is missing required fields."); return false; }
+           if (!Array.isArray(question.Choices) || question.Choices.length < 2) { alert("Error: Each question must have at least two choices."); return false; }
+           if (!question.Choices.includes(question.AnswerKey)) { alert(`Error: AnswerKey '${question.AnswerKey}' for Q "${question.Question}" not in Choices.`); return false; }
         }
     }
     if (data.DomainPercentages) {
@@ -707,9 +746,7 @@ function validateExamData(data) {
         let totalPercentage = 0;
         for (const domain in data.DomainPercentages) {
             const percentage = data.DomainPercentages[domain];
-            if (typeof percentage !== 'number' || percentage < 0 || percentage > 100) {
-                alert(`Error: Invalid percentage for domain '${domain}'.`); return false;
-            }
+            if (typeof percentage !== 'number' || percentage < 0 || percentage > 100) { alert(`Error: Invalid percentage for domain '${domain}'.`); return false; }
             totalPercentage += percentage;
         }
         if (totalPercentage > 100) { alert("Error: Total domain percentages exceed 100%."); return false; }
@@ -717,28 +754,36 @@ function validateExamData(data) {
     return true;
 }
 
-function prepareExamQuestionsInternal(sourceData, numQuestionsToSelect) {
-    let selectedQuestions = [];
-    const allQuestionsPool = JSON.parse(JSON.stringify(sourceData.Questions || []));
-    if (allQuestionsPool.length === 0 || numQuestionsToSelect === 0) return [];
-    const actualNumToSelect = Math.min(numQuestionsToSelect, allQuestionsPool.length);
-    const questionsByDomain = {};
-    allQuestionsPool.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
-    for (const domain in questionsByDomain) shuffleArray(questionsByDomain[domain]);
-    if (sourceData.DomainPercentages && Object.keys(sourceData.DomainPercentages).length > 0 && actualNumToSelect === sourceData["Number of Questions"]) {
+function prepareExamQuestionsInternal(sourceData, numQuestionsToSelect, selectedDomains = [], applyPercentages) {
+    let questionPool = JSON.parse(JSON.stringify(sourceData.Questions || []));
+    if (selectedDomains.length > 0) {
+        questionPool = questionPool.filter(q => selectedDomains.includes(q.DomainOfKnowledge));
+    }
+    const availableCount = questionPool.length;
+    if (availableCount === 0 || numQuestionsToSelect === 0) return [];
+    const actualNumToSelect = Math.min(numQuestionsToSelect, availableCount);
+
+    if (applyPercentages) {
+        let selectedQuestions = [];
+        const domainPercentages = sourceData.DomainPercentages;
+        const questionsByDomain = {};
+        questionPool.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
+        for (const domain in questionsByDomain) shuffleArray(questionsByDomain[domain]);
+
         const domainAllowances = {}; const remainderDomains = [];
-        for (const domain in sourceData.DomainPercentages) { if (questionsByDomain[domain]) { const p = sourceData.DomainPercentages[domain]; const f = (p / 100) * actualNumToSelect; domainAllowances[domain] = Math.floor(f); if (f - domainAllowances[domain] > 0) remainderDomains.push(domain); }}
+        for (const domain in domainPercentages) { if (questionsByDomain[domain]) { const p = domainPercentages[domain]; const f = (p / 100) * actualNumToSelect; domainAllowances[domain] = Math.floor(f); if (f - domainAllowances[domain] > 0) remainderDomains.push(domain); }}
         let totalIntAlloc = Object.values(domainAllowances).reduce((s, v) => s + v, 0); let slotsToDist = actualNumToSelect - totalIntAlloc;
         shuffleArray(remainderDomains); let remIdx = 0; while (slotsToDist > 0 && remainderDomains.length > 0) { const dInc = remainderDomains[remIdx % remainderDomains.length]; domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; remIdx++; }
-        if (slotsToDist > 0) { const pDoms = Object.keys(sourceData.DomainPercentages).filter(d => questionsByDomain[d] && questionsByDomain[d].length > 0); shuffleArray(pDoms); let pIdx = 0; let iters = 0; while (slotsToDist > 0 && pDoms.length > 0 && iters < pDoms.length * 3) { const dInc = pDoms[pIdx % pDoms.length]; if(questionsByDomain[dInc] && questionsByDomain[dInc].length > 0){ domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; } pIdx++; iters++; }}
+        if (slotsToDist > 0) { const pDoms = Object.keys(domainPercentages).filter(d => questionsByDomain[d] && questionsByDomain[d].length > 0); shuffleArray(pDoms); let pIdx = 0; let iters = 0; while (slotsToDist > 0 && pDoms.length > 0 && iters < pDoms.length * 3) { const dInc = pDoms[pIdx % pDoms.length]; if(questionsByDomain[dInc] && questionsByDomain[dInc].length > 0){ domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; } pIdx++; iters++; }}
         for (const domain in domainAllowances) { const numTake = domainAllowances[domain]; if (questionsByDomain[domain] && numTake > 0) { const canTake = Math.min(numTake, questionsByDomain[domain].length); selectedQuestions.push(...questionsByDomain[domain].splice(0, canTake)); }}
+        let deficit = actualNumToSelect - selectedQuestions.length;
+        if (deficit > 0) { let remPool = []; for (const domain in questionsByDomain) remPool.push(...questionsByDomain[domain]); shuffleArray(remPool); selectedQuestions.push(...remPool.slice(0, deficit)); }
+        shuffleArray(selectedQuestions); return selectedQuestions.slice(0, actualNumToSelect);
+    } else {
+        shuffleArray(questionPool);
+        return questionPool.slice(0, actualNumToSelect);
     }
-    let deficit = actualNumToSelect - selectedQuestions.length;
-    if (deficit > 0) { let remPool = []; for (const domain in questionsByDomain) remPool.push(...questionsByDomain[domain]); shuffleArray(remPool); selectedQuestions.push(...remPool.slice(0, deficit)); }
-    if (selectedQuestions.length > actualNumToSelect) { shuffleArray(selectedQuestions); selectedQuestions = selectedQuestions.slice(0, actualNumToSelect); }
-    shuffleArray(selectedQuestions); return selectedQuestions;
 }
-
 
 function loadExamDataFromUrl() {
     const url = jsonUrlInput.value.trim();
@@ -746,15 +791,12 @@ function loadExamDataFromUrl() {
     fetch(url)
         .then(response => { if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); return response.json(); })
         .then(data => { if (validateExamData(data)) { examData = data; onExamDataLoaded(); }})
-        .catch(error => { console.error('Error fetching JSON from URL:', error); alert(`Failed to load exam data from URL. Error: ${error.message}`); });
+        .catch(error => { console.error('Error fetching JSON:', error); alert(`Failed to load exam data. Error: ${error.message}`); });
 }
 
-function loadExamDataFromFile(selectedFile) { // Now accepts file directly
-  const file = selectedFile || jsonFileInput.files[0]; // Fallback if called directly (less likely now)
-  if (!file) {
-    selectedFileNameSpan.textContent = "No file selected";
-    return;
-  }
+function loadExamDataFromFile(selectedFile) {
+  const file = selectedFile || jsonFileInput.files[0];
+  if (!file) { selectedFileNameSpan.textContent = "No file selected"; return; }
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
@@ -762,8 +804,8 @@ function loadExamDataFromFile(selectedFile) { // Now accepts file directly
       if (validateExamData(data)) { examData = data; onExamDataLoaded(); }
       else { jsonFileInput.value = ''; selectedFileNameSpan.textContent = "Invalid file. No file selected.";}
     } catch (error) {
-      console.error("Error parsing JSON from file:", error);
-      alert("Failed to load or parse JSON file. Error: " + error.message);
+      console.error("Error parsing JSON:", error);
+      alert("Failed to parse JSON. Error: " + error.message);
       jsonFileInput.value = ''; selectedFileNameSpan.textContent = "Error. No file selected.";
     }
   };
@@ -774,147 +816,150 @@ function loadExamDataFromFile(selectedFile) { // Now accepts file directly
 function startDemoExam() {
     examData = JSON.parse(JSON.stringify(defaultExamData));
     onExamDataLoaded();
-    setupDefaultRadio.checked = true;
-    handleSetupTypeChange();
-    alert("Demo Exam loaded. Please review settings and click 'Start Exam'.");
 }
 
 function onExamDataLoaded() {
-    jsonUrlInput.style.display = 'none'; loadUrlButton.style.display = 'none';
-    document.getElementById('file-input-container').style.display = 'none'; // Hide entire file input container
-    runDemoButton.style.display = 'none';
-    document.querySelector("label[for='json-url']").style.display = 'none';
-    // Label for file input is part of the hidden container
-
-    welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
-    examTitle.innerText = examData["Exam Name"];
-
-    isBackNavigationDisabled = (examData.BackNavigation === false);
-
-    if (examData.Instructions) { customInstructionsTextP.innerHTML = examData.Instructions; defaultInstructionsTextDiv.style.display = 'none'; }
-    else { customInstructionsTextP.innerText = ''; defaultInstructionsTextDiv.style.display = 'block'; }
-
-    maxQuestionsInBank = examData.Questions ? examData.Questions.length : 0;
-    customQuestionCountInput.max = maxQuestionsInBank;
-
-    const defaultNumQFromFile = examData["Number of Questions"];
-    const defaultTimeM = examData["Default Time"];
-    const actualDefaultNumQ = Math.min(defaultNumQFromFile, maxQuestionsInBank);
-    let backNavText = isBackNavigationDisabled ? " (Back navigation disabled)" : "";
-
-    defaultSettingsInfoDiv.innerText = `Default: ${actualDefaultNumQ} Qs (file: ${defaultNumQFromFile}), ${defaultTimeM > 0 ? defaultTimeM + ' min' : 'unlimited'}. (Bank: ${maxQuestionsInBank} Qs)${backNavText}`;
-
     initialLoadInstructionsDiv.style.display = 'none';
     examSetupOptionsDiv.style.display = 'block';
 
-    const customRadioLabel = document.querySelector("label[for='setup-custom-number']");
-    if (maxQuestionsInBank < MIN_QUESTIONS_FOR_CUSTOM_SETUP) {
-        setupDefaultRadio.checked = true; setupCustomNumberRadio.disabled = true;
-        if (customRadioLabel) customRadioLabel.classList.add('disabled-label');
-        customNumberOptionsContainerDiv.style.display = 'none'; currentExamSetup.type = 'default';
-    } else {
-        setupCustomNumberRadio.disabled = false;
-        if (customRadioLabel) customRadioLabel.classList.remove('disabled-label');
-        if (!setupDefaultRadio.checked && !setupCustomNumberRadio.checked) setupDefaultRadio.checked = true;
-    }
+    welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
+    examTitle.innerText = examData["Exam Name"];
+    isBackNavigationDisabled = (examData.BackNavigation === false);
+
+    maxQuestionsInBank = examData.Questions ? examData.Questions.length : 0;
+    
+    populateDomainCheckboxes();
+
+    setupDefaultRadio.checked = true;
     handleSetupTypeChange();
 }
 
-function handleSetupTypeChange() {
-    if (setupCustomNumberRadio.disabled && setupCustomNumberRadio.checked) setupDefaultRadio.checked = true;
+function populateDomainCheckboxes() {
+    if (!examData || !examData.Questions) return;
+    const domains = [...new Set(examData.Questions.map(q => q.DomainOfKnowledge))];
+    domains.sort();
 
-    if (setupDefaultRadio.checked) {
-        currentExamSetup.type = 'default';
-        customNumberOptionsContainerDiv.style.display = 'none';
-        examDurationSetupInput.value = examData ? Math.max(0, examData["Default Time"]) : 60;
-    } else if (!setupCustomNumberRadio.disabled) {
-        currentExamSetup.type = 'custom_number';
-        customNumberOptionsContainerDiv.style.display = 'block';
-        handleCustomCountChange();
-    } else {
-        currentExamSetup.type = 'default';
-        customNumberOptionsContainerDiv.style.display = 'none';
-        examDurationSetupInput.value = examData ? Math.max(0, examData["Default Time"]) : 60;
+    customDomainSelectionDiv.innerHTML = '';
+    if (domains.length === 0) {
+        customDomainSelectionDiv.innerHTML = '<p>No topics found in this exam bank.</p>';
+        return;
     }
+
+    domains.forEach(domain => {
+        const item = document.createElement('div');
+        item.className = 'domain-checkbox-item';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `domain-${domain.replace(/\s+/g, '-')}`;
+        checkbox.value = domain;
+        checkbox.name = "selectedDomain";
+        
+        const label = document.createElement('label');
+        label.htmlFor = checkbox.id;
+        label.textContent = domain;
+        label.className = 'inline-label';
+        
+        item.appendChild(checkbox);
+        item.appendChild(label);
+        customDomainSelectionDiv.appendChild(item);
+    });
+
+    customDomainSelectionDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', updateCurrentExamSetup);
+    });
+}
+
+function handleSetupTypeChange() {
+    const selectedType = document.querySelector('input[name="exam-setup-type"]:checked').value;
+    currentExamSetup.type = selectedType;
+
+    customDomainOptionsContainerDiv.style.display = (selectedType === 'custom_domain') ? 'block' : 'none';
+    customExamCommonOptionsDiv.style.display = (selectedType === 'quick' || selectedType === 'custom_domain') ? 'block' : 'none';
+    defaultSettingsInfoDiv.style.display = (selectedType === 'default') ? 'block' : 'none';
+
     updateCurrentExamSetup();
 }
 
-function handleCustomCountChange() {
-    let selectedCount = 0; customSetupWarningP.innerText = "";
-
-    Array.from(customQuestionCountSelect.options).forEach(opt => {
-        if (opt.value !== "custom") { const v = parseInt(opt.value); opt.disabled = v > maxQuestionsInBank || v < 1; opt.style.display = opt.disabled ? 'none' : ''; }
-    });
-    if (customQuestionCountSelect.value !== "custom" && customQuestionCountSelect.options[customQuestionCountSelect.selectedIndex].disabled) {
-        let found = false; for (let i = 0; i < customQuestionCountSelect.options.length; i++) { if (customQuestionCountSelect.options[i].value !== "custom" && !customQuestionCountSelect.options[i].disabled) { customQuestionCountSelect.selectedIndex = i; found = true; break; }}
-        if (!found && maxQuestionsInBank >= MIN_QUESTIONS_FOR_CUSTOM_SETUP) customQuestionCountSelect.value = "custom";
-    }
-
-    if (customQuestionCountSelect.value === 'custom') {
-        customQuestionCountInput.style.display = 'inline-block';
-        selectedCount = parseInt(customQuestionCountInput.value, 10);
-        if (isNaN(selectedCount) || selectedCount <= 0) { customSetupWarningP.innerText = maxQuestionsInBank > 0 ? "Enter valid number." : "Bank empty."; selectedCount = 0; }
-    } else {
-        customQuestionCountInput.style.display = 'none'; customQuestionCountInput.value = '';
-        selectedCount = parseInt(customQuestionCountSelect.value, 10);
-        if (isNaN(selectedCount) || customQuestionCountSelect.options[customQuestionCountSelect.selectedIndex].disabled) selectedCount = 0;
-    }
-
-    if (selectedCount > 0 && selectedCount > maxQuestionsInBank) { customSetupWarningP.innerText = `Max ${maxQuestionsInBank} Qs.`; selectedCount = maxQuestionsInBank; if (customQuestionCountSelect.value === 'custom') customQuestionCountInput.value = selectedCount; }
-    if (maxQuestionsInBank === 0) selectedCount = 0;
-
-    currentExamSetup.numQuestions = selectedCount > 0 ? selectedCount : 0;
-    const autoCalculatedTimeMinutes = currentExamSetup.numQuestions > 0
-        ? Math.ceil((currentExamSetup.numQuestions * TIME_PER_QUESTION_SECONDS) / 60)
-        : (examData ? examData["Default Time"] : 0);
-    examDurationSetupInput.value = Math.max(0, autoCalculatedTimeMinutes);
-
-    customSetupTimeInfoAutoP.innerText = currentExamSetup.numQuestions > 0
-        ? `Auto-suggested time: ~${autoCalculatedTimeMinutes} min. (Editable below).`
-        : "";
-    updateCurrentExamSetup();
+function getSelectedDomains() {
+    return Array.from(customDomainSelectionDiv.querySelectorAll('input[name="selectedDomain"]:checked'))
+                .map(cb => cb.value);
 }
 
 function updateCurrentExamSetup() {
     if (!examData) return;
 
-    let numQ;
-    if (currentExamSetup.type === 'default' || setupCustomNumberRadio.disabled) {
+    const selectedType = currentExamSetup.type;
+    let numQ = 0;
+    let timeM = 0;
+    let backNavText = isBackNavigationDisabled ? " (Back navigation disabled)" : "";
+    
+    if (selectedType === 'default') {
         numQ = Math.min(examData["Number of Questions"], maxQuestionsInBank);
-    } else {
-        numQ = Math.min(currentExamSetup.numQuestions, maxQuestionsInBank);
+        timeM = examData["Default Time"];
+        effectiveSettingsSummaryP.innerHTML = `Exam will start with default settings: <strong>${numQ} questions</strong>, with a time limit of <strong>${timeM > 0 ? timeM + ' minutes' : 'Unlimited'}</strong>.${backNavText}`;
+        startButton.disabled = numQ <= 0;
+        currentExamSetup.numQuestions = numQ;
+        currentExamSetup.totalTimeMinutes = timeM;
+        return;
     }
-    currentExamSetup.numQuestions = (numQ < 0) ? 0 : numQ;
 
-    let timeM = parseInt(examDurationSetupInput.value, 10);
+    currentExamSetup.selectedDomains = (selectedType === 'custom_domain') ? getSelectedDomains() : [];
+
+    let questionPoolSize = (selectedType === 'custom_domain')
+        ? examData.Questions.filter(q => currentExamSetup.selectedDomains.includes(q.DomainOfKnowledge)).length
+        : maxQuestionsInBank;
+    
+    Array.from(customQuestionCountSelect.options).forEach(opt => {
+        if (opt.value !== "custom") { const v = parseInt(opt.value); opt.disabled = v > questionPoolSize; opt.style.display = opt.disabled ? 'none' : ''; }
+    });
+    if (customQuestionCountSelect.value !== "custom" && customQuestionCountSelect.options[customQuestionCountSelect.selectedIndex].disabled) {
+        customQuestionCountSelect.value = "5";
+    }
+    customQuestionCountInput.max = questionPoolSize;
+
+    if (customQuestionCountSelect.value === 'custom') {
+        numQ = parseInt(customQuestionCountInput.value, 10) || 0;
+    } else {
+        numQ = parseInt(customQuestionCountSelect.value, 10);
+    }
+    numQ = Math.min(numQ, questionPoolSize);
+    if (numQ < 0) numQ = 0;
+
+    timeM = parseInt(examDurationSetupInput.value, 10);
     if (isNaN(timeM) || timeM < 0) { timeM = 0; examDurationSetupInput.value = 0; }
+
+    currentExamSetup.numQuestions = numQ;
     currentExamSetup.totalTimeMinutes = timeM;
-
-    let backNavStatusText = isBackNavigationDisabled ? " (Back navigation will be disabled)" : "";
-
-    if (currentExamSetup.numQuestions > 0) {
-        effectiveSettingsSummaryP.innerHTML = `Exam will start with: <strong>${currentExamSetup.numQuestions} questions</strong>. <br>Time limit: <strong>${currentExamSetup.totalTimeMinutes > 0 ? currentExamSetup.totalTimeMinutes + ' minutes' : 'Unlimited'}</strong>.${backNavStatusText}`;
+    
+    customSetupWarningP.innerText = '';
+    if (selectedType === 'custom_domain' && currentExamSetup.selectedDomains.length === 0) {
+        customSetupWarningP.innerText = 'Please select at least one topic to proceed.';
+    }
+    
+    if (numQ > 0) {
+        effectiveSettingsSummaryP.innerHTML = `Exam will start with: <strong>${numQ} questions</strong>. <br>Time limit: <strong>${timeM > 0 ? timeM + ' minutes' : 'Unlimited'}</strong>.${backNavText}`;
         startButton.disabled = false;
     } else {
-        let reason = `(Bank: ${maxQuestionsInBank})`;
-        if (maxQuestionsInBank < MIN_QUESTIONS_FOR_CUSTOM_SETUP && maxQuestionsInBank > 0) reason = `(Bank has only ${maxQuestionsInBank} Qs. Custom setup disabled.)`;
-        else if (maxQuestionsInBank === 0) reason = `(Question bank is empty.)`;
-        effectiveSettingsSummaryP.innerHTML = `Please select valid exam configuration. ${reason}`;
+        effectiveSettingsSummaryP.innerHTML = `Please select topics and a valid number of questions.`;
         startButton.disabled = true;
     }
 }
 
+
 function startActualExam() {
-    if (currentExamSetup.numQuestions <= 0) { alert("Please configure a valid number of questions."); return; }
+    updateCurrentExamSetup();
+    const setup = currentExamSetup;
+
+    if (setup.numQuestions <= 0) { alert("Please configure a valid number of questions."); return; }
     if (!examData) { alert("No exam data loaded."); return; }
+    
+    const minForPercentages = (examData.DomainPercentages) ? Object.keys(examData.DomainPercentages).length : Infinity;
+    const usePercentageLogic = (setup.type === 'default' && setup.numQuestions >= minForPercentages);
 
-    randomizedExamData = prepareExamQuestionsInternal(examData, currentExamSetup.numQuestions);
+    randomizedExamData = prepareExamQuestionsInternal(examData, setup.numQuestions, setup.selectedDomains, usePercentageLogic);
 
-    if (randomizedExamData.length === 0) { alert("Could not prepare questions."); return; }
-    if (randomizedExamData.length < currentExamSetup.numQuestions) {
-        currentExamSetup.numQuestions = randomizedExamData.length;
-        alert(`Note: Exam will proceed with ${currentExamSetup.numQuestions} questions.`);
-    }
+    if (randomizedExamData.length === 0) { alert("Could not prepare any questions based on your selection."); return; }
 
     initialLoadInstructionsDiv.style.display = 'none'; examSetupOptionsDiv.style.display = 'none';
     questionContainer.style.display = 'block'; timerDiv.style.display = 'block';
@@ -923,7 +968,7 @@ function startActualExam() {
     currentQuestionIndex = 0; userAnswers = {}; correctAnswersCount = 0; incorrectAnswersCount = 0;
     correctQuestionsList = []; incorrectQuestionsList = []; examStartTime = Date.now();
 
-    const examDurationMinutes = currentExamSetup.totalTimeMinutes;
+    const examDurationMinutes = setup.totalTimeMinutes;
 
     if (examDurationMinutes > 0) { timeRemaining = examDurationMinutes * 60; updateTimerDisplay(); startTimerInterval(); }
     else { timeRemainingSpan.innerText = "Unlimited"; }
@@ -1010,23 +1055,31 @@ function submitActualExam() {
     const domainResults = {};
     for (let i = 0; i < numQuestionsInExam; i++) {
       const qData = randomizedExamData[i]; const userAnswer = userAnswers[i]; const domain = qData.DomainOfKnowledge;
-      if (!domainResults[domain]) domainResults[domain] = { correct: 0, total: 0 };
+      if (!domainResults[domain]) domainResults[domain] = { correct: 0, total: 0, percentage: 0 };
       domainResults[domain].total++;
       if (userAnswer === qData.AnswerKey) { domainResults[domain].correct++; correctAnswersCount++; correctQuestionsList.push(i); }
       else { incorrectAnswersCount++; incorrectQuestionsList.push(i); }
     }
+    for (const domain in domainResults) {
+        const { correct, total } = domainResults[domain];
+        domainResults[domain].percentage = total > 0 ? (correct / total) * 100 : 0;
+    }
+    
     const percentage = numQuestionsInExam > 0 ? (correctAnswersCount / numQuestionsInExam) * 100 : 0;
     correctAnswersSpan.innerText = `${correctAnswersCount}/${numQuestionsInExam}`;
     incorrectAnswersSpan.innerText = `${incorrectAnswersCount}/${numQuestionsInExam}`;
     percentageSpan.innerText = percentage.toFixed(2);
+    
+    const sortedDomains = Object.keys(domainResults).sort((a, b) => domainResults[b].percentage - domainResults[a].percentage);
+
     domainResultsDiv.innerHTML = '';
-    for (const domain in domainResults) {
-      const { correct, total } = domainResults[domain];
-      const domPerc = total > 0 ? (correct / total) * 100 : 0;
+    sortedDomains.forEach(domain => {
+      const { correct, total, percentage } = domainResults[domain];
       const el = document.createElement('div'); el.classList.add('domain-result');
-      el.innerText = `${domain}: ${correct}/${total} (${domPerc.toFixed(2)}%)`;
+      el.innerText = `${domain}: ${correct}/${total} (${percentage.toFixed(2)}%)`;
       domainResultsDiv.appendChild(el);
-    }
+    });
+
     correctReviewSpan.style.display = correctQuestionsList.length === 0 ? 'none' : 'inline';
     if (correctQuestionsList.length > 0) { correctReviewSpan.innerText = `Review Correct (${correctQuestionsList.length})`; correctReviewSpan.onclick = () => reviewQuestionsByDomain(correctQuestionsList); }
     incorrectReviewSpan.style.display = incorrectQuestionsList.length === 0 ? 'none' : 'inline';
