@@ -451,7 +451,7 @@ select option:disabled {
         font-size: 1.5em;
     }
     .button-base, select, input[type="text"], input[type="number"] {
-        font-size: 16px; /* Prevent iOS auto-zoom */
+        font-size: 16px;
     }
     .choice {
         padding: 10px;
@@ -594,7 +594,8 @@ select option:disabled {
 <div id="version-info"></div>
 
 <script>
-const APP_VERSION = "1.6.0"; // Finalized version number for this build
+const APP_VERSION = "1.7.0";
+const DEBUG = true; // Set to false to hide console logs
 
 const defaultExamData = {
   "Exam Name": "Demo Exam",
@@ -676,7 +677,6 @@ let maxQuestionsInBank = 0;
 let isBackNavigationDisabled = false;
 
 const TIME_PER_QUESTION_SECONDS = 90;
-const MIN_QUESTIONS_FOR_CUSTOM_SETUP = 1;
 
 let currentExamSetup = {
     type: 'default',
@@ -700,7 +700,7 @@ function setupEventListeners() {
     document.querySelectorAll('input[name="exam-setup-type"]').forEach(radio => {
         radio.addEventListener('change', handleSetupTypeChange);
     });
-    customQuestionCountSelect.addEventListener('change', updateCurrentExamSetup);
+    customQuestionCountSelect.addEventListener('change', handleQuestionCountSelectChange);
     customQuestionCountInput.addEventListener('input', updateCurrentExamSetup);
     examDurationSetupInput.addEventListener('input', updateCurrentExamSetup);
 }
@@ -718,6 +718,16 @@ function handleFileSelectAndLoad(event) {
     const file = event.target.files[0];
     if (file) { selectedFileNameSpan.textContent = file.name; loadExamDataFromFile(file); }
     else { selectedFileNameSpan.textContent = "No file selected"; }
+}
+
+function handleQuestionCountSelectChange() {
+    if (customQuestionCountSelect.value === 'custom') {
+        customQuestionCountInput.style.display = 'inline-block';
+        customQuestionCountInput.focus();
+    } else {
+        customQuestionCountInput.style.display = 'none';
+    }
+    updateCurrentExamSetup();
 }
 
 function shuffleArray(array) {
@@ -754,35 +764,60 @@ function validateExamData(data) {
     return true;
 }
 
-function prepareExamQuestionsInternal(sourceData, numQuestionsToSelect, selectedDomains = [], applyPercentages) {
-    let questionPool = JSON.parse(JSON.stringify(sourceData.Questions || []));
-    if (selectedDomains.length > 0) {
-        questionPool = questionPool.filter(q => selectedDomains.includes(q.DomainOfKnowledge));
+function prepareQuestionsByPercentage(totalItems, domainPercentages, allQuestions) {
+    if(DEBUG) console.log("--- Starting Percentage Distribution Algorithm ---");
+    let domainCalcs = [];
+    
+    // Step 1: Calculate Ideal Allocation
+    for (const domain in domainPercentages) {
+        const percent = domainPercentages[domain];
+        const idealShare = totalItems * (percent / 100);
+        const baseAlloc = Math.floor(idealShare);
+        const remainder = idealShare - baseAlloc;
+        domainCalcs.push({ domain, percent, idealShare, baseAlloc, remainder, finalAlloc: baseAlloc });
     }
-    const availableCount = questionPool.length;
-    if (availableCount === 0 || numQuestionsToSelect === 0) return [];
-    const actualNumToSelect = Math.min(numQuestionsToSelect, availableCount);
+    if(DEBUG) console.log("Step 1 & 2: Initial Calculation & Base Allocation:", JSON.parse(JSON.stringify(domainCalcs)));
 
-    if (applyPercentages) {
-        let selectedQuestions = [];
-        const domainPercentages = sourceData.DomainPercentages;
-        const questionsByDomain = {};
-        questionPool.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
-        for (const domain in questionsByDomain) shuffleArray(questionsByDomain[domain]);
+    // Step 2 & 3: Allocate Remainder using Largest Remainder Method
+    let totalBaseAlloc = domainCalcs.reduce((sum, current) => sum + current.baseAlloc, 0);
+    let remainingItems = totalItems - totalBaseAlloc;
+    if(DEBUG) console.log(`Total items: ${totalItems}, Base allocation: ${totalBaseAlloc}, Remainder to distribute: ${remainingItems}`);
 
-        const domainAllowances = {}; const remainderDomains = [];
-        for (const domain in domainPercentages) { if (questionsByDomain[domain]) { const p = domainPercentages[domain]; const f = (p / 100) * actualNumToSelect; domainAllowances[domain] = Math.floor(f); if (f - domainAllowances[domain] > 0) remainderDomains.push(domain); }}
-        let totalIntAlloc = Object.values(domainAllowances).reduce((s, v) => s + v, 0); let slotsToDist = actualNumToSelect - totalIntAlloc;
-        shuffleArray(remainderDomains); let remIdx = 0; while (slotsToDist > 0 && remainderDomains.length > 0) { const dInc = remainderDomains[remIdx % remainderDomains.length]; domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; remIdx++; }
-        if (slotsToDist > 0) { const pDoms = Object.keys(domainPercentages).filter(d => questionsByDomain[d] && questionsByDomain[d].length > 0); shuffleArray(pDoms); let pIdx = 0; let iters = 0; while (slotsToDist > 0 && pDoms.length > 0 && iters < pDoms.length * 3) { const dInc = pDoms[pIdx % pDoms.length]; if(questionsByDomain[dInc] && questionsByDomain[dInc].length > 0){ domainAllowances[dInc] = (domainAllowances[dInc] || 0) + 1; slotsToDist--; } pIdx++; iters++; }}
-        for (const domain in domainAllowances) { const numTake = domainAllowances[domain]; if (questionsByDomain[domain] && numTake > 0) { const canTake = Math.min(numTake, questionsByDomain[domain].length); selectedQuestions.push(...questionsByDomain[domain].splice(0, canTake)); }}
-        let deficit = actualNumToSelect - selectedQuestions.length;
-        if (deficit > 0) { let remPool = []; for (const domain in questionsByDomain) remPool.push(...questionsByDomain[domain]); shuffleArray(remPool); selectedQuestions.push(...remPool.slice(0, deficit)); }
-        shuffleArray(selectedQuestions); return selectedQuestions.slice(0, actualNumToSelect);
-    } else {
-        shuffleArray(questionPool);
-        return questionPool.slice(0, actualNumToSelect);
+    // Sort domains by remainder descending (with random tie-breaking)
+    domainCalcs.sort((a, b) => {
+        if (b.remainder > a.remainder) return 1;
+        if (a.remainder > b.remainder) return -1;
+        return Math.random() - 0.5; // Random tie-breaker
+    });
+    if(DEBUG) console.log("Step 3a: Domains sorted by remainder:", domainCalcs.map(d => `${d.domain} (${d.remainder.toFixed(2)})`));
+
+    // Distribute remaining items one by one to the domains with the largest remainders
+    for (let i = 0; i < remainingItems; i++) {
+        domainCalcs[i % domainCalcs.length].finalAlloc++;
     }
+    if(DEBUG) console.log("Step 3b/c: Final Allocation:", JSON.parse(JSON.stringify(domainCalcs)));
+
+    // Final Step: Select questions based on final allocation
+    let selectedQuestions = [];
+    const questionsByDomain = {};
+    allQuestions.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
+    for (const domain in questionsByDomain) {
+        shuffleArray(questionsByDomain[domain]);
+    }
+    
+    domainCalcs.forEach(calc => {
+        const domain = calc.domain;
+        const count = calc.finalAlloc;
+        if (questionsByDomain[domain]) {
+            const canTake = Math.min(count, questionsByDomain[domain].length);
+            if(DEBUG && canTake < count) console.warn(`Warning: Domain '${domain}' only has ${canTake} questions available, but allocation was ${count}.`);
+            selectedQuestions.push(...questionsByDomain[domain].slice(0, canTake));
+        } else {
+             if(DEBUG && count > 0) console.warn(`Warning: Domain '${domain}' has 0 questions available, but allocation was ${count}.`);
+        }
+    });
+
+    return selectedQuestions;
 }
 
 function loadExamDataFromUrl() {
@@ -825,7 +860,6 @@ function onExamDataLoaded() {
     welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
     examTitle.innerText = examData["Exam Name"];
     isBackNavigationDisabled = (examData.BackNavigation === false);
-
     maxQuestionsInBank = examData.Questions ? examData.Questions.length : 0;
     
     populateDomainCheckboxes();
@@ -846,22 +880,11 @@ function populateDomainCheckboxes() {
     }
 
     domains.forEach(domain => {
-        const item = document.createElement('div');
-        item.className = 'domain-checkbox-item';
-        
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = `domain-${domain.replace(/\s+/g, '-')}`;
-        checkbox.value = domain;
-        checkbox.name = "selectedDomain";
-        
-        const label = document.createElement('label');
-        label.htmlFor = checkbox.id;
-        label.textContent = domain;
-        label.className = 'inline-label';
-        
-        item.appendChild(checkbox);
-        item.appendChild(label);
+        const item = document.createElement('div'); item.className = 'domain-checkbox-item';
+        const checkbox = document.createElement('input'); checkbox.type = 'checkbox';
+        checkbox.id = `domain-${domain.replace(/\s+/g, '-')}`; checkbox.value = domain; checkbox.name = "selectedDomain";
+        const label = document.createElement('label'); label.htmlFor = checkbox.id; label.textContent = domain; label.className = 'inline-label';
+        item.append(checkbox, label);
         customDomainSelectionDiv.appendChild(item);
     });
 
@@ -946,7 +969,6 @@ function updateCurrentExamSetup() {
     }
 }
 
-
 function startActualExam() {
     updateCurrentExamSetup();
     const setup = currentExamSetup;
@@ -954,10 +976,20 @@ function startActualExam() {
     if (setup.numQuestions <= 0) { alert("Please configure a valid number of questions."); return; }
     if (!examData) { alert("No exam data loaded."); return; }
     
-    const minForPercentages = (examData.DomainPercentages) ? Object.keys(examData.DomainPercentages).length : Infinity;
-    const usePercentageLogic = (setup.type === 'default' && setup.numQuestions >= minForPercentages);
+    const domainPercentages = examData.DomainPercentages;
+    const minForPercentages = domainPercentages ? Object.keys(domainPercentages).filter(d => domainPercentages[d] > 0).length : Infinity;
+    const usePercentageLogic = (setup.type === 'default' && domainPercentages && setup.numQuestions >= minForPercentages);
 
-    randomizedExamData = prepareExamQuestionsInternal(examData, setup.numQuestions, setup.selectedDomains, usePercentageLogic);
+    if (usePercentageLogic) {
+        randomizedExamData = prepareQuestionsByPercentage(setup.numQuestions, domainPercentages, examData.Questions);
+    } else {
+        let questionPool = JSON.parse(JSON.stringify(examData.Questions || []));
+        if (setup.type === 'custom_domain' && setup.selectedDomains.length > 0) {
+            questionPool = questionPool.filter(q => setup.selectedDomains.includes(q.DomainOfKnowledge));
+        }
+        shuffleArray(questionPool);
+        randomizedExamData = questionPool.slice(0, setup.numQuestions);
+    }
 
     if (randomizedExamData.length === 0) { alert("Could not prepare any questions based on your selection."); return; }
 
@@ -1070,7 +1102,11 @@ function submitActualExam() {
     incorrectAnswersSpan.innerText = `${incorrectAnswersCount}/${numQuestionsInExam}`;
     percentageSpan.innerText = percentage.toFixed(2);
     
-    const sortedDomains = Object.keys(domainResults).sort((a, b) => domainResults[b].percentage - domainResults[a].percentage);
+    const sortedDomains = Object.keys(domainResults).sort((a, b) => {
+        const percentageDiff = domainResults[b].percentage - domainResults[a].percentage;
+        if (percentageDiff !== 0) return percentageDiff;
+        return a.localeCompare(b); // Sort alphabetically for ties
+    });
 
     domainResultsDiv.innerHTML = '';
     sortedDomains.forEach(domain => {
