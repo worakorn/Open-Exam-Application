@@ -1,7 +1,3 @@
-Of course. Here is the revised `README.md` file, updated to reflect the new features of version **1.6.0** and referencing the `bank/README.md` for the schema.
-
----
-
 # Open Exam Application (v1.6.0)
 
 ## Introduction
