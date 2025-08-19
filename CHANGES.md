@@ -2,7 +2,38 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
-## Version 1.7.0 (Current Release)
+## Version 1.8.4 (Current Release)
+
+**Summary:** This release introduces sophisticated performance analytics to provide users with deeper insights into their test-taking habits. Key features include a "Confidence Score" that evaluates both speed and accuracy, optional time warnings for pacing, and an enhanced review screen that tracks unanswered questions and flags questions that took too long to answer.
+
+**Key Features & Enhancements:**
+
+1.  **Performance Analytics Engine:**
+    *   **Confidence Score:** A new metric calculated for each question based on a combination of correctness and the time taken to answer relative to the exam's average. Fast, correct answers receive a high score, while slow or incorrect answers receive low or negative scores. The final result is presented as an overall percentage.
+    *   **Time Tracking:** The application now records the time spent on each question individually.
+    *   **Unanswered Question Tracking:** The system now explicitly tracks and reports questions that were skipped or never answered.
+
+2.  **Enhanced Exam Experience:**
+    *   **Optional Time Warnings:** Users can now select a checkbox during setup to receive a subtle visual warning (a "breathing" red timer) if they are spending more time on the current question than the calculated average.
+
+3.  **Upgraded Review Screen:**
+    *   **Review Unanswered Questions:** A new link on the results screen allows users to specifically review all questions they did not answer.
+    *   **Performance Icons:** The review list is now enhanced with icons to provide immediate visual feedback:
+        *   An **'x' icon (❌)** is displayed next to any unanswered question.
+        *   A **clock icon (🕰️)** is displayed next to any answered question (whether correct or incorrect) where the time taken was significantly longer than the average, helping users identify knowledge gaps or areas of hesitation.
+
+**Testing Notes for Version 1.8.4:**
+
+*   **Confidence Score:** Verify the score appears on the results screen and seems reasonable (e.g., answering quickly and correctly results in a high score).
+*   **Time Warnings:** Enable the "Show time warning" checkbox during setup. During the exam, wait on a question for longer than the average time and confirm the timer begins to pulse.
+*   **Unanswered Questions:** Complete an exam while skipping several questions. Verify the "Unanswered" count on the results screen is correct and that the "Review Unanswered" link works.
+*   **Review Screen Icons:**
+    *   Confirm the 'x' icon appears for all unanswered questions in the review list.
+    *   Answer some questions very slowly. Confirm the clock icon appears next to them in the review list (for both correct and incorrect answers).
+
+---
+
+## Version 1.7.0
 
 **Summary:** This is a maintenance and refinement release that significantly overhauls the core question distribution logic to be more intelligent and mathematically sound. It introduces a new proportional distribution algorithm that better respects the `DomainPercentages` defined in the JSON file. This version also fixes a critical UI bug in the custom exam setup, enhances the results screen with more precise sorting, and includes a developer-focused debug mode for validating the new algorithm.
 

@@ -141,6 +141,29 @@ input[type="number"].short-input {
   border-radius: 4px;
   text-align: center;
   border: 1px solid #fecaca;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@keyframes breathe {
+  0% { background-color: #ffdddd; }
+  50% { background-color: #ffcccc; }
+  100% { background-color: #ffdddd; }
+}
+
+.timer-warning {
+    animation: breathe 1.5s infinite;
+}
+
+.time-flag {
+    color: #e74c3c;
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.time-flag svg {
+    width: 1em;
+    height: 1em;
 }
 
 .choice {
@@ -233,15 +256,18 @@ input[type="number"].short-input {
   background-color: #f7f9fc;
   border-color: #d1d8e0;
 }
-.review-list-item .review-arrow {
+
+.review-arrow {
     float: right;
     color: #3498db;
-    font-weight: bold;
-    user-select: none;
     transition: transform 0.2s ease-in-out;
     padding-left: 10px;
 }
 
+.review-arrow svg {
+    width: 1.2em;
+    height: 1.2em;
+}
 
 .review-details {
     display: none;
@@ -531,6 +557,11 @@ select option:disabled {
             <div id="custom-domain-selection"></div>
         </div>
     </div>
+    
+    <div class="setup-option-group">
+        <input type="checkbox" id="show-time-warning-checkbox">
+        <label for="show-time-warning-checkbox" class="inline-label">Show time warning on questions</label>
+    </div>
 
     <div id="custom-exam-common-options" style="display: none;">
         <hr style="border: 0; border-top: 1px solid #e0e6ed;">
@@ -575,13 +606,16 @@ select option:disabled {
     <h2>Results</h2>
     <p>Correct Answers: <span id="correct-answers"></span></p>
     <p>Incorrect Answers: <span id="incorrect-answers"></span></p>
+    <p>Unanswered: <span id="unanswered-questions"></span></p>
     <p>Percentage: <span id="percentage"></span>%</p>
+    <p>Confidence Score: <span id="confidence-score"></span></p>
     <p>Average Time per Question: <span id="average-time"></span></p>
     <h3>Results by Domain (Best to Worst)</h3>
     <div id="domain-results"></div>
     <p>Review Questions:</p>
     <p>Correct: <span id="correct-review" class="review-link"></span></p>
     <p>Incorrect: <span id="incorrect-review" class="review-link"></span></p>
+    <p>Unanswered: <span id="unanswered-review" class="review-link"></span></p>
   </div>
 
   <div id="review-container" style="display: none;">
@@ -594,7 +628,7 @@ select option:disabled {
 <div id="version-info"></div>
 
 <script>
-const APP_VERSION = "1.7.0";
+const APP_VERSION = "1.8.4";
 const DEBUG = true; // Set to false to hide console logs
 
 const defaultExamData = {
@@ -626,6 +660,7 @@ const customQuestionCountInput = document.getElementById('custom-question-count-
 const customSetupWarningP = document.getElementById('custom-setup-warning');
 const examDurationSetupInput = document.getElementById('exam-duration-setup-input');
 const effectiveSettingsSummaryP = document.getElementById('effective-settings-summary');
+const showTimeWarningCheckbox = document.getElementById('show-time-warning-checkbox');
 
 const questionContainer = document.getElementById('question-container');
 const choicesContainer = document.getElementById('question-container');
@@ -638,6 +673,7 @@ const timeRemainingSpan = document.getElementById('time-remaining');
 const resultsContainer = document.getElementById('results-container');
 const correctAnswersSpan = document.getElementById('correct-answers');
 const incorrectAnswersSpan = document.getElementById('incorrect-answers');
+const unansweredQuestionsSpan = document.getElementById('unanswered-questions');
 const percentageSpan = document.getElementById('percentage');
 const startButton = document.getElementById('start-button');
 const runDemoButton = document.getElementById('run-demo-button');
@@ -645,6 +681,7 @@ const browseFileButton = document.getElementById('browse-file-button');
 const selectedFileNameSpan = document.getElementById('selected-file-name');
 const correctReviewSpan = document.getElementById('correct-review');
 const incorrectReviewSpan = document.getElementById('incorrect-review');
+const unansweredReviewSpan = document.getElementById('unanswered-review');
 const reviewContainer = document.getElementById('review-container');
 const reviewListDiv = document.getElementById('review-list');
 const reviewReturnButton = document.getElementById('review-return-button');
@@ -672,9 +709,15 @@ let timeRemaining;
 let examStartTime;
 let correctQuestionsList = [];
 let incorrectQuestionsList = [];
+let unansweredQuestionsList = [];
 let randomizedExamData = [];
 let maxQuestionsInBank = 0;
 let isBackNavigationDisabled = false;
+let questionStartTime = 0;
+let confidenceScores = [];
+let avgTimePerQuestionForConfidence = 0;
+let showTimeWarning = false;
+let questionTimeSpent = [];
 
 const TIME_PER_QUESTION_SECONDS = 90;
 
@@ -703,8 +746,9 @@ function setupEventListeners() {
     customQuestionCountSelect.addEventListener('change', handleQuestionCountSelectChange);
     customQuestionCountInput.addEventListener('input', updateCurrentExamSetup);
     examDurationSetupInput.addEventListener('input', updateCurrentExamSetup);
+    showTimeWarningCheckbox.addEventListener('change', (e) => { showTimeWarning = e.target.checked; });
 }
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
     if (versionInfoDiv) {
         versionInfoDiv.innerText = `Exam System v${APP_VERSION}`;
     }
@@ -743,7 +787,7 @@ function validateExamData(data) {
     if (typeof data["Number of Questions"] !== 'number' || data["Number of Questions"] <= 0) { alert("Error: 'Number of Questions' must be a positive number."); return false; }
     if (typeof data["Default Time"] !== 'number' || data["Default Time"] < 0) { alert("Error: 'Default Time' must be a non-negative number."); return false; }
     if (data.BackNavigation !== undefined && typeof data.BackNavigation !== 'boolean') { alert("Error: 'BackNavigation' must be a boolean (true or false) if present."); return false; }
-    if (!Array.isArray(data.Questions)) { /* Allow empty */ }
+    if (!Array.isArray(data.Questions)) { /* Allow empty */ } 
     else {
         for (const question of data.Questions) {
            if (!question.DomainOfKnowledge || !question.Question || !question.Choices || !question.AnswerKey || !question.Explaination) { alert("Error: A question is missing required fields."); return false; }
@@ -765,58 +809,96 @@ function validateExamData(data) {
 }
 
 function prepareQuestionsByPercentage(totalItems, domainPercentages, allQuestions) {
-    if(DEBUG) console.log("--- Starting Percentage Distribution Algorithm ---");
-    let domainCalcs = [];
-    
-    // Step 1: Calculate Ideal Allocation
-    for (const domain in domainPercentages) {
-        const percent = domainPercentages[domain];
-        const idealShare = totalItems * (percent / 100);
-        const baseAlloc = Math.floor(idealShare);
-        const remainder = idealShare - baseAlloc;
-        domainCalcs.push({ domain, percent, idealShare, baseAlloc, remainder, finalAlloc: baseAlloc });
-    }
-    if(DEBUG) console.log("Step 1 & 2: Initial Calculation & Base Allocation:", JSON.parse(JSON.stringify(domainCalcs)));
+    if(DEBUG) console.log("--- Starting New Percentage Distribution Algorithm ---");
 
-    // Step 2 & 3: Allocate Remainder using Largest Remainder Method
-    let totalBaseAlloc = domainCalcs.reduce((sum, current) => sum + current.baseAlloc, 0);
-    let remainingItems = totalItems - totalBaseAlloc;
-    if(DEBUG) console.log(`Total items: ${totalItems}, Base allocation: ${totalBaseAlloc}, Remainder to distribute: ${remainingItems}`);
-
-    // Sort domains by remainder descending (with random tie-breaking)
-    domainCalcs.sort((a, b) => {
-        if (b.remainder > a.remainder) return 1;
-        if (a.remainder > b.remainder) return -1;
-        return Math.random() - 0.5; // Random tie-breaker
-    });
-    if(DEBUG) console.log("Step 3a: Domains sorted by remainder:", domainCalcs.map(d => `${d.domain} (${d.remainder.toFixed(2)})`));
-
-    // Distribute remaining items one by one to the domains with the largest remainders
-    for (let i = 0; i < remainingItems; i++) {
-        domainCalcs[i % domainCalcs.length].finalAlloc++;
-    }
-    if(DEBUG) console.log("Step 3b/c: Final Allocation:", JSON.parse(JSON.stringify(domainCalcs)));
-
-    // Final Step: Select questions based on final allocation
-    let selectedQuestions = [];
     const questionsByDomain = {};
-    allQuestions.forEach(q => { (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q); });
+    allQuestions.forEach(q => {
+        (questionsByDomain[q.DomainOfKnowledge] = questionsByDomain[q.DomainOfKnowledge] || []).push(q);
+    });
     for (const domain in questionsByDomain) {
         shuffleArray(questionsByDomain[domain]);
     }
-    
-    domainCalcs.forEach(calc => {
-        const domain = calc.domain;
-        const count = calc.finalAlloc;
-        if (questionsByDomain[domain]) {
-            const canTake = Math.min(count, questionsByDomain[domain].length);
-            if(DEBUG && canTake < count) console.warn(`Warning: Domain '${domain}' only has ${canTake} questions available, but allocation was ${count}.`);
-            selectedQuestions.push(...questionsByDomain[domain].slice(0, canTake));
-        } else {
-             if(DEBUG && count > 0) console.warn(`Warning: Domain '${domain}' has 0 questions available, but allocation was ${count}.`);
-        }
-    });
 
+    if(DEBUG) {
+        console.log("Available questions per domain in bank:");
+        for(const domain in questionsByDomain) {
+            console.log(`- ${domain}: ${questionsByDomain[domain].length} questions`);
+        }
+    }
+
+    let selectedQuestions = [];
+    let questionBuckets = {};
+    let totalSelectedCount = 0;
+
+    // 1. & 2. Calculate base bucket size and fill initial questions
+    if(DEBUG) console.log("Step 1 & 2: Calculate and fill base questions");
+    for (const domain in domainPercentages) {
+        if (questionsByDomain[domain]) {
+            const percentage = domainPercentages[domain];
+            const bucketSize = Math.floor(totalItems * (percentage / 100));
+            const questionsToTake = Math.min(bucketSize, questionsByDomain[domain].length);
+            
+            questionBuckets[domain] = questionsByDomain[domain].slice(0, questionsToTake);
+            totalSelectedCount += questionsToTake;
+
+            if(DEBUG) console.log(`Domain '${domain}': ${percentage}% -> bucketSize: ${bucketSize}, taking ${questionsToTake} questions.`);
+        } else {
+            if(DEBUG) console.log(`Domain '${domain}' from percentages not found in question bank.`);
+        }
+    }
+
+    // 3. Spread the remainder
+    let remainingQuestions = totalItems - totalSelectedCount;
+    if(DEBUG) console.log(`Step 3: Base selection done. ${totalSelectedCount} questions selected. ${remainingQuestions} remaining to be spread.`);
+
+    if (remainingQuestions > 0) {
+        let availableDomains = Object.keys(questionsByDomain).filter(domain => {
+            const totalInDomain = questionsByDomain[domain].length;
+            const selectedInDomain = questionBuckets[domain] ? questionBuckets[domain].length : 0;
+            return totalInDomain > selectedInDomain;
+        });
+
+        if(DEBUG) console.log("Spreading to available domains:", availableDomains);
+
+        let spreadIndex = 0;
+        while (remainingQuestions > 0 && availableDomains.length > 0) {
+            shuffleArray(availableDomains); // Randomize the order of domains to spread into
+            const domainToAddTo = availableDomains[spreadIndex % availableDomains.length];
+            
+            const sourceQuestions = questionsByDomain[domainToAddTo];
+            const bucket = questionBuckets[domainToAddTo] || [];
+            
+            if (bucket.length < sourceQuestions.length) {
+                const nextQuestionIndex = bucket.length;
+                bucket.push(sourceQuestions[nextQuestionIndex]);
+                remainingQuestions--;
+                totalSelectedCount++;
+                if(DEBUG) console.log(`Added one more question to '${domainToAddTo}'. Remaining to spread: ${remainingQuestions}`);
+            }
+
+            // 4. If a domain is now full, remove it from the list of available domains for spreading
+            if (bucket.length >= sourceQuestions.length) {
+                availableDomains = availableDomains.filter(d => d !== domainToAddTo);
+                if(DEBUG) console.log(`Domain '${domainToAddTo}' is now full and removed from spread pool.`);
+            }
+            
+            spreadIndex++;
+            // Safety break for infinite loops
+            if (spreadIndex > totalItems * 2) {
+                if(DEBUG) console.error("Breaking spread loop to prevent infinite execution.");
+                break;
+            }
+        }
+    }
+    
+    if(DEBUG) console.log(`Total questions selected after spread: ${totalSelectedCount}`);
+
+    // Combine all buckets into the final list
+    for (const domain in questionBuckets) {
+        selectedQuestions.push(...questionBuckets[domain]);
+    }
+
+    shuffleArray(selectedQuestions); // Shuffle the final combined list
     return selectedQuestions;
 }
 
@@ -975,19 +1057,36 @@ function startActualExam() {
 
     if (setup.numQuestions <= 0) { alert("Please configure a valid number of questions."); return; }
     if (!examData) { alert("No exam data loaded."); return; }
-    
+
+    // Calculate average time for confidence score
+    if (setup.totalTimeMinutes > 0 && setup.numQuestions > 0) {
+        avgTimePerQuestionForConfidence = (setup.totalTimeMinutes * 60) / setup.numQuestions;
+    } else if (examData["Default Time"] > 0 && examData["Number of Questions"] > 0) {
+        avgTimePerQuestionForConfidence = (examData["Default Time"] * 60) / examData["Number of Questions"];
+    } else {
+        avgTimePerQuestionForConfidence = TIME_PER_QUESTION_SECONDS; // Fallback
+    }
+    if(DEBUG) console.log(`Average time for confidence score: ${avgTimePerQuestionForConfidence.toFixed(2)}s`);
+
     const domainPercentages = examData.DomainPercentages;
-    const minForPercentages = domainPercentages ? Object.keys(domainPercentages).filter(d => domainPercentages[d] > 0).length : Infinity;
-    const usePercentageLogic = (setup.type === 'default' && domainPercentages && setup.numQuestions >= minForPercentages);
+    const usePercentageLogic = ((setup.type === 'default' || setup.type === 'quick') && domainPercentages);
 
     if (usePercentageLogic) {
+        if(DEBUG) console.log(`Using Percentage Logic for setup type: '${setup.type}'`);
         randomizedExamData = prepareQuestionsByPercentage(setup.numQuestions, domainPercentages, examData.Questions);
     } else {
+        if(DEBUG) console.log(`Using Basic Logic for setup type: '${setup.type}'`);
         let questionPool = JSON.parse(JSON.stringify(examData.Questions || []));
+
         if (setup.type === 'custom_domain' && setup.selectedDomains.length > 0) {
+            if(DEBUG) console.log('Filtering for custom domains:', setup.selectedDomains);
             questionPool = questionPool.filter(q => setup.selectedDomains.includes(q.DomainOfKnowledge));
+        } else {
+            if(DEBUG) console.log('Using all questions in the pool.');
         }
+        
         shuffleArray(questionPool);
+        if(DEBUG) console.log(`Question pool of ${questionPool.length} shuffled. Taking ${setup.numQuestions} questions.`);
         randomizedExamData = questionPool.slice(0, setup.numQuestions);
     }
 
@@ -998,11 +1097,11 @@ function startActualExam() {
     progressBarContainer.style.display = 'block'; progressText.style.display = 'block';
 
     currentQuestionIndex = 0; userAnswers = {}; correctAnswersCount = 0; incorrectAnswersCount = 0;
-    correctQuestionsList = []; incorrectQuestionsList = []; examStartTime = Date.now();
+    correctQuestionsList = []; incorrectQuestionsList = []; confidenceScores = []; questionTimeSpent = []; examStartTime = Date.now();
 
     const examDurationMinutes = setup.totalTimeMinutes;
 
-    if (examDurationMinutes > 0) { timeRemaining = examDurationMinutes * 60; updateTimerDisplay(); startTimerInterval(); }
+    if (examDurationMinutes > 0) { timeRemaining = examDurationMinutes * 60; updateTimerDisplay(); startTimerInterval(); } 
     else { timeRemainingSpan.innerText = "Unlimited"; }
     showQuestion();
 }
@@ -1020,6 +1119,8 @@ function updateProgress() {
 }
 
 function showQuestion() {
+  questionStartTime = Date.now(); // Record start time for confidence score
+  timerDiv.classList.remove('timer-warning');
   const questionData = randomizedExamData[currentQuestionIndex];
   questionElement.innerText = `${currentQuestionIndex + 1}. ${questionData.Question}`;
   choicesContainer.querySelectorAll('.choice').forEach(el => el.remove());
@@ -1049,10 +1150,30 @@ function showQuestion() {
   updateProgress();
 }
 
-function goNext() { saveAnswer(); currentQuestionIndex++; showQuestion(); }
+function calculateAndStoreConfidenceScore() {
+    if (!randomizedExamData[currentQuestionIndex]) return;
+    const timeSpent = (Date.now() - questionStartTime) / 1000;
+    questionTimeSpent[currentQuestionIndex] = timeSpent;
+    const isCorrect = userAnswers[currentQuestionIndex] === randomizedExamData[currentQuestionIndex].AnswerKey;
+    let score = 0;
+
+    if (timeSpent >= avgTimePerQuestionForConfidence) {
+        score = isCorrect ? 0 : -50;
+    } else {
+        if (isCorrect) {
+            score = Math.round(100 * (1 - (timeSpent / avgTimePerQuestionForConfidence)));
+        } else {
+            score = -50;
+        }
+    }
+    confidenceScores[currentQuestionIndex] = score;
+    if(DEBUG) console.log(`Q${currentQuestionIndex + 1}: Time spent: ${timeSpent.toFixed(2)}s, Correct: ${isCorrect}, Score: ${score}`);
+}
+
+function goNext() { saveAnswer(); calculateAndStoreConfidenceScore(); currentQuestionIndex++; showQuestion(); }
 function goBack() {
     if (isBackNavigationDisabled) return;
-    saveAnswer(); currentQuestionIndex--; showQuestion();
+    saveAnswer(); calculateAndStoreConfidenceScore(); currentQuestionIndex--; showQuestion();
 }
 
 function saveAnswer() {
@@ -1062,7 +1183,16 @@ function saveAnswer() {
 
 function startTimerInterval() {
   timerInterval = setInterval(() => {
-    timeRemaining--; updateTimerDisplay();
+    timeRemaining--; 
+    updateTimerDisplay();
+    if (showTimeWarning) {
+        const timeSpent = (Date.now() - questionStartTime) / 1000;
+        if (timeSpent > avgTimePerQuestionForConfidence) {
+            timerDiv.classList.add('timer-warning');
+        } else {
+            timerDiv.classList.remove('timer-warning');
+        }
+    }
     if (timeRemaining <= 0) { clearInterval(timerInterval); alert("Time is up!"); submitActualExam(); }
   }, 1000);
 }
@@ -1072,12 +1202,17 @@ function updateTimerDisplay() {
 }
 
 function submitActualExam() {
-    saveAnswer(); clearInterval(timerInterval);
+    saveAnswer();
+    calculateAndStoreConfidenceScore(); // Score the last question
+    clearInterval(timerInterval);
     questionContainer.style.display = 'none'; timerDiv.style.display = 'none'; resultsContainer.style.display = 'block';
     submitButton.style.display = 'none'; nextButton.style.display = 'none'; backButton.style.display = 'none';
     progressBarContainer.style.display = 'none'; progressText.style.display = 'none';
 
-    correctAnswersCount = 0; incorrectAnswersCount = 0; correctQuestionsList = []; incorrectQuestionsList = [];
+    correctAnswersCount = 0; incorrectAnswersCount = 0; 
+    let unansweredCount = 0;
+    correctQuestionsList = []; incorrectQuestionsList = [];
+    unansweredQuestionsList = [];
     const endTime = Date.now();
     const elapsedTimeInSeconds = examStartTime ? (endTime - examStartTime) / 1000 : 0;
     const numQuestionsInExam = randomizedExamData.length;
@@ -1089,8 +1224,17 @@ function submitActualExam() {
       const qData = randomizedExamData[i]; const userAnswer = userAnswers[i]; const domain = qData.DomainOfKnowledge;
       if (!domainResults[domain]) domainResults[domain] = { correct: 0, total: 0, percentage: 0 };
       domainResults[domain].total++;
-      if (userAnswer === qData.AnswerKey) { domainResults[domain].correct++; correctAnswersCount++; correctQuestionsList.push(i); }
-      else { incorrectAnswersCount++; incorrectQuestionsList.push(i); }
+      if (userAnswer === undefined) {
+          unansweredCount++;
+          unansweredQuestionsList.push(i);
+      } else if (userAnswer === qData.AnswerKey) { 
+          domainResults[domain].correct++; 
+          correctAnswersCount++; 
+          correctQuestionsList.push(i); 
+      } else { 
+          incorrectAnswersCount++; 
+          incorrectQuestionsList.push(i); 
+      } 
     }
     for (const domain in domainResults) {
         const { correct, total } = domainResults[domain];
@@ -1100,7 +1244,13 @@ function submitActualExam() {
     const percentage = numQuestionsInExam > 0 ? (correctAnswersCount / numQuestionsInExam) * 100 : 0;
     correctAnswersSpan.innerText = `${correctAnswersCount}/${numQuestionsInExam}`;
     incorrectAnswersSpan.innerText = `${incorrectAnswersCount}/${numQuestionsInExam}`;
+    unansweredQuestionsSpan.innerText = `${unansweredCount}/${numQuestionsInExam}`;
     percentageSpan.innerText = percentage.toFixed(2);
+
+    const totalConfidenceScore = confidenceScores.reduce((a, b) => a + b, 0);
+    const maxConfidenceScore = numQuestionsInExam * 100;
+    const confidencePercentage = maxConfidenceScore > 0 ? (totalConfidenceScore / maxConfidenceScore) * 100 : 0;
+    document.getElementById('confidence-score').innerText = `${confidencePercentage.toFixed(2)}%`;
     
     const sortedDomains = Object.keys(domainResults).sort((a, b) => {
         const percentageDiff = domainResults[b].percentage - domainResults[a].percentage;
@@ -1120,6 +1270,8 @@ function submitActualExam() {
     if (correctQuestionsList.length > 0) { correctReviewSpan.innerText = `Review Correct (${correctQuestionsList.length})`; correctReviewSpan.onclick = () => reviewQuestionsByDomain(correctQuestionsList); }
     incorrectReviewSpan.style.display = incorrectQuestionsList.length === 0 ? 'none' : 'inline';
     if (incorrectQuestionsList.length > 0) { incorrectReviewSpan.innerText = `Review Incorrect (${incorrectQuestionsList.length})`; incorrectReviewSpan.onclick = () => reviewQuestionsByDomain(incorrectQuestionsList); }
+    unansweredReviewSpan.style.display = unansweredQuestionsList.length === 0 ? 'none' : 'inline';
+    if (unansweredQuestionsList.length > 0) { unansweredReviewSpan.innerText = `Review Unanswered (${unansweredQuestionsList.length})`; unansweredReviewSpan.onclick = () => reviewQuestionsByDomain(unansweredQuestionsList); }
 }
 
 function reviewQuestionsByDomain(questionIndicesList) {
@@ -1135,13 +1287,49 @@ function reviewQuestionsByDomain(questionIndicesList) {
             const qData = randomizedExamData[qIdx]; const uAns = userAnswers[qIdx] !== undefined ? userAnswers[qIdx] : "Not Answered";
             const li = document.createElement('div'); li.classList.add('review-list-item');
             const qTextDiv = document.createElement('div'); qTextDiv.style.cssText = 'display:flex;justify-content:space-between;align-items:center;cursor:pointer;';
-            const qTitle = document.createElement('div'); qTitle.innerText = `Q${qIdx + 1}: ${qData.Question}`;
-            const arrow = document.createElement('span'); arrow.classList.add('review-arrow'); arrow.innerHTML = '▾';
+            const qTitle = document.createElement('div'); 
+            qTitle.innerText = `Q${qIdx + 1}: ${qData.Question}`;
+            
+            const flagsContainer = document.createElement('span');
+            flagsContainer.style.marginLeft = '10px';
+            flagsContainer.style.display = 'inline-flex';
+            flagsContainer.style.alignItems = 'center';
+
+            if (uAns === "Not Answered") {
+                const flag = document.createElement('span');
+                flag.className = 'unanswered-flag';
+                flag.style.marginRight = '5px';
+                flag.innerHTML = '<svg title="Unanswered" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>';
+                flagsContainer.appendChild(flag);
+            }
+            
+            if (uAns !== "Not Answered" && questionTimeSpent[qIdx] > avgTimePerQuestionForConfidence) {
+                const flag = document.createElement('span');
+                flag.className = 'time-flag';
+                flag.innerHTML = '<svg title="Took a long time" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:1.2em; height:1.2em;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+                flagsContainer.appendChild(flag);
+            }
+
+            if (flagsContainer.hasChildNodes()) {
+                qTitle.appendChild(flagsContainer);
+            }
+
+            const arrow = document.createElement('span'); arrow.classList.add('review-arrow'); 
+            arrow.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+
             qTextDiv.append(qTitle, arrow);
             const detsDiv = document.createElement('div'); detsDiv.classList.add('review-details');
-            detsDiv.innerHTML = `<p><strong>Your Answer:</strong> ${uAns}</p><p><strong>Correct Answer:</strong> ${qData.AnswerKey}</p><div class="explanation"><strong>Explanation:</strong> ${qData.Explaination}</div>`;
+            detsDiv.innerHTML = `<p><strong>Your Answer:</strong> ${uAns}</p><p><strong>Correct Answer:</strong> ${qData.AnswerKey}</p><p><strong>Confidence Score:</strong> ${confidenceScores[qIdx]}%</p><div class="explanation"><strong>Explanation:</strong> ${qData.Explaination}</div>`;
             li.append(qTextDiv, detsDiv);
-            li.addEventListener('click', (e) => { if (e.target.closest('.review-details')) return; window.getSelection().removeAllRanges(); const exp = detsDiv.style.display === 'block'; detsDiv.style.display = exp ? 'none' : 'block'; arrow.innerHTML = exp ? '▾' : '▴'; });
+            li.addEventListener('click', (e) => { 
+                if (e.target.closest('.review-details')) return; 
+                window.getSelection().removeAllRanges(); 
+                const isExpanded = detsDiv.style.display === 'block'; 
+                detsDiv.style.display = isExpanded ? 'none' : 'block'; 
+                arrow.innerHTML = isExpanded 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>';
+            });
             reviewListDiv.appendChild(li);
         });
     }
@@ -1150,8 +1338,6 @@ function reviewQuestionsByDomain(questionIndicesList) {
 
 function returnToResults() { reviewContainer.style.display = 'none'; resultsContainer.style.display = 'block'; }
 
-if (typeof CSS === 'undefined' || typeof CSS.escape !== 'function') { CSS = { escape: (value) => { if (arguments.length == 0) throw new TypeError('`CSS.escape` requires an argument.'); var string = String(value); var length = string.length; var index = -1; var codeUnit; var result = ''; var firstCodeUnit = string.charCodeAt(0); while (++index < length) { codeUnit = string.charCodeAt(index); if (codeUnit == 0x0000) { result += '\uFFFD'; } else if ((codeUnit >= 0x0001 && codeUnit <= 0x001F) || codeUnit == 0x007F || (index == 0 && codeUnit >= 0x0030 && codeUnit <= 0x0039) || (index == 1 && codeUnit >= 0x0030 && codeUnit <= 0x0039 && firstCodeUnit == 0x002D )) { result += '\\' + codeUnit.toString(16) + ' '; } else if ( codeUnit >= 0x0080 || codeUnit == 0x002D || codeUnit == 0x005F || (codeUnit >= 0x0030 && codeUnit <= 0x0039) || (codeUnit >= 0x0041 && codeUnit <= 0x005A) || (codeUnit >= 0x0061 && codeUnit <= 0x007A) ) { result += string.charAt(index); } else { result += '\\' + string.charAt(index); } } return result; }}; }
+if (typeof CSS === 'undefined' || typeof CSS.escape !== 'function') { CSS = { escape: (value) => { if (arguments.length == 0) throw new TypeError("`CSS.escape` requires an argument."); var string = String(value); var length = string.length; var index = -1; var codeUnit; var result = ''; var firstCodeUnit = string.charCodeAt(0); while (++index < length) { codeUnit = string.charCodeAt(index); if (codeUnit == 0x0000) { result += '\uFFFD'; } else if ((codeUnit >= 0x0001 && codeUnit <= 0x001F) || codeUnit == 0x007F || (index == 0 && codeUnit >= 0x0030 && codeUnit <= 0x0039) || (index == 1 && codeUnit >= 0x0030 && codeUnit <= 0x0039 && firstCodeUnit == 0x002D )) { result += '\\' + codeUnit.toString(16) + ' '; } else if ( codeUnit >= 0x0080 || codeUnit == 0x002D || codeUnit == 0x005F || (codeUnit >= 0x0030 && codeUnit <= 0x0039) || (codeUnit >= 0x0041 && codeUnit <= 0x005A) || (codeUnit >= 0x0061 && codeUnit <= 0x007A) ) { result += string.charAt(index); } else { result += '\\' + string.charAt(index); } } return result; }}; }
 
 </script>
-</body>
-</html>
