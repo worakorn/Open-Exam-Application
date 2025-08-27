@@ -2,6 +2,24 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
+## Version 1.8.5
+
+**Summary:** This release focuses on user transparency and legal clarity by adding a prominent disclaimer and a comprehensive "Terms of Use" section to the application's main page.
+
+**Key Features & Enhancements:**
+
+1.  **Disclaimer Box:**
+    *   A disclaimer is now displayed on the initial page, informing users that the application is free to use and can be downloaded for offline use to enhance privacy.
+
+2.  **User Agreement Section:**
+    *   A detailed "Terms of Use" section has been added to the bottom of the page, covering:
+        *   Acknowledgement that the software is AI-generated.
+        *   A clear disclaimer of warranty.
+        *   Explicit statements on usage rights (free for personal/commercial use, distribution, and modification).
+        *   A prohibition on selling the software.
+        *   Privacy recommendations and a link to the GitHub repository.
+        *   Contact information.
+
 ## Version 1.8.4 (Current Release)
 
 **Summary:** This release introduces sophisticated performance analytics to provide users with deeper insights into their test-taking habits. Key features include a "Confidence Score" that evaluates both speed and accuracy, optional time warnings for pacing, and an enhanced review screen that tracks unanswered questions and flags questions that took too long to answer.

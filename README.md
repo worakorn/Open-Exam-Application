@@ -1,4 +1,4 @@
-*   # Open Exam Application (v1.8.4)
+*   # Open Exam Application (v1.8.5)
 
 ## Introduction
 
