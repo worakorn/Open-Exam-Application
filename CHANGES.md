@@ -2,6 +2,94 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
+## Version 1.9.0
+
+**Summary:** This major release delivers a comprehensive visual transformation with a modern purple gradient theme, enhanced UI/UX throughout, improved mobile responsiveness, and optimized layout for better viewport utilization. All improvements are purely visual/UX focused while maintaining 100% functional compatibility.
+
+**Key Features & Enhancements:**
+
+1.  **Comprehensive UI/UX Overhaul:**
+    *   **Modern Color Theme:** Introduced stunning purple gradient background (#667eea to #764ba2) throughout the application
+    *   **Enhanced Container:** Premium elevated card design with enhanced shadows (0 20px 60px) and larger border radius (16px)
+    *   **Gradient Typography:** Title text features purple gradient fill with transparent text for modern appearance
+    *   **Improved Visual Hierarchy:** Better font weights (700-800), letter spacing, and size differentiation across all headings
+
+2.  **Form & Input Improvements:**
+    *   **Enhanced Input Fields:** Thicker borders (2px), larger border radius (8px), better focus states with purple accent (#667eea)
+    *   **Purple Focus Rings:** Consistent purple shadow rings on all interactive elements
+    *   **Better Transitions:** Smooth cubic-bezier animations throughout
+
+3.  **Question Display Enhancements:**
+    *   **Card-Based Layout:** Questions now appear in white cards with shadows for better separation
+    *   **Enhanced Choice Elements:**
+        *   Thicker borders and better hover effects (translateY lift animation)
+        *   Purple accents when hovered or selected
+        *   Clear visual feedback with background color change on selection
+        *   Larger radio buttons (scale 1.2) with purple accent color
+
+4.  **Button & Navigation Improvements:**
+    *   **Enhanced Buttons:** Better padding, rounded corners (10px), improved shadows
+    *   **Gradient Buttons:** Start button features purple gradient matching theme
+    *   **Hover Effects:** Lift animations (translateY -2px) with enhanced shadows
+    *   **Improved States:** Better disabled states with opacity
+
+5.  **Progress Indicators:**
+    *   **Gradient Progress Bar:** Purple gradient fill (90deg) with enhanced shadow
+    *   **Better Animation:** Smoother transitions with cubic-bezier easing
+    *   **Taller Bar:** Increased to 14px for better visibility
+
+6.  **Setup Screen Enhancements:**
+    *   **Card-Style Radio Options:** Already enhanced in 1.8.5, further polished with consistent spacing
+    *   **Purple Section Headers:** Bold headers with 3px purple underline
+    *   **Gradient Summary Box:** Settings summary with purple gradient background and border
+    *   **Enhanced Time Warning:** Prominent yellow box with icon and description
+
+7.  **Mobile Responsiveness & Display:**
+    *   **Proper Viewport Meta Tags:** Added for optimal mobile display
+    *   **Enhanced Version Info:** White background box with shadow for visibility against gradient
+    *   **Offline Capability:** Confirmed fully offline-capable (all resources embedded)
+    *   **Better Mobile Spacing:** Optimized padding and margins for mobile devices
+    *   **Touch-Friendly:** Larger tap targets and better spacing on small screens
+
+8.  **Layout Optimization:**
+    *   **Reduced Vertical Spacing:** Minimized padding and margins throughout
+    *   **Compact Design:** Smaller font sizes and tighter layout for better viewport utilization
+    *   **Less Scrolling:** Optimized to show more content in single viewport
+    *   **Better Space Efficiency:** Reduced container margins (30px→15px) and padding (40px→25px)
+
+9.  **Results Screen (from 1.8.6+):**
+    *   **Colorful Gradient Cards:** Score, Correct, Incorrect, and Unanswered metrics in gradient cards
+    *   **Performance Badges:** Dynamic badges based on score (🏆 Excellent, ⭐ Great, 👍 Good, etc.)
+    *   **Icons Throughout:** SVG icons for better visual communication
+    *   **Better Organization:** Clear sections with proper spacing and borders
+
+10. **User Experience Polish:**
+    *   **Consistent Shadows:** Multiple shadow layers for depth throughout
+    *   **Smooth Transitions:** Cubic-bezier easing for premium feel
+    *   **Better Contrast:** Improved text colors and backgrounds for readability
+    *   **Visual Feedback:** Clear hover states and selected indicators
+    *   **Terms of Use Visibility:** Only shown on first page for cleaner interface during exam
+
+**Internal Version Tracking:**
+*   Started at: 20251124001
+*   Final: 20251124005
+*   Note: Internal versions track development iterations
+
+**Testing Notes for Version 1.9.0:**
+
+*   **Visual Verification:** Open exam.html and verify purple gradient background displays correctly
+*   **Title Text:** Confirm gradient text effect on "Open Exam Application" title
+*   **Form Inputs:** Test focus states show purple rings
+*   **Question Display:** Verify choices have lift animation on hover and purple accent when selected
+*   **Progress Bar:** Confirm purple gradient fill during exam
+*   **Mobile Display:** Test on mobile device or resize browser - version info should be clearly visible
+*   **Layout Density:** Verify more content fits in viewport with reduced need for scrolling
+*   **Buttons:** Test all buttons have smooth hover effects with lift animation
+*   **Results Screen:** Complete exam and verify gradient cards display correctly
+*   **Overall Polish:** Confirm entire interface feels modern, cohesive, and professional
+
+---
+
 ## Version 1.8.5
 
 **Summary:** This release focuses on user transparency and legal clarity by adding a prominent disclaimer and a comprehensive "Terms of Use" section to the application's main page.

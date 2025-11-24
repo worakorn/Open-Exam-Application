@@ -1,8 +1,10 @@
-*   # Open Exam Application (v1.8.5)
+*   # Open Exam Application (v1.9.0)
 
 ## Introduction
 
 The "Open Exam Application" is a standalone, offline-capable exam system built entirely within a single HTML file. Crafted with vanilla HTML, CSS, and JavaScript—and significantly accelerated with Google Gemini—it provides a highly flexible platform for creating and taking multiple-choice exams. It features timed tests, advanced user-driven exam configuration, and immediate, detailed results with performance analytics.
+
+**New in 1.9.0:** Modern, visually stunning interface with purple gradient theme, enhanced animations, and comprehensive UI/UX improvements throughout.
 
 ## Features
 
