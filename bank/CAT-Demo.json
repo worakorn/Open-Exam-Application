@@ -1,0 +1,1312 @@
+{
+    "Exam Name": "CAT Demo Exam - Adaptive Testing",
+    "EnableCAT": true,
+    "minQuestions": 10,
+    "maxQuestions": 30,
+    "percentPass": 70,
+    "Number of Questions": 100,
+    "Default Time": 0,
+    "BackNavigation": false,
+    "Questions": [
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 2 + 2?",
+            "Choices": [
+                "3",
+                "4",
+                "5",
+                "6"
+            ],
+            "AnswerKey": "4",
+            "Explanation": "Basic addition: 2 + 2 = 4",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 5 + 3?",
+            "Choices": [
+                "6",
+                "7",
+                "8",
+                "9"
+            ],
+            "AnswerKey": "8",
+            "Explanation": "5 + 3 = 8",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'big' mean?",
+            "Choices": [
+                "Small",
+                "Large",
+                "Fast",
+                "Slow"
+            ],
+            "AnswerKey": "Large",
+            "Explanation": "Big means large in size",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "If A > B and B > C, then A __ C",
+            "Choices": [
+                "> (greater than)",
+                "< (less than)",
+                "= (equal to)",
+                "Cannot determine"
+            ],
+            "AnswerKey": "> (greater than)",
+            "Explanation": "Transitive property: if A > B and B > C, then A > C",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the main source of energy for Earth?",
+            "Choices": [
+                "Moon",
+                "Sun",
+                "Stars",
+                "Wind"
+            ],
+            "AnswerKey": "Sun",
+            "Explanation": "The Sun provides most of Earth's energy",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 10 - 4?",
+            "Choices": [
+                "4",
+                "5",
+                "6",
+                "7"
+            ],
+            "AnswerKey": "6",
+            "Explanation": "10 - 4 = 6",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is the opposite of 'hot'?",
+            "Choices": [
+                "Warm",
+                "Cool",
+                "Cold",
+                "Freezing"
+            ],
+            "AnswerKey": "Cold",
+            "Explanation": "Cold is the opposite of hot",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "Which comes next: 2, 4, 6, 8, __?",
+            "Choices": [
+                "9",
+                "10",
+                "11",
+                "12"
+            ],
+            "AnswerKey": "10",
+            "Explanation": "Pattern increases by 2",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "How many legs does a spider have?",
+            "Choices": [
+                "6",
+                "8",
+                "10",
+                "12"
+            ],
+            "AnswerKey": "8",
+            "Explanation": "Spiders have 8 legs",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 3 × 3?",
+            "Choices": [
+                "6",
+                "9",
+                "12",
+                "15"
+            ],
+            "AnswerKey": "9",
+            "Explanation": "3 × 3 = 9",
+            "difficultyLevel": 1
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 15 + 27?",
+            "Choices": [
+                "40",
+                "41",
+                "42",
+                "43"
+            ],
+            "AnswerKey": "42",
+            "Explanation": "15 + 27 = 42",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 12 × 5?",
+            "Choices": [
+                "50",
+                "55",
+                "60",
+                "65"
+            ],
+            "AnswerKey": "60",
+            "Explanation": "12 × 5 = 60",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'ancient' mean?",
+            "Choices": [
+                "New",
+                "Modern",
+                "Very old",
+                "Future"
+            ],
+            "AnswerKey": "Very old",
+            "Explanation": "Ancient means very old",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "If all cats are animals, and some animals are pets, which is true?",
+            "Choices": [
+                "All cats are pets",
+                "Some cats might be pets",
+                "No cats are pets",
+                "All pets are cats"
+            ],
+            "AnswerKey": "Some cats might be pets",
+            "Explanation": "We only know cats are animals and some animals are pets",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What state is water at 0°C?",
+            "Choices": [
+                "Gas",
+                "Liquid",
+                "Solid",
+                "Plasma"
+            ],
+            "AnswerKey": "Solid",
+            "Explanation": "Water freezes at 0°C (ice)",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 50% of 80?",
+            "Choices": [
+                "30",
+                "35",
+                "40",
+                "45"
+            ],
+            "AnswerKey": "40",
+            "Explanation": "50% of 80 = 80/2 = 40",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "A synonym for 'happy' is:",
+            "Choices": [
+                "Sad",
+                "Joyful",
+                "Angry",
+                "Tired"
+            ],
+            "AnswerKey": "Joyful",
+            "Explanation": "Joyful means happy",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "Which number doesn't fit: 2, 4, 6, 9, 10?",
+            "Choices": [
+                "2",
+                "4",
+                "9",
+                "10"
+            ],
+            "AnswerKey": "9",
+            "Explanation": "9 is the only odd number",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What do plants need for photosynthesis?",
+            "Choices": [
+                "Darkness",
+                "Moonlight",
+                "Sunlight",
+                "Artificial light only"
+            ],
+            "AnswerKey": "Sunlight",
+            "Explanation": "Plants need sunlight for photosynthesis",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 144 ÷ 12?",
+            "Choices": [
+                "10",
+                "11",
+                "12",
+                "13"
+            ],
+            "AnswerKey": "12",
+            "Explanation": "144 ÷ 12 = 12",
+            "difficultyLevel": 2
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Solve: 3x + 7 = 22",
+            "Choices": [
+                "x = 3",
+                "x = 5",
+                "x = 7",
+                "x = 9"
+            ],
+            "AnswerKey": "x = 5",
+            "Explanation": "3x = 15, so x = 5",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is 17²?",
+            "Choices": [
+                "289",
+                "299",
+                "279",
+                "269"
+            ],
+            "AnswerKey": "289",
+            "Explanation": "17 × 17 = 289",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'ephemeral' mean?",
+            "Choices": [
+                "Lasting forever",
+                "Very large",
+                "Short-lived",
+                "Beautiful"
+            ],
+            "AnswerKey": "Short-lived",
+            "Explanation": "Ephemeral means lasting for a very short time",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "If P implies Q, and Q implies R, what can we conclude?",
+            "Choices": [
+                "R implies P",
+                "P implies R",
+                "R is false",
+                "Cannot determine"
+            ],
+            "AnswerKey": "P implies R",
+            "Explanation": "Transitive property of implication",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the chemical symbol for gold?",
+            "Choices": [
+                "Go",
+                "Gd",
+                "Au",
+                "Ag"
+            ],
+            "AnswerKey": "Au",
+            "Explanation": "Au comes from Latin 'aurum'",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the area of a circle with radius 5? (use π ≈ 3.14)",
+            "Choices": [
+                "78.5",
+                "31.4",
+                "15.7",
+                "62.8"
+            ],
+            "AnswerKey": "78.5",
+            "Explanation": "A = πr² = 3.14 × 25 = 78.5",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "An antonym for 'verbose' is:",
+            "Choices": [
+                "Wordy",
+                "Talkative",
+                "Concise",
+                "Lengthy"
+            ],
+            "AnswerKey": "Concise",
+            "Explanation": "Verbose means wordy, concise is the opposite",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "In a group of 100 people, 60 speak English, 40 speak French, 10 speak both. How many speak neither?",
+            "Choices": [
+                "0",
+                "10",
+                "20",
+                "30"
+            ],
+            "AnswerKey": "10",
+            "Explanation": "60 + 40 - 10 = 90 speak at least one, so 10 speak neither",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is Newton's First Law?",
+            "Choices": [
+                "F=ma",
+                "Objects in motion stay in motion unless acted upon",
+                "Every action has a reaction",
+                "E=mc²"
+            ],
+            "AnswerKey": "Objects in motion stay in motion unless acted upon",
+            "Explanation": "Law of inertia",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Factor: x² - 9",
+            "Choices": [
+                "(x-3)(x-3)",
+                "(x+3)(x+3)",
+                "(x-3)(x+3)",
+                "Cannot factor"
+            ],
+            "AnswerKey": "(x-3)(x+3)",
+            "Explanation": "Difference of squares: a² - b² = (a-b)(a+b)",
+            "difficultyLevel": 3
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Integrate: ∫2x dx",
+            "Choices": [
+                "x² + C",
+                "2x² + C",
+                "x²/2 + C",
+                "2x + C"
+            ],
+            "AnswerKey": "x² + C",
+            "Explanation": "∫2x dx = 2(x²/2) + C = x² + C",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is log₂(64)?",
+            "Choices": [
+                "4",
+                "5",
+                "6",
+                "7"
+            ],
+            "AnswerKey": "6",
+            "Explanation": "2⁶ = 64, so log₂(64) = 6",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'ubiquitous' mean?",
+            "Choices": [
+                "Rare",
+                "Present everywhere",
+                "Ancient",
+                "Mysterious"
+            ],
+            "AnswerKey": "Present everywhere",
+            "Explanation": "Ubiquitous means existing everywhere",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "Which statement is the contrapositive of 'If P then Q'?",
+            "Choices": [
+                "If Q then P",
+                "If not Q then not P",
+                "If not P then not Q",
+                "P and Q"
+            ],
+            "AnswerKey": "If not Q then not P",
+            "Explanation": "Contrapositive: if A→B, then ¬B→¬A",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the Heisenberg Uncertainty Principle about?",
+            "Choices": [
+                "Energy conservation",
+                "Position and momentum cannot both be precisely measured",
+                "Speed of light limit",
+                "Time dilation"
+            ],
+            "AnswerKey": "Position and momentum cannot both be precisely measured",
+            "Explanation": "Fundamental limit of quantum mechanics",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Solve for x: e^x = 7.389 (approximately)",
+            "Choices": [
+                "x = 1",
+                "x = 2",
+                "x = 3",
+                "x = 4"
+            ],
+            "AnswerKey": "x = 2",
+            "Explanation": "e² ≈ 7.389",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is a 'tautology'?",
+            "Choices": [
+                "A contradiction",
+                "A statement that's always true",
+                "A circular argument",
+                "A false premise"
+            ],
+            "AnswerKey": "A statement that's always true",
+            "Explanation": "A tautology is logically true in all cases",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "In propositional logic, what is ¬(P ∧ Q) equivalent to?",
+            "Choices": [
+                "¬P ∨ ¬Q",
+                "¬P ∧ ¬Q",
+                "P ∨ Q",
+                "P ∧ Q"
+            ],
+            "AnswerKey": "¬P ∨ ¬Q",
+            "Explanation": "De Morgan's Law",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the unit of electrical resistance?",
+            "Choices": [
+                "Ampere",
+                "Volt",
+                "Ohm",
+                "Watt"
+            ],
+            "AnswerKey": "Ohm",
+            "Explanation": "Resistance is measured in Ohms (Ω)",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the derivative of sin(x)?",
+            "Choices": [
+                "cos(x)",
+                "-cos(x)",
+                "sin(x)",
+                "-sin(x)"
+            ],
+            "AnswerKey": "cos(x)",
+            "Explanation": "d/dx[sin(x)] = cos(x)",
+            "difficultyLevel": 4
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Evaluate: lim(x→0) (sin(x)/x)",
+            "Choices": [
+                "0",
+                "1",
+                "∞",
+                "Undefined"
+            ],
+            "AnswerKey": "1",
+            "Explanation": "Famous limit: lim(x→0) sin(x)/x = 1",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the sum of an infinite geometric series with a=1 and r=1/2?",
+            "Choices": [
+                "1",
+                "2",
+                "3",
+                "Diverges"
+            ],
+            "AnswerKey": "2",
+            "Explanation": "S = a/(1-r) = 1/(1-0.5) = 2",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'soliloquy' mean?",
+            "Choices": [
+                "Dialogue between two people",
+                "A speech given alone",
+                "A type of poem",
+                "Musical performance"
+            ],
+            "AnswerKey": "A speech given alone",
+            "Explanation": "A soliloquy is when someone speaks their thoughts aloud alone",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is the principle of explosion in logic?",
+            "Choices": [
+                "From contradiction, anything follows",
+                "Truth implies truth",
+                "False implies nothing",
+                "Axioms must be consistent"
+            ],
+            "AnswerKey": "From contradiction, anything follows",
+            "Explanation": "Ex falso quodlibet: from falsehood, anything",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is Schrödinger's equation used for?",
+            "Choices": [
+                "Classical mechanics",
+                "Relativity",
+                "Quantum mechanics",
+                "Thermodynamics"
+            ],
+            "AnswerKey": "Quantum mechanics",
+            "Explanation": "Fundamental equation of quantum mechanics",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is ∫e^x cos(x) dx?",
+            "Choices": [
+                "e^x(sin(x)+cos(x))/2 + C",
+                "e^x sin(x) + C",
+                "e^x cos(x) + C",
+                "Cannot integrate"
+            ],
+            "AnswerKey": "e^x(sin(x)+cos(x))/2 + C",
+            "Explanation": "Integration by parts twice",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'apotheosis'?",
+            "Choices": [
+                "A downfall",
+                "The highest point or culmination",
+                "A beginning",
+                "A repetition"
+            ],
+            "AnswerKey": "The highest point or culmination",
+            "Explanation": "Apotheosis means the peak or highest development",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "In modal logic, □P means:",
+            "Choices": [
+                "P is possible",
+                "P is necessary",
+                "P is contingent",
+                "Not P"
+            ],
+            "AnswerKey": "P is necessary",
+            "Explanation": "□ (box) represents necessity in modal logic",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What does the Second Law of Thermodynamics state about entropy?",
+            "Choices": [
+                "Decreases over time",
+                "Remains constant",
+                "Increases in isolated systems",
+                "Can be reversed"
+            ],
+            "AnswerKey": "Increases in isolated systems",
+            "Explanation": "Entropy always increases in an isolated system",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Laplace transform of t?",
+            "Choices": [
+                "1/s",
+                "1/s²",
+                "s",
+                "s²"
+            ],
+            "AnswerKey": "1/s²",
+            "Explanation": "L{t} = 1/s²",
+            "difficultyLevel": 5
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "Solve the differential equation: y'' + 4y = 0",
+            "Choices": [
+                "y = C₁cos(2x) + C₂sin(2x)",
+                "y = C₁e^(2x) + C₂e^(-2x)",
+                "y = C₁cos(x) + C₂sin(x)",
+                "y = C₁x + C₂"
+            ],
+            "AnswerKey": "y = C₁cos(2x) + C₂sin(2x)",
+            "Explanation": "Characteristic equation r² + 4 = 0, r = ±2i",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the residue of f(z) = 1/z² at z = 0?",
+            "Choices": [
+                "0",
+                "1",
+                "-1",
+                "Undefined"
+            ],
+            "AnswerKey": "0",
+            "Explanation": "Pole of order 2, coefficient of 1/z term is 0",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'prolegomenon'?",
+            "Choices": [
+                "A conclusion",
+                "A preliminary discussion",
+                "A middle section",
+                "An appendix"
+            ],
+            "AnswerKey": "A preliminary discussion",
+            "Explanation": "Prolegomenon is an introductory or preliminary discussion",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is Gödel's Incompleteness Theorem about?",
+            "Choices": [
+                "Geometry",
+                "Arithmetic systems have unprovable true statements",
+                "All statements are provable",
+                "Logic is complete"
+            ],
+            "AnswerKey": "Arithmetic systems have unprovable true statements",
+            "Explanation": "No consistent system can prove all truths about arithmetic",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the Pauli Exclusion Principle?",
+            "Choices": [
+                "Particles can share quantum states",
+                "No two fermions can have identical quantum numbers",
+                "Energy is conserved",
+                "Momentum is conserved"
+            ],
+            "AnswerKey": "No two fermions can have identical quantum numbers",
+            "Explanation": "Fundamental principle of quantum mechanics for fermions",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the dimension of the vector space of n×n matrices over ℝ?",
+            "Choices": [
+                "n",
+                "2n",
+                "n²",
+                "n!"
+            ],
+            "AnswerKey": "n²",
+            "Explanation": "Each entry is independent, n rows × n columns",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What does 'apophenia' mean?",
+            "Choices": [
+                "Fear of heights",
+                "Seeing patterns where none exist",
+                "Love of knowledge",
+                "Speaking truth"
+            ],
+            "AnswerKey": "Seeing patterns where none exist",
+            "Explanation": "Apophenia is perceiving connections in random data",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "In set theory, what is the cardinality of the power set of ℕ?",
+            "Choices": [
+                "ℵ₀",
+                "2^ℵ₀",
+                "ℵ₁",
+                "Finite"
+            ],
+            "AnswerKey": "2^ℵ₀",
+            "Explanation": "|P(A)| = 2^|A|, so |P(ℕ)| = 2^ℵ₀",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is renormalization in quantum field theory?",
+            "Choices": [
+                "Making calculations finite",
+                "Increasing energy",
+                "Decreasing mass",
+                "Time reversal"
+            ],
+            "AnswerKey": "Making calculations finite",
+            "Explanation": "Technique to handle infinities in QFT",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Fourier transform of a Gaussian?",
+            "Choices": [
+                "Another Gaussian",
+                "Sinc function",
+                "Delta function",
+                "Exponential"
+            ],
+            "AnswerKey": "Another Gaussian",
+            "Explanation": "Gaussians are eigenfunctions of Fourier transform",
+            "difficultyLevel": 6
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Riemann Hypothesis about?",
+            "Choices": [
+                "Prime numbers",
+                "Zeros of zeta function",
+                "Continuous functions",
+                "Metric spaces"
+            ],
+            "AnswerKey": "Zeros of zeta function",
+            "Explanation": "Concerns non-trivial zeros of ζ(s) having Re(s) = 1/2",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "In algebraic topology, what is π₁(S¹)?",
+            "Choices": [
+                "0",
+                "ℤ",
+                "ℤ₂",
+                "ℝ"
+            ],
+            "AnswerKey": "ℤ",
+            "Explanation": "Fundamental group of circle is integers",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'tmesis'?",
+            "Choices": [
+                "Repetition",
+                "Insertion of word into another word",
+                "Omission",
+                "Inversion"
+            ],
+            "AnswerKey": "Insertion of word into another word",
+            "Explanation": "Tmesis is separating a word with another (e.g., 'abso-bloody-lutely')",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is the axiom of choice equivalent to?",
+            "Choices": [
+                "Continuum hypothesis",
+                "Zorn's lemma",
+                "Axiom of infinity",
+                "Power set axiom"
+            ],
+            "AnswerKey": "Zorn's lemma",
+            "Explanation": "AC, Zorn's lemma, and well-ordering theorem are equivalent",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the Yang-Mills existence and mass gap problem?",
+            "Choices": [
+                "Solved problem",
+                "Millennium Prize Problem about quantum field theory",
+                "Classical mechanics problem",
+                "Statistical problem"
+            ],
+            "AnswerKey": "Millennium Prize Problem about quantum field theory",
+            "Explanation": "Unsolved problem worth $1 million",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Hodge conjecture concerned with?",
+            "Choices": [
+                "Number theory",
+                "Algebraic cycles in algebraic geometry",
+                "Differential equations",
+                "Graph theory"
+            ],
+            "AnswerKey": "Algebraic cycles in algebraic geometry",
+            "Explanation": "Millennium problem about algebraic geometry",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'aporia'?",
+            "Choices": [
+                "Logical certainty",
+                "State of puzzlement or doubt",
+                "Clear understanding",
+                "Simple truth"
+            ],
+            "AnswerKey": "State of puzzlement or doubt",
+            "Explanation": "Aporia is an irresolvable internal contradiction",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What does 'intuitionistic logic' reject?",
+            "Choices": [
+                "Modus ponens",
+                "Law of excluded middle",
+                "Law of identity",
+                "Modus tollens"
+            ],
+            "AnswerKey": "Law of excluded middle",
+            "Explanation": "Intuitionistic logic doesn't accept P ∨ ¬P universally",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the holographic principle in physics?",
+            "Choices": [
+                "3D can be described by 2D surface",
+                "Light behaves as particles",
+                "Energy equals mass",
+                "Time is relative"
+            ],
+            "AnswerKey": "3D can be described by 2D surface",
+            "Explanation": "Information in volume encoded on boundary",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Taniyama-Shimura conjecture (now theorem)?",
+            "Choices": [
+                "About elliptic curves and modular forms",
+                "About prime distribution",
+                "About topology",
+                "About logic"
+            ],
+            "AnswerKey": "About elliptic curves and modular forms",
+            "Explanation": "Key to proving Fermat's Last Theorem",
+            "difficultyLevel": 7
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Langlands program about?",
+            "Choices": [
+                "Connecting number theory and harmonic analysis",
+                "Solving polynomials",
+                "Prime factorization",
+                "Matrix theory"
+            ],
+            "AnswerKey": "Connecting number theory and harmonic analysis",
+            "Explanation": "Vast web of conjectures relating different areas",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "In category theory, what is a topos?",
+            "Choices": [
+                "A type of group",
+                "A category behaving like Set",
+                "A topological space",
+                "A number field"
+            ],
+            "AnswerKey": "A category behaving like Set",
+            "Explanation": "Topos is a category with specific properties generalizing Set",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'hapax legomenon'?",
+            "Choices": [
+                "Common word",
+                "Word appearing once in a text",
+                "Repeated phrase",
+                "Title"
+            ],
+            "AnswerKey": "Word appearing once in a text",
+            "Explanation": "A word that occurs only once in a written record",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is linear logic concerned with?",
+            "Choices": [
+                "Linear algebra",
+                "Resource-sensitive reasoning",
+                "Lines and points",
+                "Sequential thinking"
+            ],
+            "AnswerKey": "Resource-sensitive reasoning",
+            "Explanation": "Logic that tracks resource usage",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is supersymmetry in particle physics?",
+            "Choices": [
+                "Particles move symmetrically",
+                "Fermions and bosons are related",
+                "Atoms are symmetric",
+                "Forces are equal"
+            ],
+            "AnswerKey": "Fermions and bosons are related",
+            "Explanation": "Theoretical relation between two particle types",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is a scheme in algebraic geometry?",
+            "Choices": [
+                "A plan",
+                "Generalization of algebraic varieties",
+                "A function",
+                "A graph"
+            ],
+            "AnswerKey": "Generalization of algebraic varieties",
+            "Explanation": "Fundamental object in modern algebraic geometry",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'parapraxis'?",
+            "Choices": [
+                "Perfect action",
+                "Freudian slip",
+                "Logical conclusion",
+                "Medical condition"
+            ],
+            "AnswerKey": "Freudian slip",
+            "Explanation": "Error revealing unconscious thoughts",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is homotopy type theory?",
+            "Choices": [
+                "Study of shapes",
+                "Foundations of math based on homotopy",
+                "Theory of functions",
+                "Number theory"
+            ],
+            "AnswerKey": "Foundations of math based on homotopy",
+            "Explanation": "Connects type theory with homotopy theory",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the firewall paradox in black hole physics?",
+            "Choices": [
+                "Black holes are hot",
+                "Conflict between quantum mechanics and general relativity at horizon",
+                "Black holes have firewalls",
+                "Stars burn forever"
+            ],
+            "AnswerKey": "Conflict between quantum mechanics and general relativity at horizon",
+            "Explanation": "Paradox about information and horizons",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the Birch and Swinnerton-Dyer conjecture about?",
+            "Choices": [
+                "Rational points on elliptic curves",
+                "Prime numbers",
+                "Topology",
+                "Analysis"
+            ],
+            "AnswerKey": "Rational points on elliptic curves",
+            "Explanation": "Millennium problem relating L-functions to curves",
+            "difficultyLevel": 8
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the classification of finite simple groups?",
+            "Choices": [
+                "5 groups",
+                "26 sporadic groups plus infinite families",
+                "Infinite list",
+                "Unsolved"
+            ],
+            "AnswerKey": "26 sporadic groups plus infinite families",
+            "Explanation": "Enormous theorem classifying all finite simple groups",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is a motive in algebraic geometry?",
+            "Choices": [
+                "Purpose",
+                "Universal cohomology theory",
+                "Function",
+                "Shape"
+            ],
+            "AnswerKey": "Universal cohomology theory",
+            "Explanation": "Conjectural object unifying cohomology theories",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'catachresis'?",
+            "Choices": [
+                "Correct usage",
+                "Misuse of words creating new meaning",
+                "Repetition",
+                "Rhyming"
+            ],
+            "AnswerKey": "Misuse of words creating new meaning",
+            "Explanation": "Creative misuse of language (e.g., 'leg of a table')",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is the curry-howard correspondence?",
+            "Choices": [
+                "Recipes",
+                "Proofs are programs",
+                "Logic is math",
+                "Sets are types"
+            ],
+            "AnswerKey": "Proofs are programs",
+            "Explanation": "Deep connection between logic and computation",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the measurement problem in quantum mechanics fundamentally about?",
+            "Choices": [
+                "Accuracy",
+                "How observation causes wave function collapse",
+                "Instrument calibration",
+                "Human perception"
+            ],
+            "AnswerKey": "How observation causes wave function collapse",
+            "Explanation": "Fundamental interpretational issue in QM",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is derived algebraic geometry?",
+            "Choices": [
+                "Simple algebra",
+                "Homotopy-theoretic enhancement of algebraic geometry",
+                "Calculus",
+                "Number patterns"
+            ],
+            "AnswerKey": "Homotopy-theoretic enhancement of algebraic geometry",
+            "Explanation": "Modern approach using ∞-categories",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'zeugma' as a rhetorical device?",
+            "Choices": [
+                "Repetition",
+                "Using one word to govern multiple others in different senses",
+                "Exaggeration",
+                "Understatement"
+            ],
+            "AnswerKey": "Using one word to govern multiple others in different senses",
+            "Explanation": "E.g., 'She broke his car and his heart'",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is a large cardinal in set theory?",
+            "Choices": [
+                "Big number",
+                "Cardinal with strong axioms beyond ZFC",
+                "Infinite set",
+                "Countable set"
+            ],
+            "AnswerKey": "Cardinal with strong axioms beyond ZFC",
+            "Explanation": "Cardinals whose existence cannot be proven in ZFC",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is the AdS/CFT correspondence?",
+            "Choices": [
+                "Alphabet codes",
+                "Duality between gravity and quantum field theories",
+                "Chemical formulas",
+                "Astronomical mapping"
+            ],
+            "AnswerKey": "Duality between gravity and quantum field theories",
+            "Explanation": "Profound connection in string theory",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is perfectoid space theory used for?",
+            "Choices": [
+                "Cooking",
+                "Studying p-adic geometry",
+                "Classical mechanics",
+                "Statistics"
+            ],
+            "AnswerKey": "Studying p-adic geometry",
+            "Explanation": "Recent breakthrough in arithmetic geometry",
+            "difficultyLevel": 9
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is anabelian geometry?",
+            "Choices": [
+                "Study without coordinates",
+                "Recovering schemes from fundamental groups",
+                "Non-abelian groups",
+                "Abstract algebra"
+            ],
+            "AnswerKey": "Recovering schemes from fundamental groups",
+            "Explanation": "Grothendieck's program on étale fundamental groups",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the étale cohomology used for primarily?",
+            "Choices": [
+                "Calculus",
+                "Studying algebraic varieties over finite fields",
+                "Statistics",
+                "Trigonometry"
+            ],
+            "AnswerKey": "Studying algebraic varieties over finite fields",
+            "Explanation": "Cohomology theory for algebraic geometry",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'sesquipedalian'?",
+            "Choices": [
+                "Half-measure",
+                "Given to using long words",
+                "Walk slowly",
+                "Ancient"
+            ],
+            "AnswerKey": "Given to using long words",
+            "Explanation": "Ironically, a long word meaning 'using long words'",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is forcing in set theory?",
+            "Choices": [
+                "Coercion",
+                "Technique to prove consistency and independence results",
+                "Strong axioms",
+                "Proof by contradiction"
+            ],
+            "AnswerKey": "Technique to prove consistency and independence results",
+            "Explanation": "Paul Cohen's method for independence proofs",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What does the black hole information paradox concern?",
+            "Choices": [
+                "Data storage",
+                "Whether information is destroyed in black holes",
+                "Hawking radiation temperature",
+                "Black hole size"
+            ],
+            "AnswerKey": "Whether information is destroyed in black holes",
+            "Explanation": "Conflict between QM unitarity and GR",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is the geometric Langlands program?",
+            "Choices": [
+                "Mapping geography",
+                "Geometric analogue of number-theoretic Langlands",
+                "Land surveying",
+                "Graph theory"
+            ],
+            "AnswerKey": "Geometric analogue of number-theoretic Langlands",
+            "Explanation": "Deep connections in algebraic geometry",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Vocabulary",
+            "Question": "What is 'apocatastasis'?",
+            "Choices": [
+                "Medical term",
+                "Restoration to original condition",
+                "Destruction",
+                "Evolution"
+            ],
+            "AnswerKey": "Restoration to original condition",
+            "Explanation": "Theological/philosophical concept of universal reconciliation",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Logic",
+            "Question": "What is incompatible with the axiom of choice in some models?",
+            "Choices": [
+                "Addition",
+                "Axiom of determinacy",
+                "Subtraction",
+                "Multiplication"
+            ],
+            "AnswerKey": "Axiom of determinacy",
+            "Explanation": "AD and AC are inconsistent",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Science",
+            "Question": "What is M-theory in string theory?",
+            "Choices": [
+                "Theory of mass",
+                "Unifying theory of all string theories",
+                "Magnetic theory",
+                "Mathematical theory"
+            ],
+            "AnswerKey": "Unifying theory of all string theories",
+            "Explanation": "11-dimensional theory unifying 5 string theories",
+            "difficultyLevel": 10
+        },
+        {
+            "DomainOfKnowledge": "Math",
+            "Question": "What is a condensed mathematics?",
+            "Choices": [
+                "Summary",
+                "New foundations using condensed sets",
+                "Compressed data",
+                "Simple math"
+            ],
+            "AnswerKey": "New foundations using condensed sets",
+            "Explanation": "Recent Scholze-Clausen approach to topology",
+            "difficultyLevel": 10
+        }
+    ]
+}

@@ -16,6 +16,13 @@ The JSON format allows for a comprehensive definition of an exam, including its 
     "Default Time": 15, // Total exam time in minutes for the default setup
     "Instructions": "Welcome to the exam! Please read each question carefully. Good luck!",
     "BackNavigation": true, // Optional: true (default) or false. If false, the 'Back' button is disabled during the exam.
+    
+    // CAT Engine configuration (exam-next.html only)
+    "EnableCAT": true,
+    "minQuestions": 10,
+    "maxQuestions": 30,
+    "percentPass": 75,
+    
     "DomainPercentages": { // Optional: Defines how questions should be drawn from different domains
         "JavaScript Basics": 50, // 50% of the "Number of Questions" should come from this domain
         "DOM Manipulation": 30,
@@ -27,21 +34,24 @@ The JSON format allows for a comprehensive definition of an exam, including its 
             "Question": "What is the output of `console.log(2 + '2');`?",
             "Choices": ["22", "4", "NaN", "Error"],
             "AnswerKey": "22",
-            "Explaination": "In JavaScript, when the `+` operator is used with a number and a string, it performs string concatenation. Thus, `2` is converted to `'2'`, and `'2' + '2'` results in `'22'`."
+            "Explanation": "In JavaScript, when the `+` operator is used with a number and a string, it performs string concatenation. Thus, `2` is converted to `'2'`, and `'2' + '2'` results in `'22'`.",
+            "difficultyLevel": 3
         },
         {
             "DomainOfKnowledge": "DOM Manipulation",
             "Question": "Which method is used to select an HTML element by its ID?",
             "Choices": ["getElementByClassName", "querySelector", "getElementById", "selectById"],
             "AnswerKey": "getElementById",
-            "Explaination": "`document.getElementById('elementId')` is the standard JavaScript method for selecting an element by its unique ID."
+            "Explanation": "`document.getElementById('elementId')` is the standard JavaScript method for selecting an element by its unique ID.",
+            "difficultyLevel": 4
         },
         {
             "DomainOfKnowledge": "HTML Basics",
             "Question": "What does HTML stand for?",
             "Choices": ["Hyper Trainer Marking Language", "Hyper Text Marketing Language", "Hyper Text Markup Language", "Hyperlink and Text Markup Language"],
             "AnswerKey": "Hyper Text Markup Language",
-            "Explaination": "HTML stands for Hyper Text Markup Language, which is the standard markup language for creating web pages."
+            "Explanation": "HTML stands for Hyper Text Markup Language, which is the standard markup language for creating web pages.",
+            "difficultyLevel": 2
         }
         // ... more questions as needed ...
     ]
@@ -61,6 +71,12 @@ The JSON format allows for a comprehensive definition of an exam, including its 
 *   **`BackNavigation`**: (Boolean, Optional)
     *   If set to `false`, the "Back" button will be disabled during the exam, preventing users from returning to previously answered questions.
     *   If set to `true` or if the field is omitted, back navigation is allowed (default behavior).
+*   **`EnableCAT`**: (Boolean, Optional)
+    Required for `exam-next.html` to run in Computerized Adaptive Testing mode. If true, the system dynamically scales difficulty based on history.
+*   **`minQuestions`** / **`maxQuestions`**: (Integer, Optional)
+    Used only when CAT is enabled. Represents the minimum number of questions to ask before stopping rules can trigger, and the absolute maximum number of questions allowable.
+*   **`percentPass`**: (Integer, Optional)
+    Used only when CAT is enabled. Target percentage needed to pass the exam (e.g., `75`).
 *   **`DomainPercentages`**: (Object, Optional)
     *   An object where keys are strings representing the "DomainOfKnowledge" and values are integers (0-100) representing the desired percentage of questions from that domain.
     *   The sum of percentages should ideally be 100. If less, the remaining questions (to reach "Number of Questions") will be filled randomly. If more than 100, it's an invalid configuration.
@@ -76,8 +92,10 @@ The JSON format allows for a comprehensive definition of an exam, including its 
         An array of possible answer choices for the question. Must contain at least two choices.
     *   **`AnswerKey`**: (String, Required)
         The correct answer. This string *must exactly match* one of the strings in the `Choices` array.
-    *   **`Explaination`**: (String, Required)
-        An explanation for why the `AnswerKey` is correct. This is shown during the review.
+    *   **`Explanation`**: (String, Required)
+        An explanation for why the `AnswerKey` is correct. This is shown during the review. *(Note: The legacy spelling `Explaination` is also fully supported for backwards compatibility).*
+    *   **`difficultyLevel`**: (Integer, Optional)
+        Used specifically by `exam-next.html` for CAT processing. Integer 1-10 where 1 is the easiest (Fundamental) and 10 is the hardest (Insanely Hard).
 
 ## Application Behavior Notes
 

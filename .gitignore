@@ -1,5 +1,6 @@
 pycode/
 .DS_Store
 */.DS_Store
-exam-next.html
+#exam-next.html
 bank/CISSP5.json
+ref/exam.html

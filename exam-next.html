@@ -863,6 +863,22 @@
             <div style="text-align: center; padding: 20px 0;">
                 <h2 style="font-size: 2.2em; margin: 0; color: #2c3e50;">🎯 Exam Results</h2>
                 <div id="performance-badge" style="margin: 15px 0; font-size: 1.3em; font-weight: 600;"></div>
+
+                <!-- CAT Mode Results (shown only in CAT mode) -->
+                <div id="cat-results-summary"
+                    style="display: none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 10px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <h3 style="margin: 0 0 15px 0; font-size: 1.5em;">🎯 CAT Mode Results</h3>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; font-size: 0.95em;">
+                        <div><strong>Questions Asked:</strong> <span id="cat-questions-asked"></span></div>
+                        <div><strong>Efficiency:</strong> <span id="cat-efficiency"></span></div>
+                        <div><strong>Avg Difficulty:</strong> <span id="cat-avg-difficulty"></span></div>
+                        <div><strong>Hardest Level:</strong> <span id="cat-hardest-level"></span></div>
+                        <div style="grid-column: 1 / -1; font-size: 1.2em; margin-top: 10px; text-align: center;">
+                            <strong>Result:</strong> <span id="cat-pass-fail"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Stats Cards -->
@@ -1052,7 +1068,7 @@
                     <h4 style="color: #34495e; margin-top: 20px; margin-bottom: 10px;">7. Contributors</h4>
                     <p>Special thanks to the following contributors for their bug fixes and improvements:</p>
                     <ul>
-                        <li><strong>bank4500 (Aj. Bank)</strong> — Contributed 30+ bug fixes in v1.9.1 including validation hardening, security improvements, confidence score fixes, UI state resets, and XSS-safe DOM construction.</li>
+                        <li><strong>bank4500 (Aj. Bank)</strong> — Contributed 30+ bug fixes in v2.0 including validation hardening, security improvements, confidence score overhaul, UI state resets, XSS-safe DOM construction, and CAT algorithm stabilization.</li>
                     </ul>
                 </div>
             </details>
@@ -1062,10 +1078,29 @@
     <div id="version-info"></div>
 
     <script>
-        const APP_VERSION = "1.9.1";
+        const APP_VERSION = "2.0.0";
         const INTERNAL_VERSION = "20260419001"; // Internal version: YYYYMMDDnnnn
-        // Patch credits: Worakorn Kuruwongwattana (core), bank4500/Aj. Bank (30+ bug fixes v1.9→1.9.1)
+        // Patch credits: Worakorn Kuruwongwattana (core), bank4500/Aj. Bank (30+ bug fixes v1.9→2.0)
         const DEBUG = false; // Set to true for development console logs
+
+        // CAT Mode Variables
+        let isCATMode = false;
+        let catConfig = {
+            minQuestions: 10,
+            maxQuestions: 30,
+            percentPass: 70
+        };
+        let catState = {
+            currentDifficulty: 1,
+            questionsAsked: 0,
+            correctAnswers: 0,
+            usedQuestionIndices: new Set(),
+            difficultyHistory: [],
+            answerHistory: [], // true/false per answer for sliding window logic
+            consecutiveAtLevel: 0,
+            lastDifficulty: 4,
+            questionPool: {} // Organized by difficulty level
+        };
 
         const defaultExamData = {
             "Exam Name": "Demo Exam",
@@ -1221,6 +1256,268 @@
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
+
+        // ===== CAT MODE FUNCTIONS =====
+
+        /**
+         * Detect if CAT mode should be enabled based on exam data
+         */
+        function detectCATMode(data) {
+            return data.EnableCAT === true
+                && typeof data.minQuestions === 'number' && data.minQuestions > 0
+                && typeof data.maxQuestions === 'number' && data.maxQuestions >= data.minQuestions
+                && typeof data.percentPass === 'number' && data.percentPass >= 0 && data.percentPass <= 100;
+        }
+
+        /**
+         * Organize questions by difficulty level (1-10)
+         */
+        function organizeCATQuestionPool(questions) {
+            const pool = {};
+            for (let i = 1; i <= 10; i++) {
+                pool[i] = [];
+            }
+
+            questions.forEach((q, index) => {
+                const difficulty = q.difficultyLevel || 5; // Default to medium if not specified
+                if (difficulty >= 1 && difficulty <= 10) {
+                    pool[difficulty].push({ question: q, originalIndex: index });
+                }
+            });
+
+            if (DEBUG) {
+                console.log("CAT Question Pool organized by difficulty:");
+                for (let i = 1; i <= 10; i++) {
+                    console.log(`  Level ${i}: ${pool[i].length} questions`);
+                }
+            }
+
+            return pool;
+        }
+
+        /**
+         * Find available difficulty levels with questions
+         */
+        function getAvailableLevels(pool, usedIndices) {
+            const available = [];
+            for (let level = 1; level <= 10; level++) {
+                const hasAvailable = pool[level].some(item => !usedIndices.has(item.originalIndex));
+                if (hasAvailable) {
+                    available.push(level);
+                }
+            }
+            return available;
+        }
+
+        /**
+         * Select next CAT question based on adaptive algorithm.
+         *
+         * Strategy:
+         *  - Start at level 4 (Intermediate)
+         *  - Use a 3-question sliding window to decide direction:
+         *      - 3/3 correct  → move up 1-2 levels
+         *      - 2/3 correct  → stay (within ±1)
+         *      - 0-1/3 correct → move down 1-2 levels
+         *  - Anti-stuck: if ≥4 consecutive Qs at same level and stuck by pool exhaustion,
+         *    jump to nearest available level
+         *  - Domain awareness: prefer domains that are under-represented so far
+         */
+        function selectNextCATQuestion() {
+            const { currentDifficulty, usedQuestionIndices, questionPool, answerHistory } = catState;
+
+            const availableLevels = getAvailableLevels(questionPool, usedQuestionIndices);
+            if (availableLevels.length === 0) {
+                if (DEBUG) console.log("CAT: No more questions available!");
+                return null;
+            }
+
+            let targetDifficulty = currentDifficulty;
+
+            // Use last 3 answers as sliding window (ignore first question)
+            if (catState.questionsAsked >= 1) {
+                const window = answerHistory.slice(-3);
+                const recentCorrect = window.filter(Boolean).length;
+                const windowSize = window.length;
+
+                if (windowSize >= 3) {
+                    if (recentCorrect === 3) {
+                        // Performing very well → step up more aggressively
+                        targetDifficulty = currentDifficulty + (currentDifficulty >= 8 ? 1 : 2);
+                        if (DEBUG) console.log(`CAT: 3/3 correct window → moving up to ${targetDifficulty}`);
+                    } else if (recentCorrect <= 1) {
+                        // Struggling → step down
+                        targetDifficulty = currentDifficulty - (currentDifficulty <= 3 ? 1 : 2);
+                        if (DEBUG) console.log(`CAT: ${recentCorrect}/3 correct window → moving down to ${targetDifficulty}`);
+                    } else {
+                        // 2/3 — near the ability boundary, oscillate ±1
+                        const lastWasCorrect = answerHistory[answerHistory.length - 1];
+                        targetDifficulty = currentDifficulty + (lastWasCorrect ? 1 : -1);
+                        if (DEBUG) console.log(`CAT: 2/3 correct window → small ${lastWasCorrect ? 'up' : 'down'} to ${targetDifficulty}`);
+                    }
+                } else {
+                    // Small window (< 3 questions asked yet)
+                    const lastWasCorrect = answerHistory[answerHistory.length - 1];
+                    targetDifficulty = currentDifficulty + (lastWasCorrect ? 1 : -1);
+                }
+            }
+
+            // Clamp within valid range
+            targetDifficulty = Math.max(1, Math.min(10, targetDifficulty));
+
+            // Find nearest available level (prefer same direction as intended move)
+            let nearestLevel = targetDifficulty;
+            if (!availableLevels.includes(targetDifficulty)) {
+                let minDist = Infinity;
+                availableLevels.forEach(level => {
+                    const dist = Math.abs(level - targetDifficulty);
+                    if (dist < minDist || (dist === minDist && Math.abs(level - currentDifficulty) > Math.abs(nearestLevel - currentDifficulty))) {
+                        minDist = dist;
+                        nearestLevel = level;
+                    }
+                });
+                if (DEBUG) console.log(`CAT: Target level ${targetDifficulty} unavailable, using ${nearestLevel}`);
+            }
+
+            // Domain balancing: prefer questions from under-represented domains
+            const availableInLevel = questionPool[nearestLevel].filter(item => !usedQuestionIndices.has(item.originalIndex));
+            if (availableInLevel.length === 0) {
+                if (DEBUG) console.log(`CAT: Error - level ${nearestLevel} should have questions but doesn't`);
+                return null;
+            }
+
+            // Count domain usage so far
+            const domainUsage = {};
+            randomizedExamData.forEach(q => {
+                domainUsage[q.DomainOfKnowledge] = (domainUsage[q.DomainOfKnowledge] || 0) + 1;
+            });
+
+            // Sort candidates: prioritise domains with fewest questions asked
+            const sorted = [...availableInLevel].sort((a, b) => {
+                const usageA = domainUsage[a.question.DomainOfKnowledge] || 0;
+                const usageB = domainUsage[b.question.DomainOfKnowledge] || 0;
+                return usageA - usageB;
+            });
+
+            // Pick randomly among the top tier (lowest-usage group)
+            const minUsage = domainUsage[sorted[0].question.DomainOfKnowledge] || 0;
+            const topTier = sorted.filter(item => (domainUsage[item.question.DomainOfKnowledge] || 0) <= minUsage + 1);
+            const selectedItem = topTier[Math.floor(Math.random() * topTier.length)];
+
+            // Update state
+            catState.usedQuestionIndices.add(selectedItem.originalIndex);
+            catState.currentDifficulty = nearestLevel;
+            catState.difficultyHistory.push(nearestLevel);
+
+            if (nearestLevel === catState.lastDifficulty) {
+                catState.consecutiveAtLevel++;
+            } else {
+                catState.consecutiveAtLevel = 1;
+                catState.lastDifficulty = nearestLevel;
+            }
+
+            if (DEBUG) console.log(`CAT: Selected difficulty ${nearestLevel}, consecutive at level: ${catState.consecutiveAtLevel}, domain: ${selectedItem.question.DomainOfKnowledge}`);
+
+            return selectedItem.question;
+        }
+
+        /**
+         * Check if CAT stopping criteria are met.
+         *
+         * Stops when ANY of these is true:
+         *  1. Early Pass  – answered ≥ minQuestions AND running score ≥ percentPass
+         *  2. Early Fail  – answered ≥ minQuestions AND mathematically impossible to pass
+         *                   even if every remaining question (up to maxQ) is answered correctly
+         *  3. Max reached – answered ≥ maxQuestions
+         *  4. Mastery     – answered ≥ minQuestions AND last 5 all correct at avg difficulty ≥ 7
+         *  5. Pool empty  – no more questions available
+         */
+        function checkCATStoppingCriteria() {
+            const { questionsAsked, correctAnswers, difficultyHistory } = catState;
+            const currentPercentage = questionsAsked > 0 ? (correctAnswers / questionsAsked) * 100 : 0;
+
+            // 1. Early pass
+            if (questionsAsked >= catConfig.minQuestions && currentPercentage >= catConfig.percentPass) {
+                if (DEBUG) console.log(`CAT STOP: Early pass (${questionsAsked}Q, ${currentPercentage.toFixed(1)}% >= ${catConfig.percentPass}%)`);
+                return true;
+            }
+
+            // 2. Early fail – can we still reach the pass threshold?
+            if (questionsAsked >= catConfig.minQuestions) {
+                const remaining = catConfig.maxQuestions - questionsAsked;
+                const maxPossibleCorrect = correctAnswers + remaining;
+                const maxPossiblePct = (maxPossibleCorrect / catConfig.maxQuestions) * 100;
+                if (maxPossiblePct < catConfig.percentPass) {
+                    if (DEBUG) console.log(`CAT STOP: Early fail – max achievable ${maxPossiblePct.toFixed(1)}% < ${catConfig.percentPass}%`);
+                    return true;
+                }
+            }
+
+            // 3. Maximum questions reached
+            if (questionsAsked >= catConfig.maxQuestions) {
+                if (DEBUG) console.log(`CAT STOP: Max questions reached (${questionsAsked}/${catConfig.maxQuestions})`);
+                return true;
+            }
+
+            // 4. Mastery – last 5 consecutive correct answers at avg difficulty ≥ 7
+            if (questionsAsked >= catConfig.minQuestions && catState.answerHistory.length >= 5) {
+                const recentAnswers = catState.answerHistory.slice(-5);
+                const allCorrect = recentAnswers.every(Boolean);
+                const recentDiffs = difficultyHistory.slice(-5);
+                const avgRecentDiff = recentDiffs.reduce((a, b) => a + b, 0) / recentDiffs.length;
+                if (allCorrect && avgRecentDiff >= 7) {
+                    if (DEBUG) console.log(`CAT STOP: Mastery threshold met (5 correct, avg diff ${avgRecentDiff.toFixed(1)})`);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Reset CAT state for new exam
+         */
+        function resetCATState() {
+            catState.currentDifficulty = 4; // Start at mid-low difficulty (Intermediate)
+            catState.questionsAsked = 0;
+            catState.correctAnswers = 0;
+            catState.usedQuestionIndices = new Set();
+            catState.difficultyHistory = [];
+            catState.answerHistory = []; // true/false per question for sliding window
+            catState.consecutiveAtLevel = 0;
+            catState.lastDifficulty = 4;
+            catState.questionPool = {};
+        }
+
+        /**
+         * Update CAT progress display
+         */
+        function updateCATProgress() {
+            const { questionsAsked, correctAnswers, currentDifficulty } = catState;
+            const currentPercentage = questionsAsked > 0 ? (correctAnswers / questionsAsked) * 100 : 0;
+
+            // Difficulty names matching the exam-builder scale
+            const diffNames = ['', 'Fundamental', 'Beginner', 'Novice', 'Intermediate', 'Proficient', 'Advanced', 'Hard', 'Very Hard', 'Expert', 'Insanely Hard'];
+            const diffLabel = diffNames[currentDifficulty] || `Level ${currentDifficulty}`;
+            const diffBar = '█'.repeat(currentDifficulty) + '░'.repeat(10 - currentDifficulty);
+
+            // Show early-fail warning if applicable
+            let warningHtml = '';
+            if (questionsAsked >= catConfig.minQuestions) {
+                const remaining = catConfig.maxQuestions - questionsAsked;
+                const maxPossiblePct = ((correctAnswers + remaining) / catConfig.maxQuestions) * 100;
+                if (maxPossiblePct < catConfig.percentPass) {
+                    warningHtml = ` <span style="color:#e53e3e">⚠ Pass no longer achievable</span>`;
+                }
+            }
+
+            progressText.innerHTML =
+                `🎯 CAT Mode: Question ${questionsAsked + 1} &nbsp;|&nbsp; ` +
+                `Range: ${catConfig.minQuestions}–${catConfig.maxQuestions}<br>` +
+                `Score: ${currentPercentage.toFixed(0)}% &nbsp;|&nbsp; ` +
+                `Difficulty: ${diffBar} <strong>${diffLabel}</strong>${warningHtml}`;
+        }
+
+        // ===== END CAT MODE FUNCTIONS =====
 
         function validateExamData(data) {
             if (!data) { alert("Error: Exam data is null or undefined."); return false; }
@@ -1389,28 +1686,47 @@
         function onExamDataLoaded() {
             initialLoadInstructionsDiv.style.display = 'none';
             if (userAgreementDiv) userAgreementDiv.style.display = 'none';
-            examSetupOptionsDiv.style.display = 'block';
 
-            welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
-            examTitle.innerText = examData["Exam Name"];
-            isBackNavigationDisabled = (examData.BackNavigation === false);
-            maxQuestionsInBank = examData.Questions ? examData.Questions.length : 0;
+            // Detect CAT mode
+            isCATMode = detectCATMode(examData);
 
-            // Display custom instructions if provided in the bank JSON
-            if (examData.Instructions && customInstructionsTextP) {
-                customInstructionsTextP.textContent = examData.Instructions;
+            if (isCATMode) {
+                // Configure CAT from exam data
+                catConfig.minQuestions = examData.minQuestions;
+                catConfig.maxQuestions = examData.maxQuestions;
+                catConfig.percentPass = examData.percentPass;
+
+                // Organize question pool by difficulty
+                resetCATState();
+                catState.questionPool = organizeCATQuestionPool(examData.Questions);
+
+                if (DEBUG) {
+                    console.log("CAT Mode Activated!");
+                    console.log(`Min Questions: ${catConfig.minQuestions}`);
+                    console.log(`Max Questions: ${catConfig.maxQuestions}`);
+                    console.log(`Pass Percentage: ${catConfig.percentPass}%`);
+                }
+
+                // Skip setup screen for CAT - go straight to exam
+                welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}! (CAT Mode)`;
+                examTitle.innerText = examData["Exam Name"];
+                examSetupOptionsDiv.style.display = 'none';
+
+                // Auto-start CAT exam
+                setTimeout(() => startCATExam(), 100);
+            } else {
+                // Normal mode
+                examSetupOptionsDiv.style.display = 'block';
+                welcomeMessage.innerText = `Welcome to the ${examData["Exam Name"]}!`;
+                examTitle.innerText = examData["Exam Name"];
+                isBackNavigationDisabled = (examData.BackNavigation === false);
+                maxQuestionsInBank = examData.Questions ? examData.Questions.length : 0;
+
+                populateDomainCheckboxes();
+
+                setupDefaultRadio.checked = true;
+                handleSetupTypeChange();
             }
-
-            populateDomainCheckboxes();
-
-            // Populate default settings info
-            const defaultNumQ = Math.min(examData["Number of Questions"], maxQuestionsInBank);
-            const defaultTimeM = examData["Default Time"];
-            const backNavStatus = (examData.BackNavigation === false) ? 'Disabled' : 'Enabled';
-            defaultSettingsInfoDiv.innerHTML = `Questions: <strong>${defaultNumQ}</strong> | Time: <strong>${defaultTimeM > 0 ? defaultTimeM + ' min' : 'Unlimited'}</strong> | Back Navigation: <strong>${backNavStatus}</strong>`;
-
-            setupDefaultRadio.checked = true;
-            handleSetupTypeChange();
         }
 
         function populateDomainCheckboxes() {
@@ -1424,12 +1740,11 @@
                 return;
             }
 
-            domains.forEach((domain, domainIdx) => {
+            domains.forEach(domain => {
                 const item = document.createElement('div'); item.className = 'domain-checkbox-item';
                 const checkbox = document.createElement('input'); checkbox.type = 'checkbox';
-                const safeId = `domain-${domainIdx}`;
-                checkbox.id = safeId; checkbox.value = domain; checkbox.name = "selectedDomain";
-                const label = document.createElement('label'); label.htmlFor = safeId; label.textContent = domain; label.className = 'inline-label';
+                checkbox.id = `domain-${domain.replace(/\s+/g, '-')}`; checkbox.value = domain; checkbox.name = "selectedDomain";
+                const label = document.createElement('label'); label.htmlFor = checkbox.id; label.textContent = domain; label.className = 'inline-label';
                 item.append(checkbox, label);
                 customDomainSelectionDiv.appendChild(item);
             });
@@ -1515,8 +1830,54 @@
             }
         }
 
+        /**
+         * Start CAT Exam
+         */
+        function startCATExam() {
+            if (!examData || !isCATMode) {
+                alert("CAT mode is not properly configured.");
+                return;
+            }
+
+            if (DEBUG) console.log("Starting CAT Exam...");
+
+            // Initialize exam state
+            randomizedExamData = []; // Will be built dynamically
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            correctAnswersCount = 0;
+            incorrectAnswersCount = 0;
+            correctQuestionsList = [];
+            incorrectQuestionsList = [];
+            confidenceScores = [];
+            questionTimeSpent = [];
+            examStartTime = Date.now();
+
+            // Reset CAT state
+            resetCATState();
+            catState.questionPool = organizeCATQuestionPool(examData.Questions);
+
+            // CAT exams don't use timer (focus on adaptive difficulty)
+            avgTimePerQuestionForConfidence = TIME_PER_QUESTION_SECONDS;
+
+            // Show UI
+            initialLoadInstructionsDiv.style.display = 'none';
+            examSetupOptionsDiv.style.display = 'none';
+            if (userAgreementDiv) userAgreementDiv.style.display = 'none';
+            questionContainer.style.display = 'block';
+            timerDiv.style.display = 'none'; // CAT doesn't use timer
+            progressBarContainer.style.display = 'none'; // CAT uses custom progress
+            progressText.style.display = 'block';
+
+            // Disable back navigation in CAT (adaptive test should move forward only)
+            backButton.style.display = 'none';
+            backButton.disabled = true;
+
+            // Load first question
+            showCATQuestion();
+        }
+
         function startActualExam() {
-            clearInterval(timerInterval); // Safety: clear any existing timer from previous exam
             updateCurrentExamSetup();
             const setup = currentExamSetup;
 
@@ -1584,6 +1945,65 @@
             progressText.innerText = `Question ${currentQNumber} / ${totalQuestions}`;
         }
 
+        /**
+         * Show next CAT question (adaptive selection)
+         */
+        function showCATQuestion() {
+            questionStartTime = Date.now();
+
+            // Check stopping criteria
+            if (checkCATStoppingCriteria()) {
+                if (DEBUG) console.log("CAT: Stopping criteria met, ending exam");
+                submitActualExam();
+                return;
+            }
+
+            // Select next question adaptively
+            const nextQuestion = selectNextCATQuestion();
+
+            if (!nextQuestion) {
+                if (DEBUG) console.log("CAT: No more questions available");
+                submitActualExam();
+                return;
+            }
+
+            // Add to randomizedExamData (building dynamically)
+            randomizedExamData.push(nextQuestion);
+            currentQuestionIndex = randomizedExamData.length - 1;
+
+            // Update progress
+            updateCATProgress();
+
+            // Display question
+            questionElement.innerText = `${catState.questionsAsked + 1}. ${nextQuestion.Question}`;
+            choicesContainer.querySelectorAll('.choice').forEach(el => el.remove());
+
+            nextQuestion.Choices.forEach((choice, index) => {
+                const choiceDiv = document.createElement('div');
+                choiceDiv.classList.add('choice');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'answer';
+                radio.value = choice;
+                radio.id = `choice${index + 1}`;
+                const label = document.createElement('label');
+                label.htmlFor = `choice${index + 1}`;
+                label.innerText = choice;
+                choiceDiv.appendChild(radio);
+                choiceDiv.appendChild(label);
+                choicesContainer.insertBefore(choiceDiv, backButton);
+            });
+
+            // CAT mode: always show submit button (can end at any time after min questions)
+            if (catState.questionsAsked + 1 >= catConfig.minQuestions) {
+                submitButton.style.display = 'inline-block';
+                nextButton.innerText = 'Next';
+            } else {
+                submitButton.style.display = 'none';
+                nextButton.innerText = 'Next';
+            }
+        }
+
         function showQuestion() {
             questionStartTime = Date.now(); // Record start time for confidence score
             timerDiv.classList.remove('timer-warning');
@@ -1595,7 +2015,7 @@
                 const radio = document.createElement('input'); radio.type = 'radio'; radio.name = 'answer'; radio.value = choice; radio.id = `choice${index + 1}`;
                 const label = document.createElement('label'); label.htmlFor = `choice${index + 1}`; label.innerText = choice;
                 choiceDiv.appendChild(radio); choiceDiv.appendChild(label);
-                choicesContainer.appendChild(choiceDiv);
+                choicesContainer.insertBefore(choiceDiv, backButton);
             });
             if (userAnswers[currentQuestionIndex] !== undefined) {
                 const answer = userAnswers[currentQuestionIndex];
@@ -1645,11 +2065,31 @@
             if (DEBUG) console.log(`Q${currentQuestionIndex + 1}: Time spent: ${timeSpent.toFixed(2)}s, Correct: ${isCorrect}, Score: ${score}`);
         }
 
-        function goNext() { saveAnswer(); calculateAndStoreConfidenceScore(); currentQuestionIndex++; showQuestion(); }
+        function goNext() {
+            saveAnswer();
+            calculateAndStoreConfidenceScore();
+
+            if (isCATMode) {
+                // Update CAT state
+                const wasCorrect = userAnswers[currentQuestionIndex] === randomizedExamData[currentQuestionIndex].AnswerKey;
+                catState.questionsAsked++;
+                if (wasCorrect) {
+                    catState.correctAnswers++;
+                }
+                catState.answerHistory.push(wasCorrect);
+
+                // Show next CAT question (adaptive)
+                showCATQuestion();
+            } else {
+                // Normal mode
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        }
         function goBack() {
             if (isBackNavigationDisabled) return;
             saveAnswer();
-            // Update time spent but only calculate confidence if not yet set
+            // Accumulate time-spent; only calculate confidence if not yet set for this visit
             const timeSpent = (Date.now() - questionStartTime) / 1000;
             questionTimeSpent[currentQuestionIndex] = (questionTimeSpent[currentQuestionIndex] || 0) + timeSpent;
             if (confidenceScores[currentQuestionIndex] === undefined) {
@@ -1742,6 +2182,42 @@
                 performanceBadge.innerHTML = '📈 <span style=\"color: #e67e22;\">Fair</span> - Room for improvement';
             } else {
                 performanceBadge.innerHTML = '💪 <span style=\"color: #e74c3c;\">Keep Practicing!</span> You can do better!';
+            }
+
+            // Display CAT-specific metrics if in CAT mode
+            if (isCATMode) {
+                const catResultsDiv = document.getElementById('cat-results-summary');
+                if (catResultsDiv) {
+                    catResultsDiv.style.display = 'block';
+
+                    document.getElementById('cat-questions-asked').innerText = `${numQuestionsInExam} of ${catConfig.minQuestions}-${catConfig.maxQuestions}`;
+
+                    // Calculate efficiency (fewer questions = more efficient if passing)
+                    const efficiency = percentage >= catConfig.percentPass
+                        ? (numQuestionsInExam <= catConfig.minQuestions ? 'Excellent' : numQuestionsInExam <= (catConfig.minQuestions + catConfig.maxQuestions) / 2 ? 'Good' : 'Fair')
+                        : 'Did not pass';
+                    document.getElementById('cat-efficiency').innerText = efficiency;
+
+                    // Calculate average difficulty
+                    const avgDifficulty = catState.difficultyHistory.length > 0
+                        ? (catState.difficultyHistory.reduce((a, b) => a + b, 0) / catState.difficultyHistory.length).toFixed(1)
+                        : 'N/A';
+                    document.getElementById('cat-avg-difficulty').innerText = `${avgDifficulty}/10`;
+
+                    // Find hardest level completed
+                    const hardestLevel = catState.difficultyHistory.length > 0
+                        ? Math.max(...catState.difficultyHistory)
+                        : 0;
+                    document.getElementById('cat-hardest-level').innerText = `Level ${hardestLevel}`;
+
+                    // Pass/Fail status
+                    const passFail = percentage >= catConfig.percentPass
+                        ? `✓ PASSED (${percentage.toFixed(1)}% ≥ ${catConfig.percentPass}%)`
+                        : `✗ FAILED (${percentage.toFixed(1)}% < ${catConfig.percentPass}%)`;
+                    document.getElementById('cat-pass-fail').innerHTML = percentage >= catConfig.percentPass
+                        ? `\u003cspan style="color: #2ecc71; font-weight: 700;"\u003e${passFail}\u003c/span\u003e`
+                        : `\u003cspan style="color: #e74c3c; font-weight: 700;"\u003e${passFail}\u003c/span\u003e`;
+                }
             }
 
             const totalConfidenceScore = confidenceScores.reduce((a, b) => a + (b || 0), 0);

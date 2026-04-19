@@ -2,6 +2,43 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
+## Version 2.0.0 (Cutting Edge)
+**File:** `exam-next.html`
+
+**Summary:** This major release introduces the mathematically rigorous Computerized Adaptive Testing (CAT) engine. It also includes all 30+ stability patches and bug fixes from v1.9.1. 
+
+**Key Features & Enhancements:**
+1.  **Computerized Adaptive Testing (CAT) Engine:**
+    *   **Sliding Window Algorithm:** Introduces a principled 3-question sliding window algorithm to dynamically adjust problem difficulty based on real-time performance.
+    *   **Domain Balancing Logic:** Intelligently prioritizes under-represented knowledge domains to ensure broad exam coverage while adapting difficulty.
+    *   **Advanced Stopping Criteria:** Implements "Early Fail" (mathematically impossible to pass), "Mastery" (5 consecutive correct answers at high difficulty), and standard Max Questions limits.
+    *   **Stateful History:** Uses boolean answer history tracking to eliminate index-mismatch calculation bugs.
+    *   **Real-time Analytics:** Notifies users in-test when passing is no longer statistically possible.
+2.  **Hardened Stability & Security (Inherited from 1.9.1):**
+    *   Validates protocols (`http/https`) before fetching JSON.
+    *   Strict schema validation with `validateExamData` to enforce minimum requirements.
+    *   Robust component state resets between exam sessions.
+    *   XSS-safe DOM node creation.
+
+## Version 1.9.1 (Stable)
+**File:** `exam.html`
+
+**Summary:** This release includes 30+ critical bug fixes, stability patches, and security improvements contributed by the community (Special thanks to bank4500 / Aj. Bank). It focuses on hardening the application's core logic without changing its outward features.
+
+**Key Features & Enhancements:**
+1.  **Strict Validation:** `validateExamData` now rigorously enforces `Questions` arrays, properties, and choice minimums to prevent invalid exams from loading.
+2.  **Logic & Math Fixes:**
+    *   Fixed a bug where unanswered questions resulted in NaN confidence scores (now correctly calculated as 0).
+    *   Fixed infinite loops and `shuffleArray` behavior in proportional question distribution spreading.
+    *   Prevented negative confidence scores by properly clamping the bounds between 0 and 100.
+    *   Fixed time accumulation logic so returning to previous questions (`goBack`) accurately records total time spent.
+3.  **UI & Security Improvements:**
+    *   Implemented proper timer clearing (`clearInterval`) on exam restarts to fix memory leaks and double-ticking.
+    *   Prevented double-submission of exams via UI debounce.
+    *   Added safe generation of DOM nodes (removed `.innerHTML` usage in review listings) to prevent Cross-Site Scripting (XSS).
+    *   Fixed missing ID association on setup screen checkboxes by utilizing safe index-based IDs.
+    *   Added explicit `<html lang="en">` tag for SEO and accessibility.
+
 ## Version 1.9.0
 
 **Summary:** This major release delivers a comprehensive visual transformation with a modern purple gradient theme, enhanced UI/UX throughout, improved mobile responsiveness, and optimized layout for better viewport utilization. All improvements are purely visual/UX focused while maintaining 100% functional compatibility.
