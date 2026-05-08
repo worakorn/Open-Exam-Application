@@ -3537,8 +3537,8 @@
                 "Degaussing (demagnetizing the media).",
                 "Overwriting with a single pass of random data."
             ],
-            "AnswerKey": "Degaussing (demagnetizing the media).",
-            "Explaination": "Physical destruction (shredding) is the most secure method but eliminates reuse [42]. Overwriting may still leave residual physical traces [43]. Cryptographic purging or clearing uses software techniques [43]. **Degaussing** uses a strong magnetic field to completely erase data from magnetic media (hard drives/tapes), rendering the data irrecoverable while allowing the physical media device itself to potentially be reused, making it the most efficient option for magnetic media reuse [44, 45]."
+            "AnswerKey": "Cryptographic purging (zeroing out the disk).",
+            "Explaination": "Change the correct answer to Cryptographic purging (zeroing out the disk). It's the best way of all choices -- degaussing don't make drive reusable// Physical destruction (shredding) is the most secure method but eliminates reuse [42]. Overwriting may still leave residual physical traces [43]. Cryptographic purging or clearing uses software techniques [43]. **Degaussing** uses a strong magnetic field to completely erase data from magnetic media (hard drives/tapes), rendering the data irrecoverable while allowing the physical media device itself to potentially be reused, making it the most efficient option for magnetic media reuse [44, 45]."
         },
         {
             "DomainOfKnowledge": "Domain 1: Security Principles",
