@@ -12810,11 +12810,11 @@
             "Choices": [
                 "The key card and PIN are both examples of 'Something You Know.'",
                 "The fingerprint scan is immune to brute force or guessing attacks.",
-                "The key card (Possession) and fingerprint (Inherence) belong to three distinct factors, whereas the PIN and card belong to only two.",
+                "The key card (possession) and fingerprint (inherence) use two different authentication factor types, whereas the card and PIN rely on a weaker knowledge‑based factor plus possession.",
                 "The key card and fingerprint combination ensures higher system Availability."
             ],
-            "AnswerKey": "The key card (Possession) and fingerprint (Inherence) belong to three distinct factors, whereas the PIN and card belong to only two.",
-            "Explaination": "Strong MFA requires factors from distinct categories: Know (PIN/password), Have (Key card/token), and Are (Biometric/Inherence). A key card (Possession) combined with a fingerprint (Inherence) uses two distinctly different categories, offering superior security against compromise compared to a key card and PIN (Possession and Knowledge), although some interpretations might place the key card and PIN as two factors."
+            "AnswerKey": "The key card (possession) and fingerprint (inherence) use two different authentication factor types, whereas the card and PIN rely on a weaker knowledge‑based factor plus possession.",
+            "Explaination": "Strong MFA uses factors from distinct categories: something you know (PIN/password), something you have (key card/token), and something you are (biometric/inherence). A key card (possession) combined with a fingerprint (inherence) draws on two different factor types, which is generally more resistant to theft or guessing than a key card and PIN (possession plus knowledge). In some access-control implementations, a key card and PIN are still treated as two separate factors, but the inherence factor in biometrics typically offers stronger assurance than a knowledge factor alone."
         },
         {
             "DomainOfKnowledge": "Domain 3: Access Controls Concepts",
