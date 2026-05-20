@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Pack Builder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -84,7 +82,7 @@
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             border: none;
-            font-family: 'Inter', sans-serif;
+            font-family: inherit;
             font-weight: 500;
             font-size: 0.9rem;
             cursor: pointer;
@@ -460,7 +458,7 @@
     </main>
 
     <script>
-        const APP_VERSION = "2.0.0";
+        const APP_VERSION = "2.0.1";
         const INTERNAL_VERSION = "20260419001";
         
         document.getElementById('app-version-badge').textContent = `v${APP_VERSION}`;

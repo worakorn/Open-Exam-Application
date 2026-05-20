@@ -2,6 +2,23 @@
 
 This document tracks the significant changes, features, and improvements made to the "Open Exam Application."
 
+## Version 2.0.1 (Cutting Edge)
+**File:** `exam-next.html` & `exam-builder.html`
+
+**Summary:** This patch addresses a bug with the submit button state and removes external dependencies from the exam builder.
+
+**Key Features & Enhancements:**
+1.  **Bug Fix:** The submit button is now correctly re-enabled when starting a new exam or restarting an existing one in `exam-next.html`.
+2.  **Exam Builder Independence:** Removed external Google Font dependencies from `exam-builder.html`, ensuring it is a fully standalone, offline-capable HTML file.
+
+## Version 1.9.2 (Stable)
+**File:** `exam.html`
+
+**Summary:** This patch addresses a bug with the submit button state.
+
+**Key Features & Enhancements:**
+1.  **Bug Fix:** The submit button is now correctly re-enabled when starting a new exam or restarting an existing one.
+
 ## Version 2.0.0 (Cutting Edge)
 **File:** `exam-next.html`
 

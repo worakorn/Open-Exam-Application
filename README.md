@@ -5,8 +5,8 @@
 The "Open Exam Application" is a standalone, offline-capable exam system built entirely within a single HTML file. Crafted with vanilla HTML, CSS, and JavaScript—and significantly accelerated with Google Gemini—it provides a highly flexible platform for creating and taking multiple-choice exams. It features timed tests, advanced user-driven exam configuration, and immediate, detailed results with performance analytics.
 
 There are currently two actively maintained versions of the application:
-1. **`exam.html` (v1.9.1 - Stable):** The classic, standard exam application with robust fixed-length testing.
-2. **`exam-next.html` (v2.0.0 - Cutting Edge):** The advanced application featuring a full Computerized Adaptive Testing (CAT) engine that dynamically scales difficulty based on real-time performance.
+1. **`exam.html` (v1.9.2 - Stable):** The classic, standard exam application with robust fixed-length testing.
+2. **`exam-next.html` (v2.0.1 - Cutting Edge):** The advanced application featuring a full Computerized Adaptive Testing (CAT) engine that dynamically scales difficulty based on real-time performance.
 
 ## Features
 

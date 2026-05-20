@@ -1062,7 +1062,7 @@
     <div id="version-info"></div>
 
     <script>
-        const APP_VERSION = "1.9.1";
+        const APP_VERSION = "1.9.2";
         const INTERNAL_VERSION = "20260419001"; // Internal version: YYYYMMDDnnnn
         // Patch credits: Worakorn Kuruwongwattana (core), bank4500/Aj. Bank (30+ bug fixes v1.9→1.9.1)
         const DEBUG = false; // Set to true for development console logs
@@ -1564,6 +1564,7 @@
 
             currentQuestionIndex = 0; userAnswers = {}; correctAnswersCount = 0; incorrectAnswersCount = 0;
             correctQuestionsList = []; incorrectQuestionsList = []; confidenceScores = []; questionTimeSpent = []; examStartTime = Date.now();
+            submitButton.disabled = false;
 
             const examDurationMinutes = setup.totalTimeMinutes;
 
