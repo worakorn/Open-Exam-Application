@@ -1,441 +1,984 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
-<title>Exam Builder v3.1</title>
-<style>
-:root,[data-theme="light"]{
-  --bg:#F0F4F0;--bg2:#FFF;--bg3:#F8FAF8;
-  --bdr:#DCE4DD;--bdr-f:#00A651;
-  --t1:#0F1A12;--t2:#354038;--t3:#6B7C72;--t4:#94A39A;
-  --pri:#00A651;--pri-h:#2E7D32;--pri-lt:#E8F5E9;
-  --dan:#DC2626;--dan-lt:#FEF2F2;
-  --suc:#2E7D32;
-  --sh:0 1px 3px rgba(0,0,0,.06);--sh2:0 4px 12px rgba(0,0,0,.08);
-}
-[data-theme="dark"]{
-  --bg:#0F1A12;--bg2:#1A2B1E;--bg3:#152219;
-  --bdr:#2A3D2E;--bdr-f:#00A651;
-  --t1:#E8F5E9;--t2:#A5D6A7;--t3:#6B7C72;--t4:#4A5950;
-  --pri:#00A651;--pri-h:#66BB6A;--pri-lt:#0A1F0E;
-  --dan:#F87171;--dan-lt:#2A1215;
-  --suc:#66BB6A;
-  --sh:0 1px 3px rgba(0,0,0,.2);--sh2:0 4px 12px rgba(0,0,0,.3);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column;transition:background .3s,color .3s}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Pack Builder</title>
 
-/* HEADER */
-header{
-  padding:12px 20px;display:flex;justify-content:space-between;align-items:center;
-  background:var(--bg2);border-bottom:1px solid var(--bdr);
-  position:sticky;top:0;z-index:10;box-shadow:var(--sh);
-  transition:background .3s;gap:12px;flex-wrap:wrap;
-}
-.logo{display:flex;align-items:center;gap:8px}
-.logo h1{font-size:1.25rem;font-weight:800;color:var(--pri);white-space:nowrap}
-.vbadge{font-size:.65rem;background:var(--pri);color:#FFF;padding:2px 8px;border-radius:12px;font-weight:700}
-.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    <style>
+        :root {
+            --bg-body: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-card: #ffffff;
+            --bg-input: #ffffff;
+            --border: #e2e8f0;
+            --border-focus: #667eea;
+            --text-main: #2c3e50;
+            --text-muted: #4a5568;
+            --primary: #667eea;
+            --primary-hover: #5568d3;
+            --danger: #e74c3c;
+            --danger-hover: #c0392b;
+            --success: #1abc9c;
+            --success-hover: #16a085;
+            --glass-blur: none;
+        }
 
-/* BUTTONS */
-.btn{padding:8px 16px;border-radius:8px;border:none;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.btn-p{background:var(--pri);color:#FFF}.btn-p:hover{background:var(--pri-h)}
-.btn-d{background:var(--dan);color:#FFF}
-.btn-s{background:var(--suc);color:#FFF}.btn-s:hover{opacity:.9}
-.btn-o{background:var(--bg2);border:1.5px solid var(--bdr);color:var(--t2)}.btn-o:hover{border-color:var(--pri);color:var(--pri)}
-.btn-sm{padding:4px 10px;font-size:12px}
-.btn-xs{padding:3px 8px;font-size:11px}
-.btn-icon{padding:4px;width:28px;height:28px;border-radius:6px;justify-content:center;font-size:14px}
-.dm-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--bdr);background:var(--bg2);color:var(--t1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .3s}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* LAYOUT */
-main{display:grid;grid-template-columns:320px 1fr;gap:0;flex-grow:1;height:calc(100vh - 57px)}
-.sidebar{display:flex;flex-direction:column;border-right:1px solid var(--bdr);background:var(--bg2);overflow-y:auto;transition:background .3s}
-.sidebar::-webkit-scrollbar{width:5px}.sidebar::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-attachment: fixed;
+        }
 
-/* SIDEBAR SECTIONS */
-.s-section{padding:16px;border-bottom:1px solid var(--bdr)}
-.s-section:last-child{border-bottom:none;flex-grow:1;display:flex;flex-direction:column}
-.s-hdr{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+        header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
 
-/* FORM */
-.fg{margin-bottom:12px}
-.fg:last-child{margin-bottom:0}
-.fg label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
-.fg label .req{color:var(--dan)}
-.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fg-cb{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.fg-cb label{margin:0;text-transform:none;font-size:13px;color:var(--t2);cursor:pointer}
-input[type="text"],input[type="number"],textarea,select{
-  width:100%;background:var(--bg3);border:1.5px solid var(--bdr);color:var(--t1);
-  border-radius:8px;padding:8px 12px;font-family:inherit;font-size:14px;
-  transition:border-color .2s,background .3s;outline:none;
-}
-input:focus,textarea:focus,select:focus{border-color:var(--bdr-f);box-shadow:0 0 0 2px rgba(0,166,81,.15)}
-textarea{resize:vertical;min-height:64px;line-height:1.5}
-input[type="checkbox"],input[type="radio"]{width:16px;height:16px;accent-color:var(--pri);cursor:pointer;flex-shrink:0}
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            display: inline-block;
+        }
 
-/* DOMAIN PERCENTAGES */
-.dp-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
-.dp-row input[type="text"]{flex:1;padding:6px 10px;font-size:13px}
-.dp-row input[type="number"]{width:56px;padding:6px 8px;font-size:13px;text-align:center}
-.dp-total{font-size:11px;color:var(--t3);font-weight:400;margin-left:6px}
+        .version-badge {
+            font-size: 0.75rem;
+            background: #e2e8f0;
+            color: var(--text-muted);
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+            font-weight: 600;
+        }
 
-/* QUESTION LIST */
-.q-list{flex-grow:1;overflow-y:auto;padding:0 16px 16px}
-.q-list::-webkit-scrollbar{width:5px}.q-list::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
-.qi{padding:10px 12px;background:var(--bg3);border:1.5px solid var(--bdr);border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
-.qi:hover{border-color:var(--t4)}
-.qi.active{border-color:var(--pri);background:var(--pri-lt)}
-.qi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.qi-top strong{font-size:12px;color:var(--t2)}
-.qi-tag{font-size:10px;background:var(--bdr);padding:1px 6px;border-radius:10px;color:var(--t3);white-space:nowrap}
-.qi-prev{font-size:12px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        header .actions {
+            display: flex;
+            gap: 1rem;
+        }
 
-/* EDITOR AREA */
-.editor{background:var(--bg);overflow-y:auto;padding:24px;transition:background .3s}
-.editor::-webkit-scrollbar{width:6px}.editor::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
-.editor-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:24px;box-shadow:var(--sh2);transition:background .3s;max-width:720px}
-.editor-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bdr)}
-.editor-hdr h2{font-size:16px;font-weight:700;color:var(--t1)}
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
 
-/* CHOICES */
-.ch-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ch-row input[type="radio"]{width:18px;height:18px}
-.ch-row input[type="text"]{flex:1;padding:8px 12px;font-size:14px}
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: var(--danger-hover); }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: var(--success-hover); transform: translateY(-1px); }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
 
-/* EMPTY STATE */
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--t3);text-align:center;padding:40px}
-.empty h2{font-size:18px;margin-bottom:6px;color:var(--t2)}
-.empty p{font-size:14px;max-width:300px;line-height:1.5}
+        main {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            flex-grow: 1;
+            height: calc(100vh - 73px);
+        }
 
-.hidden{display:none!important}
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
 
-/* FILE INPUT (mobile-safe) */
-.file-input-sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  main{grid-template-columns:280px 1fr}
-}
-@media(max-width:768px){
-  main{grid-template-columns:1fr;height:auto}
-  .sidebar{border-right:none;border-bottom:1px solid var(--bdr);max-height:50vh;overflow-y:auto}
-  .editor{padding:16px}
-  input[type="text"],input[type="number"],textarea,select{font-size:16px}
-  header{padding:10px 16px}
-  .logo h1{font-size:1.1rem}
-  .btn{padding:8px 12px;font-size:12px}
-  .s-section{padding:12px}
-  .editor-card{padding:16px}
-}
-@media(max-width:480px){
-  .fg-row{grid-template-columns:1fr}
-  .acts{width:100%;justify-content:flex-end}
-  header{gap:8px}
-  .editor-card{border-radius:8px;padding:14px}
-}
-</style>
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .form-group-checkbox {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.6rem 0.75rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .question-item {
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .question-item:hover {
+            border-color: var(--text-muted);
+        }
+
+        .question-item.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .question-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .question-item-domain {
+            font-size: 0.75rem;
+            background: #e2e8f0;
+            padding: 0.1rem 0.4rem;
+            border-radius: 1rem;
+            color: var(--text-muted);
+        }
+
+        .question-preview {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main Editor Area */
+        .editor-area {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            border-radius: 1rem;
+        }
+
+        .editor-area::-webkit-scrollbar { width: 8px; }
+        .editor-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .choices-container {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .choice-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .choice-row input[type="radio"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--success);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .choice-row input[type="text"] {
+            flex-grow: 1;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            border: 1px dashed var(--border);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <h1>Exam Builder</h1>
-    <span class="vbadge">v3.1</span>
-  </div>
-  <div class="acts">
-    <input type="file" id="imp-file" accept=".json" class="file-input-sr">
-    <label for="imp-file" class="btn btn-o" style="cursor:pointer;margin:0">Import</label>
-    <button class="btn btn-s" onclick="exportExam()">Export JSON</button>
-    <button class="dm-btn" onclick="toggleDark()" title="Toggle dark mode">☀</button>
-  </div>
-</header>
-
-<main>
-  <aside class="sidebar">
-    <!-- EXAM SETTINGS -->
-    <div class="s-section">
-      <div class="s-hdr">Exam Settings</div>
-
-      <div class="fg">
-        <label>Exam Name <span class="req">*</span></label>
-        <input type="text" id="ex-name" oninput="upCfg('Exam Name',this.value)" placeholder="e.g. CISSP Practice Exam">
-      </div>
-
-      <div class="fg-row">
-        <div class="fg">
-          <label>Questions per Test <span class="req">*</span></label>
-          <input type="number" id="ex-total" min="1" oninput="upCfg('Number of Questions',parseInt(this.value)||0)">
+    <header>
+        <div>
+            <h1>Exam Pack Builder</h1>
+            <span class="version-badge" id="app-version-badge">v2.0.0</span>
         </div>
-        <div class="fg">
-          <label>Passing % <span class="req">*</span></label>
-          <input type="number" id="ex-pass" min="1" max="100" oninput="upCfg('percentPass',parseInt(this.value)||0)">
+        <div class="actions">
+            <input type="file" id="import-file" accept=".json" class="hidden">
+            <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Import
+            </button>
+            <button class="btn btn-success" onclick="exportExam()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export JSON
+            </button>
         </div>
-      </div>
+    </header>
 
-      <div class="fg-row hidden" id="cat-row">
-        <div class="fg">
-          <label>CAT Min Qs <span class="req">*</span></label>
-          <input type="number" id="ex-min" min="1" oninput="upCfg('minQuestions',parseInt(this.value)||0)">
-        </div>
-        <div class="fg">
-          <label>CAT Max Qs</label>
-          <input type="number" id="ex-max" disabled style="opacity:.6;cursor:not-allowed">
-        </div>
-      </div>
+    <main>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="card">
+                <div class="card-header">Exam Settings</div>
+                <div class="form-group">
+                    <label>Exam Name <span style="color: var(--danger);">*</span></label>
+                    <input type="text" id="exam-name" oninput="updateExamConfig('Exam Name', this.value)" placeholder="e.g. CAT Demo Exam">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label title="How many questions to draw from the pool for a single test session">Questions per Test <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="exam-total" oninput="updateExamConfig('Number of Questions', parseInt(this.value) || 0)">
+                    </div>
+                    <div class="form-group">
+                        <label>Passing % <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="exam-pass" min="1" max="100" oninput="updateExamConfig('percentPass', parseInt(this.value) || 0)">
+                    </div>
+                </div>
+                <div class="form-row" id="cat-config-row" style="display: none;">
+                    <div class="form-group">
+                        <label title="Minimum questions for CAT">Min Questions <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="exam-min" oninput="updateExamConfig('minQuestions', parseInt(this.value) || 0)">
+                    </div>
+                    <div class="form-group">
+                        <label title="Locked to 'Questions per Test'">Max Questions <span style="color: var(--danger);">*</span></label>
+                        <input type="number" id="exam-max" disabled style="opacity: 0.7; cursor: not-allowed;" title="Max Questions automatically matches Questions per Test">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Default Time limit (mins, 0 for off) <span style="color: var(--danger);">*</span></label>
+                    <input type="number" id="exam-time" oninput="updateExamConfig('Default Time', parseInt(this.value) || 0)">
+                </div>
+                <div class="form-group">
+                    <label>Instructions</label>
+                    <textarea id="exam-instructions" oninput="updateExamConfig('Instructions', this.value)" placeholder="Exam Instructions"></textarea>
+                </div>
+                <div class="form-group" style="border: 1px solid var(--border); padding: 0.75rem; border-radius: 0.5rem; background: #f8fafc;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <label style="margin: 0; color: var(--text-main);">Domain Percentages <span style="color: var(--danger);">*</span> <span id="domain-total-label" style="font-size:0.8rem; color:var(--text-muted); font-weight:normal; margin-left:8px;">(Total: 0%)</span></label>
+                        <button type="button" class="btn btn-outline" style="padding: 0.2rem 0.4rem; font-size: 0.7rem; border-color: var(--border); color: var(--text-main);" onclick="addDomainPercentage()">+ Add</button>
+                    </div>
+                    <div id="domain-percentages-list" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="exam-cat" onchange="updateExamConfig('EnableCAT', this.checked)">
+                    <label for="exam-cat">Enable Computer Adaptive Testing (CAT)</label>
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="exam-nav" onchange="updateExamConfig('BackNavigation', this.checked)">
+                    <label for="exam-nav">Allow Back Navigation</label>
+                </div>
+            </div>
 
-      <div class="fg">
-        <label>Time limit (min, 0 = off) <span class="req">*</span></label>
-        <input type="number" id="ex-time" min="0" oninput="upCfg('Default Time',parseInt(this.value)||0)">
-      </div>
+            <div class="card" style="flex-grow: 1; display: flex; flex-direction: column;">
+                <div class="card-header">
+                    <span id="question-count-label" style="font-size: 1rem;">Questions <span style="color: var(--danger);">*</span> (0)</span>
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="addQuestion()">+ Add</button>
+                </div>
+                <div class="question-list" id="question-list">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </aside>
 
-      <div class="fg">
-        <label>Instructions</label>
-        <textarea id="ex-instr" oninput="upCfg('Instructions',this.value)" placeholder="Optional exam instructions..."></textarea>
-      </div>
+        <!-- Main Editor -->
+        <section class="editor-area">
+            <div id="empty-state" class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <h2>No Question Selected</h2>
+                <p>Select a question from the sidebar or add a new one to start editing.</p>
+            </div>
 
-      <!-- Domain Percentages -->
-      <div class="fg" style="background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;padding:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <label style="margin:0">Domains <span class="req">*</span> <span id="dp-total" class="dp-total">(0%)</span></label>
-          <button type="button" class="btn btn-p btn-xs" onclick="addDP()">+ Add</button>
-        </div>
-        <div id="dp-list"></div>
-      </div>
+            <div id="question-editor" class="card hidden">
+                <div class="card-header">
+                    <span>Edit Question</span>
+                    <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="deleteCurrentQuestion()">Delete</button>
+                </div>
 
-      <div class="fg-cb">
-        <input type="checkbox" id="ex-cat" onchange="upCfg('EnableCAT',this.checked)">
-        <label for="ex-cat">Enable CAT (Adaptive Testing)</label>
-      </div>
-      <div class="fg-cb">
-        <input type="checkbox" id="ex-nav" onchange="upCfg('BackNavigation',this.checked)">
-        <label for="ex-nav">Allow Back Navigation</label>
-      </div>
-    </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Domain of Knowledge</label>
+                        <select id="q-domain" onchange="updateCurrentQuestion('DomainOfKnowledge', this.value)" style="width: 100%; border-radius: 0.5rem; padding: 0.6rem 0.75rem; border: 1px solid var(--border); font-family: inherit; font-size: 0.95rem; background: var(--bg-input); color: var(--text-main);"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty Level</label>
+                        <select id="q-difficulty" onchange="updateCurrentQuestion('difficultyLevel', parseInt(this.value))" style="width: 100%; border-radius: 0.5rem; padding: 0.6rem 0.75rem; border: 1px solid var(--border); font-family: inherit; font-size: 0.95rem; background: var(--bg-input); color: var(--text-main);">
+                            <option value="1">1 - Fundamental</option>
+                            <option value="2">2 - Beginner</option>
+                            <option value="3">3 - Novice</option>
+                            <option value="4">4 - Intermediate</option>
+                            <option value="5">5 - Proficient</option>
+                            <option value="6">6 - Advanced</option>
+                            <option value="7">7 - Hard</option>
+                            <option value="8">8 - Very Hard</option>
+                            <option value="9">9 - Expert</option>
+                            <option value="10">10 - Insanely Hard</option>
+                        </select>
+                    </div>
+                </div>
 
-    <!-- QUESTION LIST -->
-    <div class="s-section">
-      <div class="s-hdr">
-        <span id="q-count">Questions (0)</span>
-        <button class="btn btn-p btn-sm" onclick="addQ()">+ Add</button>
-      </div>
-      <div class="q-list" id="q-list"></div>
-    </div>
-  </aside>
+                <div class="form-group">
+                    <label>Question Text <span style="color: var(--danger);">*</span></label>
+                    <textarea id="q-text" oninput="updateCurrentQuestion('Question', this.value)" placeholder="What is the question?"></textarea>
+                </div>
 
-  <!-- EDITOR -->
-  <section class="editor">
-    <div id="empty" class="empty">
-      <h2>No Question Selected</h2>
-      <p>Select a question from the sidebar or click "+ Add" to create one.</p>
-    </div>
+                <div class="form-group">
+                    <label>Choices (Select the correct answer) <span style="color: var(--danger);">*</span></label>
+                    <div class="choices-container" id="choices-container">
+                        <!-- Dynamically generated -->
+                    </div>
+                    <button type="button" class="btn btn-primary" style="margin-top: 0.5rem; width: fit-content; padding: 0.4rem 0.6rem; font-size: 0.85rem;" onclick="addChoice()">+ Add Choice</button>
+                </div>
 
-    <div id="q-editor" class="editor-card hidden">
-      <div class="editor-hdr">
-        <h2>Edit Question</h2>
-        <button class="btn btn-d btn-sm" onclick="delQ()">Delete</button>
-      </div>
+                <div class="form-group">
+                    <label>Explanation <span style="color: var(--danger);">*</span></label>
+                    <textarea id="q-explanation" oninput="updateCurrentQuestion('Explanation', this.value)" placeholder="Explain why the answer is correct..."></textarea>
+                </div>
 
-      <div class="fg-row">
-        <div class="fg">
-          <label>Domain of Knowledge</label>
-          <select id="q-dom" onchange="upQ('DomainOfKnowledge',this.value)"></select>
-        </div>
-        <div class="fg">
-          <label>Difficulty Level</label>
-          <select id="q-diff" onchange="upQ('difficultyLevel',parseInt(this.value))">
-            <option value="1">1 — Fundamental</option>
-            <option value="2">2 — Beginner</option>
-            <option value="3">3 — Novice</option>
-            <option value="4">4 — Intermediate</option>
-            <option value="5">5 — Proficient</option>
-            <option value="6">6 — Advanced</option>
-            <option value="7">7 — Hard</option>
-            <option value="8">8 — Very Hard</option>
-            <option value="9">9 — Expert</option>
-            <option value="10">10 — Insanely Hard</option>
-          </select>
-        </div>
-      </div>
+            </div>
+        </section>
+    </main>
 
-      <div class="fg">
-        <label>Question Text <span class="req">*</span></label>
-        <textarea id="q-txt" oninput="upQ('Question',this.value)" placeholder="Enter your question here..."></textarea>
-      </div>
+    <script>
+        const APP_VERSION = "2.0.1";
+        const INTERNAL_VERSION = "20260419001";
+        
+        document.getElementById('app-version-badge').textContent = `v${APP_VERSION}`;
 
-      <div class="fg">
-        <label>Choices — select the correct answer <span class="req">*</span></label>
-        <div id="ch-con"></div>
-        <button type="button" class="btn btn-p btn-sm" style="margin-top:8px" onclick="addCh()">+ Add Choice</button>
-      </div>
+        // State
+        let examData = {
+            "Exam Name": "New Exam Pack",
+            "EnableCAT": false,
+            "minQuestions": 10,
+            "maxQuestions": 30,
+            "percentPass": 70,
+            "Number of Questions": 50,
+            "Default Time": 0,
+            "BackNavigation": false,
+            "Instructions": "",
+            "DomainPercentages": {},
+            "Questions": []
+        };
+        let currentQuestionIndex = -1;
 
-      <div class="fg">
-        <label>Explanation <span class="req">*</span></label>
-        <textarea id="q-expl" oninput="upQ('Explanation',this.value)" placeholder="Explain why the answer is correct..."></textarea>
-      </div>
-    </div>
-  </section>
-</main>
+        // Initialize empty state
+        renderExamConfig();
+        renderQuestionList();
+        updateEditorView();
 
-<script>
-"use strict";
-/* DARK MODE */
-function toggleDark(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);document.querySelector('.dm-btn').textContent=d==='dark'?'🌙':'☀';try{localStorage.setItem('builder-theme',d)}catch(e){}}
-try{const t=localStorage.getItem('builder-theme');if(t){document.documentElement.setAttribute('data-theme',t);document.querySelector('.dm-btn').textContent=t==='dark'?'🌙':'☀'}}catch(e){}
+        // Exam Config Form Bindings
+        function renderExamConfig() {
+            document.getElementById('exam-name').value = examData["Exam Name"] || '';
+            document.getElementById('exam-total').value = examData["Number of Questions"] || 0;
+            document.getElementById('exam-pass').value = examData["percentPass"] || 0;
+            
+            examData["maxQuestions"] = examData["Number of Questions"];
+            
+            document.getElementById('exam-min').value = examData["minQuestions"] || 0;
+            document.getElementById('exam-max').value = examData["maxQuestions"] || 0;
+            document.getElementById('exam-time').value = examData["Default Time"] || 0;
+            document.getElementById('exam-instructions').value = examData["Instructions"] || '';
+            
+            const isCat = !!examData["EnableCAT"];
+            document.getElementById('exam-cat').checked = isCat;
+            
+            const catRow = document.getElementById('cat-config-row');
+            if (catRow) catRow.style.display = isCat ? 'grid' : 'none';
+            
+            document.getElementById('exam-nav').checked = !!examData["BackNavigation"];
+            renderDomainPercentages();
+        }
 
-let ED={"Exam Name":"New Exam","EnableCAT":false,"minQuestions":10,"maxQuestions":30,"percentPass":70,"Number of Questions":50,"Default Time":0,"BackNavigation":false,"Instructions":"","DomainPercentages":{},"Questions":[]};
-let CQI=-1;
-renderCfg();renderQL();showEditor();
+        function renderDomainPercentages() {
+            const list = document.getElementById('domain-percentages-list');
+            list.innerHTML = '';
+            if(!examData["DomainPercentages"]) {
+                examData["DomainPercentages"] = {};
+            }
+            
+            Object.entries(examData["DomainPercentages"]).forEach(([domain, percent]) => {
+                const row = document.createElement('div');
+                row.style = 'display: flex; gap: 0.25rem; align-items: center;';
+                row.innerHTML = `
+                    <input type="text" value="${domain.replace(/"/g, '&quot;')}" onchange="updateDomainName('${domain.replace(/'/g, "\\'")}', this.value)" style="flex-grow: 1; padding: 0.3rem 0.5rem; font-size: 0.8rem;" placeholder="Domain">
+                    <input type="number" value="${percent}" oninput="updateDomainPercent('${domain.replace(/'/g, "\\'")}', parseInt(this.value) || 0)" style="width: 60px; padding: 0.3rem 0.5rem; font-size: 0.8rem;">
+                    <button type="button" class="btn btn-danger" style="padding: 0.3rem;" onclick="removeDomainPercentage('${domain.replace(/'/g, "\\'")}')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                `;
+                list.appendChild(row);
+            });
+            updateDomainTotalUI();
+        }
 
-function renderCfg(){
-  document.getElementById('ex-name').value=ED["Exam Name"]||'';
-  document.getElementById('ex-total').value=ED["Number of Questions"]||0;
-  document.getElementById('ex-pass').value=ED["percentPass"]||0;
-  ED["maxQuestions"]=ED["Number of Questions"];
-  document.getElementById('ex-min').value=ED["minQuestions"]||0;
-  document.getElementById('ex-max').value=ED["maxQuestions"]||0;
-  document.getElementById('ex-time').value=ED["Default Time"]||0;
-  document.getElementById('ex-instr').value=ED["Instructions"]||'';
-  document.getElementById('ex-cat').checked=!!ED["EnableCAT"];
-  document.getElementById('cat-row').classList.toggle('hidden',!ED["EnableCAT"]);
-  document.getElementById('ex-nav').checked=!!ED["BackNavigation"];
-  renderDP();
-}
+        function updateDomainTotalUI() {
+            let total = 0;
+            if(examData["DomainPercentages"]) {
+                for(let key in examData["DomainPercentages"]) {
+                    total += examData["DomainPercentages"][key];
+                }
+            }
+            const label = document.getElementById('domain-total-label');
+            if(label) {
+                label.textContent = `(Total: ${total}%)`;
+                label.style.color = total > 100 ? 'var(--danger)' : 'var(--text-muted)';
+            }
+        }
 
-/* XSS-SAFE Domain Percentages */
-function renderDP(){
-  const list=document.getElementById('dp-list');list.innerHTML='';
-  if(!ED["DomainPercentages"])ED["DomainPercentages"]={};
-  Object.entries(ED["DomainPercentages"]).forEach(([dom,pct])=>{
-    const row=document.createElement('div');row.className='dp-row';
-    const ni=document.createElement('input');ni.type='text';ni.value=dom;ni.placeholder='Domain name';
-    ni.addEventListener('change',function(){updateDN(dom,this.value)});
-    const pi=document.createElement('input');pi.type='number';pi.value=pct;pi.min=0;pi.max=100;
-    pi.addEventListener('input',function(){updateDPct(dom,parseInt(this.value)||0)});
-    const db=document.createElement('button');db.type='button';db.className='btn btn-d btn-icon';db.textContent='✕';
-    db.addEventListener('click',function(){delete ED["DomainPercentages"][dom];renderDP()});
-    row.append(ni,pi,db);list.appendChild(row);
-  });
-  updDPTotal();
-}
+        function updateDomainName(oldDomain, newDomain) {
+            oldDomain = (oldDomain || "").trim();
+            newDomain = (newDomain || "").trim();
+            if(oldDomain === newDomain || !newDomain) return;
+            
+            const percent = examData["DomainPercentages"][oldDomain];
+            delete examData["DomainPercentages"][oldDomain];
+            examData["DomainPercentages"][newDomain] = percent;
+            
+            // Mass rename in questions
+            if(examData.Questions) {
+                examData.Questions.forEach(q => {
+                    if (q.DomainOfKnowledge && q.DomainOfKnowledge.trim() === oldDomain) {
+                        q.DomainOfKnowledge = newDomain;
+                    }
+                });
+            }
 
-function updDPTotal(){
-  let t=0;for(const k in ED["DomainPercentages"]||{})t+=ED["DomainPercentages"][k];
-  const l=document.getElementById('dp-total');l.textContent='('+t+'%)';l.style.color=t>100?'var(--dan)':'var(--t3)';
-}
-function updateDN(old,nw){old=(old||'').trim();nw=(nw||'').trim();if(old===nw||!nw)return;const p=ED["DomainPercentages"][old];delete ED["DomainPercentages"][old];ED["DomainPercentages"][nw]=p;if(ED.Questions)ED.Questions.forEach(q=>{if(q.DomainOfKnowledge&&q.DomainOfKnowledge.trim()===old)q.DomainOfKnowledge=nw});renderDP();renderQL();showEditor()}
-function updateDPct(d,p){ED["DomainPercentages"][d]=p;updDPTotal()}
-function addDP(){if(!ED["DomainPercentages"])ED["DomainPercentages"]={};let s=0;for(const k in ED["DomainPercentages"])s+=ED["DomainPercentages"][k];let r=Math.max(0,100-s),n="New Domain",c=1;while(ED["DomainPercentages"].hasOwnProperty(n)){n="New Domain "+c;c++}ED["DomainPercentages"][n]=r;renderDP()}
+            renderDomainPercentages();
+            renderQuestionList();
+            updateEditorView();
+        }
 
-function upCfg(k,v){
-  if(k==='minQuestions'){const mx=ED.maxQuestions||ED["Number of Questions"]||0;v=Math.max(1,Math.min(v,mx));document.getElementById('ex-min').value=v}
-  if(k==='percentPass'&&v>100){v=100;document.getElementById('ex-pass').value=100}
-  ED[k]=v;
-  if(k==='Number of Questions'){ED.maxQuestions=v;document.getElementById('ex-max').value=v;if(ED.EnableCAT&&(ED.minQuestions||0)>v){ED.minQuestions=v;document.getElementById('ex-min').value=v}}
-  if(k==='EnableCAT')document.getElementById('cat-row').classList.toggle('hidden',!v);
-}
+        function updateDomainPercent(domain, percent) {
+            examData["DomainPercentages"][domain] = percent;
+            updateDomainTotalUI();
+        }
 
-/* XSS-SAFE Question List */
-function renderQL(){
-  const list=document.getElementById('q-list');list.innerHTML='';
-  const cnt=ED.Questions.length;
-  document.getElementById('q-count').textContent='Questions ('+cnt+')';
-  const frag=document.createDocumentFragment();
-  ED.Questions.forEach((q,i)=>{
-    const el=document.createElement('div');el.className='qi'+(i===CQI?' active':'');
-    el.addEventListener('click',()=>selQ(i));
-    const top=document.createElement('div');top.className='qi-top';
-    const st=document.createElement('strong');st.textContent='Q'+(i+1);
-    const tag=document.createElement('span');tag.className='qi-tag';tag.textContent=(q.difficultyLevel||1)+' · '+(q.DomainOfKnowledge||'No Domain');
-    top.append(st,tag);
-    const prev=document.createElement('div');prev.className='qi-prev';prev.textContent=q.Question||'(empty question)';
-    el.append(top,prev);frag.appendChild(el);
-  });
-  list.appendChild(frag);
-}
+        function removeDomainPercentage(domain) {
+            delete examData["DomainPercentages"][domain];
+            renderDomainPercentages();
+        }
 
-function addQ(){
-  if(!ED["DomainPercentages"]||Object.keys(ED["DomainPercentages"]).length===0){ED["DomainPercentages"]={"General":100};renderDP()}
-  const fd=Object.keys(ED["DomainPercentages"])[0]||"General";
-  ED.Questions.push({DomainOfKnowledge:fd,Question:"",Choices:["",""],AnswerKey:"",Explanation:"",difficultyLevel:1});
-  selQ(ED.Questions.length-1);renderQL();
-}
-function selQ(i){CQI=i;renderQL();showEditor()}
-function delQ(){if(CQI>-1&&confirm('Delete this question?')){ED.Questions.splice(CQI,1);CQI=-1;renderQL();showEditor()}}
+        function addDomainPercentage() {
+            if(!examData["DomainPercentages"]) examData["DomainPercentages"] = {};
+            
+            let currentSum = 0;
+            for(let key in examData["DomainPercentages"]) {
+                currentSum += examData["DomainPercentages"][key];
+            }
+            let remaining = 100 - currentSum;
+            if(remaining < 0) remaining = 0;
+            
+            let baseName = "New Domain";
+            let name = baseName;
+            let counter = 1;
+            while(examData["DomainPercentages"].hasOwnProperty(name)) {
+                name = baseName + " " + counter;
+                counter++;
+            }
+            
+            examData["DomainPercentages"][name] = remaining;
+            renderDomainPercentages();
+        }
 
-/* XSS-SAFE Editor */
-function showEditor(){
-  const ed=document.getElementById('q-editor'),em=document.getElementById('empty');
-  if(CQI===-1||!ED.Questions[CQI]){ed.classList.add('hidden');em.classList.remove('hidden');return}
-  ed.classList.remove('hidden');em.classList.add('hidden');
-  const q=ED.Questions[CQI];
+        function updateExamConfig(key, value) {
+            if (key === 'minQuestions') {
+                const maxAllowed = examData.maxQuestions || examData["Number of Questions"] || 0;
+                if (value > maxAllowed) {
+                    value = maxAllowed;
+                    const minEl = document.getElementById('exam-min');
+                    if(minEl) minEl.value = value;
+                }
+                if (value < 1) {
+                    value = 1;
+                    const minEl = document.getElementById('exam-min');
+                    if(minEl) minEl.value = value;
+                }
+            }
 
-  const ds=document.getElementById('q-dom');ds.innerHTML='';
-  const avail=Object.keys(ED["DomainPercentages"]||{});const cur=q.DomainOfKnowledge||'';
-  avail.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o)});
-  if(cur&&!avail.includes(cur)){const o=document.createElement('option');o.value=cur;o.textContent=cur+' (Not in Settings)';ds.appendChild(o)}
-  ds.value=cur;
+            if (key === 'percentPass') {
+                if (value > 100) {
+                    value = 100;
+                    const passEl = document.getElementById('exam-pass');
+                    if(passEl) passEl.value = 100;
+                }
+            }
 
-  document.getElementById('q-diff').value=q.difficultyLevel||1;
-  document.getElementById('q-txt').value=q.Question||'';
-  document.getElementById('q-expl').value=q.Explanation||'';
+            examData[key] = value;
+            
+            if (key === 'Number of Questions') {
+                examData.maxQuestions = value;
+                const maxEl = document.getElementById('exam-max');
+                if (maxEl) maxEl.value = value;
+                
+                // Auto-clamp minQuestions if new max shrinks below it
+                if (examData.EnableCAT && (examData.minQuestions || 0) > value) {
+                    examData.minQuestions = value;
+                    const minEl = document.getElementById('exam-min');
+                    if (minEl) minEl.value = value;
+                }
+            }
+            if (key === 'EnableCAT') {
+                const catRow = document.getElementById('cat-config-row');
+                if (catRow) catRow.style.display = value ? 'grid' : 'none';
+            }
+        }
 
-  const cc=document.getElementById('ch-con');cc.innerHTML='';
-  q.Choices.forEach((ch,i)=>{
-    const row=document.createElement('div');row.className='ch-row';
-    const radio=document.createElement('input');radio.type='radio';radio.name='answer';radio.id='ans-'+i;
-    radio.checked=!!(q.AnswerKey!==''&&q.AnswerKey===ch&&ch.trim()!=='');
-    radio.addEventListener('change',()=>upAns(i));
-    const txt=document.createElement('input');txt.type='text';txt.id='ch-'+i;txt.placeholder='Choice '+(i+1);txt.value=ch;
-    txt.addEventListener('input',function(){upCh(i,this.value)});
-    const del=document.createElement('button');del.type='button';del.className='btn btn-d btn-icon';del.textContent='✕';del.title='Remove';
-    del.addEventListener('click',()=>rmCh(i));
-    row.append(radio,txt,del);cc.appendChild(row);
-  });
-}
+        function addQuestion() {
+            if (!examData["DomainPercentages"] || Object.keys(examData["DomainPercentages"]).length === 0) {
+                examData["DomainPercentages"] = { "General": 100 };
+                renderDomainPercentages();
+            }
+            
+            const firstDomain = Object.keys(examData["DomainPercentages"])[0] || "General";
 
-function addCh(){if(CQI>-1){ED.Questions[CQI].Choices.push("");showEditor()}}
-function rmCh(i){if(CQI>-1){ED.Questions[CQI].Choices.splice(i,1);showEditor()}}
-function upQ(k,v){if(CQI>-1){ED.Questions[CQI][k]=v;if(['Question','DomainOfKnowledge','difficultyLevel'].includes(k))renderQL()}}
-function upCh(i,v){if(CQI>-1){const q=ED.Questions[CQI];const wa=document.getElementById('ans-'+i).checked;q.Choices[i]=v;if(wa)q.AnswerKey=v}}
-function upAns(i){if(CQI>-1)ED.Questions[CQI].AnswerKey=document.getElementById('ch-'+i).value}
+            const newQ = {
+                "DomainOfKnowledge": firstDomain,
+                "Question": "New Question",
+                "Choices": ["", ""],
+                "AnswerKey": "",
+                "Explanation": "",
+                "difficultyLevel": 1
+            };
+            examData.Questions.push(newQ);
+            selectQuestion(examData.Questions.length - 1);
+            renderQuestionList();
+        }
 
-function exportExam(){
-  if(!ED["Exam Name"]||!ED["Exam Name"].trim()){alert("Exam Name is required.");return}
-  const rq0=ED["Number of Questions"];if(rq0<=0){alert("Questions per Test must be > 0.");return}
-  const tot=ED.Questions.length;if(!tot){alert("Add at least one question.");return}
-  for(let i=0;i<tot;i++){const q=ED.Questions[i];
-    if(!q.Question||!q.Question.trim()){alert("Q"+(i+1)+": question text is empty.");selQ(i);return}
-    const vc=q.Choices.filter(c=>c&&c.trim());
-    if(vc.length<2){alert("Q"+(i+1)+": needs at least 2 choices.");selQ(i);return}
-    if(!q.AnswerKey||!q.AnswerKey.trim()||!vc.includes(q.AnswerKey)){alert("Q"+(i+1)+": select a correct answer.");selQ(i);return}
-    if(!q.Explanation||!q.Explanation.trim()){alert("Q"+(i+1)+": explanation is required.");selQ(i);return}
-  }
-  if(ED.percentPass<=0||ED.percentPass>100){alert("Passing % must be 1–100.");return}
-  let rq=rq0;
-  if(ED.EnableCAT){if(ED.minQuestions<=0){alert("CAT Min Questions must be > 0.");return}if(ED.maxQuestions<ED.minQuestions){alert("CAT Max < Min.");return}rq=ED.maxQuestions}
-  if(tot<rq){alert("Need at least "+rq+" questions in the file (have "+tot+").");return}
-  const clean=JSON.parse(JSON.stringify(ED));
-  clean.Questions.forEach(q=>{q.Choices=q.Choices.filter(c=>c&&c.trim())});
-  const a=document.createElement('a');a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(clean,null,4));
-  a.download=(clean["Exam Name"].replace(/[^a-z0-9]/gi,'_').toLowerCase()||'exam')+'.json';
-  document.body.appendChild(a);a.click();a.remove();
-}
+        function selectQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuestionList();
+            updateEditorView();
+        }
 
-document.getElementById('imp-file').addEventListener('change',function(ev){
-  const f=ev.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=function(e){try{
-    const p=JSON.parse(e.target.result);
-    if(!p.Questions||!Array.isArray(p.Questions)){alert("Invalid JSON: 'Questions' missing.");return}
-    p.Questions.forEach(q=>{if(q&&'Explaination' in q){q.Explanation=q.Explaination;delete q.Explaination}});
-    ED=p;CQI=-1;renderCfg();renderQL();showEditor();
-  }catch(err){alert("JSON error: "+err.message)}};
-  r.readAsText(f);ev.target.value=null;
-});
-</script>
+        function deleteCurrentQuestion() {
+            if(currentQuestionIndex > -1 && confirm('Are you sure you want to delete this question?')) {
+                examData.Questions.splice(currentQuestionIndex, 1);
+                currentQuestionIndex = -1;
+                renderQuestionList();
+                updateEditorView();
+            }
+        }
+
+        function renderQuestionList() {
+            const list = document.getElementById('question-list');
+            list.innerHTML = '';
+            
+            const count = examData.Questions.length;
+            const countLabel = document.getElementById('question-count-label');
+            if (countLabel) {
+                let text = `Questions <span style="color: var(--danger);">*</span> (${count})`;
+                let color = "inherit";
+                let title = "";
+                
+                if (count >= 10000) {
+                    text += ' <span style="font-size: 0.75rem;">⚠️ Performance may drop</span>';
+                    color = "var(--danger)";
+                    title = "Over 10000 questions may cause browser lag. Processing limits reached.";
+                } else if (count >= 5000) {
+                    text += ' <span style="font-size: 0.75rem;">⚠️ Approaching limits</span>';
+                    color = "#eab308";
+                    title = "Over 5000 questions. The editor might begin to slow down.";
+                }
+                
+                countLabel.innerHTML = text;
+                countLabel.style.color = color;
+                countLabel.title = title;
+            }
+
+            examData.Questions.forEach((q, index) => {
+                const el = document.createElement('div');
+                el.className = `question-item ${index === currentQuestionIndex ? 'active' : ''}`;
+                el.onclick = () => selectQuestion(index);
+                
+                el.innerHTML = `
+                    <div class="question-item-header">
+                        <strong>Q${index + 1}</strong>
+                        <span class="question-item-domain">${q.difficultyLevel} • ${q.DomainOfKnowledge || 'No Domain'}</span>
+                    </div>
+                    <div class="question-preview">${q.Question || '<em>Empty question</em>'}</div>
+                `;
+                list.appendChild(el);
+            });
+        }
+
+        // Editor Actions
+        function updateEditorView() {
+            const editor = document.getElementById('question-editor');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (currentQuestionIndex === -1 || !examData.Questions[currentQuestionIndex]) {
+                editor.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            editor.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            const q = examData.Questions[currentQuestionIndex];
+            
+            // Populate select options
+            const domainSelect = document.getElementById('q-domain');
+            domainSelect.innerHTML = '';
+            
+            const availableDomains = Object.keys(examData["DomainPercentages"] || {});
+            const currentDom = q.DomainOfKnowledge || '';
+            
+            // Add existing domains from setup
+            availableDomains.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                domainSelect.appendChild(opt);
+            });
+            
+            // If question has a domain not in the UI, ensure it's still selectable
+            if (currentDom && !availableDomains.includes(currentDom)) {
+                const opt = document.createElement('option');
+                opt.value = currentDom;
+                opt.textContent = currentDom + " (Not in Settings)";
+                domainSelect.appendChild(opt);
+            }
+            
+            domainSelect.value = currentDom;
+            document.getElementById('q-difficulty').value = q.difficultyLevel || 1;
+            document.getElementById('q-text').value = q.Question || '';
+            document.getElementById('q-explanation').value = q.Explanation || '';
+
+            // Dynamically render choices
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+            
+            q.Choices.forEach((choice, index) => {
+                const choiceRow = document.createElement('div');
+                choiceRow.className = 'choice-row';
+                choiceRow.style.display = 'flex';
+                choiceRow.style.alignItems = 'center';
+                choiceRow.style.gap = '8px';
+                choiceRow.style.marginBottom = '8px';
+                
+                const isSelected = (q.AnswerKey !== "" && q.AnswerKey === choice && choice.trim() !== "");
+                
+                choiceRow.innerHTML = `
+                    <input type="radio" name="answer" value="${index}" id="ans-${index}" onchange="updateCorrectAnswer(${index})" ${isSelected ? 'checked' : ''} title="Mark as correct answer">
+                    <input type="text" id="choice-${index}" oninput="updateChoice(${index}, this.value)" placeholder="Choice ${index + 1}" value="${choice.replace(/"/g, '&quot;')}" style="flex-grow: 1; border-radius: 0.25rem; padding: 0.4rem; border: 1px solid var(--border);">
+                    <button type="button" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="removeChoice(${index})" title="Remove choice">&times;</button>
+                `;
+                choicesContainer.appendChild(choiceRow);
+            });
+        }
+
+        function addChoice() {
+            if (currentQuestionIndex > -1) {
+                examData.Questions[currentQuestionIndex].Choices.push("");
+                updateEditorView();
+            }
+        }
+
+        function removeChoice(index) {
+            if (currentQuestionIndex > -1) {
+                examData.Questions[currentQuestionIndex].Choices.splice(index, 1);
+                updateEditorView();
+            }
+        }
+
+        function updateCurrentQuestion(key, value) {
+            if (currentQuestionIndex > -1) {
+                examData.Questions[currentQuestionIndex][key] = value;
+                // re-render list if key affects preview
+                if (['Question', 'DomainOfKnowledge', 'difficultyLevel'].includes(key)) {
+                    renderQuestionList();
+                }
+            }
+        }
+
+        function updateChoice(index, value) {
+            if (currentQuestionIndex > -1) {
+                const q = examData.Questions[currentQuestionIndex];
+                
+                // If this choice was previously the AnswerKey, update the AnswerKey to match new value
+                const isCorrectAnswer = document.getElementById(`ans-${index}`).checked;
+                
+                q.Choices[index] = value;
+                
+                if (isCorrectAnswer) {
+                    q.AnswerKey = value;
+                }
+            }
+        }
+
+        function updateCorrectAnswer(index) {
+            if (currentQuestionIndex > -1) {
+                const choiceVal = document.getElementById(`choice-${index}`).value;
+                examData.Questions[currentQuestionIndex].AnswerKey = choiceVal;
+            }
+        }
+
+        // Import / Export
+        function exportExam() {
+            // Extensive Validation Before Export
+            if (!examData["Exam Name"] || examData["Exam Name"].trim() === "") {
+                alert("Validation Error: Exam Name cannot be empty.");
+                return;
+            }
+
+            let requiredTestQs = examData["Number of Questions"];
+            if (requiredTestQs <= 0) {
+                alert("Validation Error: Questions per Test must be greater than 0.");
+                return;
+            }
+
+            const totalBankQs = examData.Questions.length;
+            if (totalBankQs === 0) {
+                alert("Validation Error: The exam bank has no questions. Add some before exporting.");
+                return;
+            }
+
+            // Validate all questions have required fields
+            for (let i = 0; i < totalBankQs; i++) {
+                const q = examData.Questions[i];
+                if (!q.Question || q.Question.trim() === "") {
+                    alert("Validation Error: Question #" + (i + 1) + " has empty question text.");
+                    selectQuestion(i); // Jump to it
+                    return;
+                }
+                const validChoices = q.Choices.filter(c => c && c.trim() !== "");
+                if (validChoices.length < 2) {
+                    alert("Validation Error: Question #" + (i + 1) + " must have at least 2 valid choices.");
+                    selectQuestion(i);
+                    return;
+                }
+                if (!q.AnswerKey || q.AnswerKey.trim() === "" || !validChoices.includes(q.AnswerKey)) {
+                    alert("Validation Error: Question #" + (i + 1) + " does not have a valid correct answer selected. (Make sure you clicked the radio button next to your answer)");
+                    selectQuestion(i);
+                    return;
+                }
+                if (!q.Explanation || q.Explanation.trim() === "") {
+                    alert("Validation Error: Question #" + (i + 1) + " is missing an Explanation. This field is strictly required by the exam application.");
+                    selectQuestion(i);
+                    return;
+                }
+            }
+
+            if (examData.percentPass <= 0 || examData.percentPass > 100) {
+                alert("Validation Error: Passing % must be between 1 and 100.");
+                return;
+            }
+
+            if (examData.EnableCAT) {
+                if (examData.minQuestions <= 0) {
+                    alert("Validation Error: CAT Min Questions must be greater than 0.");
+                    return;
+                }
+                if (examData.maxQuestions < examData.minQuestions) {
+                    alert("Validation Error: CAT Max Questions cannot be less than Min Questions.");
+                    return;
+                }
+                requiredTestQs = examData.maxQuestions;
+            }
+
+            if (totalBankQs < requiredTestQs) {
+                alert("Validation Error: Number of questions in bank (" + totalBankQs + ") must be greater than or equal to the total required per test draw (" + requiredTestQs + ").");
+                return;
+            }
+
+            // Validate Domains
+            let totalPercent = 0;
+            const domainCounts = {};
+            examData.Questions.forEach(q => {
+                const dom = (q.DomainOfKnowledge || "").trim();
+                domainCounts[dom] = (domainCounts[dom] || 0) + 1;
+            });
+
+            if(examData["DomainPercentages"] && Object.keys(examData["DomainPercentages"]).length > 0) {
+                for(let key in examData["DomainPercentages"]) {
+                    let percent = examData["DomainPercentages"][key];
+                    totalPercent += percent;
+
+                    let requiredForDomain = Math.ceil(requiredTestQs * (percent / 100));
+                    let actualInBank = domainCounts[key.trim()] || 0;
+                    if (actualInBank < requiredForDomain) {
+                        alert("Validation Error: Domain '" + key + "' targets " + percent + "% of the test (" + requiredForDomain + " Qs). The active bank only has " + actualInBank + " Qs matching this domain.");
+                        return;
+                    }
+                }
+                if (totalPercent > 100) {
+                    alert("Validation Error: Total Domain Percentages exceed 100%. Please adjust before exporting.");
+                    return;
+                }
+            }
+
+            // Before export, ensure schema is fully obeyed
+            const cleanData = JSON.parse(JSON.stringify(examData));
+            cleanData.Questions.forEach(q => {
+                // Remove empty strings from choices prior to JSON generation
+                q.Choices = q.Choices.filter(c => c && c.trim() !== "");
+            });
+            
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cleanData, null, 4));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     dataStr);
+            let fn = cleanData["Exam Name"].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            if (!fn) fn = 'exam_pack';
+            downloadAnchorNode.setAttribute("download", fn + ".json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        document.getElementById('import-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    // Minimal validation
+                    if(parsed["Questions"] && Array.isArray(parsed["Questions"])) {
+                        
+                        // Backwards compatibility migration for misspelled Explaination
+                        parsed.Questions.forEach(q => {
+                            if (q && typeof q === 'object' && 'Explaination' in q) {
+                                q.Explanation = q.Explaination;
+                                delete q.Explaination;
+                            }
+                        });
+
+                        examData = parsed;
+                        currentQuestionIndex = -1;
+                        renderExamConfig();
+                        renderQuestionList();
+                        updateEditorView();
+                    } else {
+                        alert("Invalid exam JSON format: 'Questions' missing.");
+                    }
+                } catch (err) {
+                    alert("Error parsing JSON: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            // Reset input so importing same file again works
+            e.target.value = null;
+        });
+    </script>
 </body>
 </html>
