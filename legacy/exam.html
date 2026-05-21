@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+<title>Open Exam v3.1 — CISSP Edition</title>
+<style>
+/* ============ THEME SYSTEM ============ */
+:root, [data-theme="light"] {
+  --bg:#F8FAF8;--bg2:#FFF;--bdr:#E2E8E4;--bdr2:#C5CEC7;--t1:#0F1A12;--t2:#1E2A22;--t3:#354038;--t4:#4A5950;--t5:#6B7C72;--t6:#94A39A;
+  --g50:#E8F5E9;--g100:#C8E6C9;--g200:#A5D6A7;--g300:#81C784;--g400:#66BB6A;--g500:#00A651;--g600:#2E7D32;--g700:#1B5E20;--g800:#003D2B;--g900:#002A1C;
+  --r50:#FEF2F2;--r100:#FEE2E2;--r500:#EF4444;--r600:#DC2626;--r700:#B91C1C;
+  --a50:#FFFBEB;--a100:#FEF3C7;--a500:#F59E0B;--a700:#B45309;
+  --p50:#F3E8FF;--p500:#A855F7;--p700:#7E22CE;
+  --card-sh:0 1px 3px rgba(0,0,0,.08);
+}
+[data-theme="dark"] {
+  --bg:#0F1A12;--bg2:#1A2B1E;--bdr:#2A3D2E;--bdr2:#3A5040;--t1:#E8F5E9;--t2:#C8E6C9;--t3:#A5D6A7;--t4:#81C784;--t5:#6B7C72;--t6:#4A5950;
+  --g50:#0A1F0E;--g100:#132A17;--g200:#1C3C22;--g300:#2E5A35;--g400:#3A7744;--g500:#00A651;--g600:#2E7D32;--g700:#66BB6A;--g800:#A5D6A7;--g900:#E8F5E9;
+  --r50:#2A1215;--r100:#3D1A1E;--r500:#EF4444;--r600:#F87171;--r700:#FCA5A5;
+  --a50:#2A2210;--a100:#3D3318;--a500:#F59E0B;--a700:#FCD34D;
+  --p50:#1F0A2E;--p500:#C084FC;--p700:#E9D5FF;
+  --card-sh:0 2px 8px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--t2);line-height:1.6;min-height:100vh;padding:16px;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+.app{max-width:720px;margin:0 auto}
+.hidden{display:none!important}
+.sy>*+*{margin-top:12px}.syL>*+*{margin-top:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fr{display:flex;align-items:center;gap:10px}
+.fbt{display:flex;justify-content:space-between;align-items:center}
+.fw{display:flex;flex-wrap:wrap;gap:8px}
+.f1{flex:1}.s0{flex-shrink:0}.wf{width:100%}
+.mt2{margin-top:8px}.mt3{margin-top:12px}.mt4{margin-top:16px}.mb2{margin-bottom:8px}.mb3{margin-bottom:12px}
+.xs{font-size:12px}.sm{font-size:14px}.lg{font-size:18px}
+.fm{font-weight:500}.fb{font-weight:700}
+.up{text-transform:uppercase}.tw{letter-spacing:.05em}
+.cd{background:var(--bg2);border:1px solid var(--bdr);border-radius:16px;padding:20px;box-shadow:var(--card-sh);transition:background .3s,border-color .3s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.bp{background:var(--g500);color:#FFF}.bp:hover:not(:disabled){background:var(--g600)}
+.bs2{background:var(--t2);color:var(--bg)}.bs2:hover:not(:disabled){background:var(--t1)}
+.bo{background:var(--bg2);color:var(--t3);border:2px solid var(--bdr)}.bo:hover:not(:disabled){border-color:var(--g500);color:var(--g700);background:var(--g50)}
+.bsc{background:var(--g600);color:#FFF}.bsc:hover:not(:disabled){background:var(--g700)}
+.bgh{background:none;border:none;color:var(--g500);padding:6px 10px;font-size:14px;font-weight:500;cursor:pointer}
+.bgh:hover{text-decoration:underline}
+.bg{display:flex;gap:10px}.bg>*{flex:1}
+.pill{padding:6px 14px;border-radius:9999px;font-size:12px;font-weight:600;border:none;cursor:pointer}
+input[type="text"],input[type="number"],select{width:100%;padding:10px 14px;border:2px solid var(--bdr);border-radius:12px;font-family:inherit;font-size:14px;background:var(--bg2);color:var(--t2);outline:none;transition:border-color .2s,background .3s}
+input:focus,select:focus{border-color:var(--g500);box-shadow:0 0 0 3px rgba(0,166,81,.12)}
+input[type="checkbox"],input[type="radio"]{accent-color:var(--g500);width:16px;height:16px;cursor:pointer}
+label{display:block;font-size:11px;font-weight:600;color:var(--t5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.et{font-size:12px;color:var(--r600);margin-top:4px}
+.hdr{text-align:center;margin-bottom:24px}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:9999px;background:var(--g800);color:var(--g200);font-size:11px;font-weight:600;letter-spacing:.04em;margin-bottom:12px}
+.hbg .dot{width:6px;height:6px;border-radius:50%;background:var(--g400)}
+.etl{font-size:28px;font-weight:900;color:var(--g800);letter-spacing:-.03em;line-height:1.1;transition:color .3s}
+.esu{font-size:14px;color:var(--t5);margin-top:4px}
+.bnr{background:linear-gradient(135deg,var(--g800),var(--g900));color:#FFF;border-radius:16px;padding:16px 20px;display:flex;align-items:flex-start;gap:12px}
+.bnr .ic{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bnr .ic svg{width:20px;height:20px}.bnr h3{font-size:14px;font-weight:700;margin-bottom:2px}.bnr p{font-size:12px;opacity:.75;line-height:1.4}
+.sc{border:2px solid var(--bdr);border-radius:16px;padding:14px 16px;cursor:pointer;transition:all .2s;background:var(--bg2)}
+.sc:hover{border-color:var(--g300)}.sc.act{border-color:var(--g500);background:var(--g50)}
+.sc .ti{font-size:14px;font-weight:700;color:var(--t2)}.sc .de{font-size:12px;color:var(--t5);margin-top:2px}
+.cc{border:2px solid var(--bdr);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;background:var(--bg2);display:flex;align-items:center;gap:12px}
+.cc:hover{border-color:var(--g300)}
+.cc.sel{border-color:var(--g500);background:var(--g50)}
+.cr{width:20px;height:20px;border-radius:50%;border:2px solid var(--bdr2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.cc.sel .cr{border-color:var(--g500);background:var(--g500)}
+.crd{width:8px;height:8px;border-radius:50%;background:#FFF;display:none}.cc.sel .crd{display:block}
+.cl{font-size:14px;color:var(--t3)}.cc.sel .cl{color:var(--g800);font-weight:600}
+.pt{height:6px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--g500),var(--g400));border-radius:3px;transition:width .4s ease}
+.tmr{font-family:"SF Mono",Consolas,monospace;padding:4px 10px;background:var(--g50);border-radius:6px;font-size:13px;font-weight:600;color:var(--t4)}
+.tmr.wrn{background:var(--r50);color:var(--r600);animation:pw 1.5s ease infinite}
+.shr{background:linear-gradient(135deg,var(--g800),var(--g900));color:#FFF;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,61,43,.3)}
+.sp{font-size:56px;font-weight:900;letter-spacing:-.04em;line-height:1}.sb{font-size:14px;opacity:.8;margin-top:8px}
+.stc{border-radius:12px;padding:14px;text-align:center;border:1px solid;transition:background .3s}
+.stc .sl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}.stc .sv{font-size:22px;font-weight:700;margin-top:2px}
+.stg{background:var(--g50);border-color:var(--g200)}.stg .sl{color:var(--g600)}.stg .sv{color:var(--g800)}
+.str{background:var(--r50);border-color:var(--r100)}.str .sl{color:var(--r600)}.str .sv{color:var(--r700)}
+.stn{background:var(--bg);border-color:var(--bdr)}.stn .sl{color:var(--t5)}.stn .sv{color:var(--t3)}
+.dr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.dn{width:120px;font-size:12px;color:var(--t4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0}
+.db{flex:1;height:22px;background:var(--bdr);border-radius:11px;overflow:hidden}
+.dfl{height:100%;border-radius:11px;transition:width .6s ease}
+.dfl.go{background:var(--g500)}.dfl.mi{background:var(--a500)}.dfl.lo{background:var(--r500)}
+.ds{width:80px;font-size:12px;font-weight:600;color:var(--t5);text-align:right;font-family:"SF Mono",monospace;flex-shrink:0}
+.ri{border:1px solid var(--bdr);border-radius:12px;background:var(--bg2);overflow:hidden}
+.rh{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;cursor:pointer}.rh:hover{background:var(--g50)}
+.rh .qt{font-size:13px;font-weight:500;color:var(--t2);flex:1}
+.ra{font-size:12px;color:var(--t6);transition:transform .2s;margin-left:8px}
+.rb{padding:0 16px 14px;border-top:1px solid var(--bdr)}.rb p{font-size:13px;margin-top:8px;color:var(--t4)}.rb strong{color:var(--t2)}
+.exb{margin-top:10px;padding:10px 14px;background:var(--g50);border:1px solid var(--g100);border-radius:8px;font-size:12px;color:var(--g800);line-height:1.5}
+.dcg{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:140px;overflow-y:auto;padding:8px;border:1px solid var(--bdr);border-radius:8px;background:var(--bg2)}
+.dci{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t3);padding:4px 6px;border-radius:6px;cursor:pointer}.dci:hover{background:var(--g50)}
+/* CAT progress */
+.cat-prog{font-size:12px;color:var(--t4);line-height:1.6}
+.cat-prog strong{color:var(--t2)}
+.diff-bar{display:inline-block;letter-spacing:1px;font-family:monospace}
+.cat-card{border:1px solid var(--p500);border-radius:12px;padding:14px;background:var(--p50);transition:background .3s}
+.cat-card .sl{color:var(--p700)}.cat-card .sv{color:var(--p700);font-size:18px;font-weight:700}
+/* Error box */
+.ebox{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:540px;width:calc(100% - 32px);background:var(--r50);border:2px solid var(--r500);border-radius:12px;padding:14px 18px;box-shadow:0 8px 32px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:10px;animation:eIn .3s ease}
+.ebox .eic{width:24px;height:24px;border-radius:50%;background:var(--r500);color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
+.ebox .emsg{font-size:13px;color:var(--r700);line-height:1.5;flex:1}.ebox .emsg strong{display:block;font-size:14px;margin-bottom:2px}
+.ebox .ecl{background:none;border:none;color:var(--r500);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0}
+.dtl{border:1px solid var(--bdr);border-radius:16px;overflow:hidden;background:var(--bg2);transition:background .3s}
+.dtl summary{padding:14px 18px;font-weight:700;font-size:14px;color:var(--t3);cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+.dtl summary:hover{background:var(--g50)}.dtl summary::before{content:'▸';font-size:12px;color:var(--t6);transition:transform .2s}
+.dtl[open] summary::before{transform:rotate(90deg)}
+.dtl .body{padding:0 18px 18px;font-size:13px;color:var(--t4);line-height:1.7}
+.dtl .body h4{font-size:13px;color:var(--t3);margin:16px 0 6px;font-weight:700}
+.dtl .body ul{padding-left:20px;margin:6px 0}.dtl .body li{margin-bottom:4px}
+.dtl .body a{color:var(--g500);text-decoration:underline}.dtl .body a:hover{color:var(--g700)}
+.vtag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;font-family:"SF Mono",monospace;margin-right:6px}
+.vtag.cur{background:var(--g500);color:#FFF}.vtag.old{background:var(--bdr);color:var(--t5)}
+.hr{border:none;border-top:1px solid var(--bdr);margin:16px 0}
+/* Dark toggle */
+.dm-btn{position:fixed;top:12px;right:12px;z-index:100;width:40px;height:40px;border-radius:50%;border:2px solid var(--bdr);background:var(--bg2);color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .3s;box-shadow:var(--card-sh)}
+.dm-btn:hover{border-color:var(--g500);background:var(--g50)}
+@keyframes eIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes pw{0%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}70%{box-shadow:0 0 0 6px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.au{animation:fu .3s ease-out both}
+:focus-visible{outline:2px solid var(--g500);outline-offset:2px;border-radius:4px}
+@media print{body{background:#fff;padding:0}.bnr,.btn,.bg,.fw,.pill,.bgh,#screen-load,#screen-setup,#screen-exam,#screen-review,.hbg,.dtl,#error-box,.dm-btn{display:none!important}.shr{box-shadow:none;print-color-adjust:exact}.cd{box-shadow:none;border:1px solid #ccc}}
+/* Touch: only apply hover transform on devices with hover capability */
+@media(hover:hover){.cc:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}.bp:hover:not(:disabled){background:var(--g600)}.bo:hover:not(:disabled){border-color:var(--g500);color:var(--g700);background:var(--g50)}}
+/* Tablet */
+@media(max-width:768px){
+  body{padding:12px}
+  .etl{font-size:24px}
+  .sp{font-size:48px}
+  .bnr{flex-direction:column;gap:8px}
+  .bnr .ic{width:28px;height:28px}
+  .bnr .ic svg{width:16px;height:16px}
+  .cat-prog{font-size:11px;line-height:1.4;word-break:break-word}
+  .ebox{max-width:calc(100% - 24px);top:10px}
+}
+/* Mobile */
+@media(max-width:600px){
+  body{padding:8px}
+  .etl{font-size:20px}
+  .sp{font-size:38px}.sb{font-size:12px}
+  .hbg{font-size:10px;padding:3px 8px}
+  /* iOS Safari: prevent auto-zoom on input focus (needs >= 16px) */
+  input[type="text"],input[type="number"],select{font-size:16px;padding:12px 14px}
+  /* Grids collapse */
+  .g2{grid-template-columns:1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  /* Buttons stack */
+  .bg{flex-direction:column}
+  .bg>.btn{width:100%}
+  /* Touch-friendly choice cards (min 44px tap target) */
+  .cc{padding:16px;gap:10px;min-height:48px}
+  .cl{font-size:15px}
+  /* Domain results compact */
+  .dn{width:70px;font-size:10px}
+  .ds{width:60px;font-size:10px}
+  .dr{gap:6px}
+  /* Domain checkbox single column on small phones */
+  .dcg{grid-template-columns:1fr}
+  /* Review items larger tap area */
+  .rh{padding:14px 16px;min-height:48px}
+  .rh .qt{font-size:12px}
+  /* Pills larger for touch */
+  .pill{padding:8px 16px;font-size:13px}
+  /* Dark mode button away from edge */
+  .dm-btn{top:8px;right:8px;width:36px;height:36px;font-size:16px}
+  /* Setup cards larger tap */
+  .sc{padding:16px}
+  /* Stat cards tighter */
+  .stc{padding:10px}
+  .stc .sv{font-size:18px}
+  /* Progress area wrap */
+  .fbt{flex-wrap:wrap;gap:6px}
+  /* Score hero compact */
+  .shr{padding:24px 16px}
+  /* CAT results 1-col on very small */
+  #cat-results{grid-template-columns:1fr 1fr}
+}
+/* Very small phones (< 375px) */
+@media(max-width:374px){
+  .g3{grid-template-columns:1fr}
+  #cat-results{grid-template-columns:1fr}
+  .sp{font-size:32px}
+  .dn{display:none}
+}
+</style>
+</head>
+<body>
+<button class="dm-btn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">☀</button>
+<div id="error-box" class="ebox hidden" role="alert"><div class="eic">!</div><div class="emsg"><strong id="err-title">Error</strong><span id="err-msg"></span></div><button class="ecl" onclick="dismissError()" aria-label="Close">&times;</button></div>
+<div class="app">
+<div class="hdr au"><div class="hbg"><span class="dot"></span> OPEN EXAM v3.1</div><h1 id="exam-title" class="etl">Open Exam Application</h1><p id="welcome-msg" class="esu"></p></div>
+
+<!-- LOAD -->
+<div id="screen-load" class="syL">
+<div class="bnr au"><div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg></div><div><h3>Security hardened · CAT adaptive testing</h3><p>CSP headers · XSS-safe DOM · URL validation · input sanitization · duplicate detection · dark mode · zero dependencies</p></div></div>
+<div class="cd au"><p class="sm" style="color:var(--t4)">Load an exam file from a URL or local JSON file, or try the built-in CISSP demo.</p>
+<div class="mt4"><label for="url-input">Load from URL</label><div class="fr"><input id="url-input" type="text" placeholder="https://example.com/exam.json" class="f1"><button onclick="E.loadUrl()" class="btn bp s0">Load</button></div><p id="url-error" class="et hidden"></p></div>
+<hr class="hr"><div><label>Load from local file</label><div class="fr"><input id="file-input" type="file" accept=".json" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden" onchange="E.loadFile(event)"><label for="file-input" class="btn bs2 s0" style="cursor:pointer;margin:0">Browse file</label><span id="file-name" class="xs" style="color:var(--t6);font-style:italic">No file selected</span></div></div>
+<hr class="hr"><button onclick="E.loadDemo()" class="btn bp wf" style="padding:14px">&#9654; Run Demo Exam (CISSP)</button></div>
+<div id="integrity-report" class="cd hidden au"><div class="fr mb2"><svg style="width:16px;height:16px;color:var(--g600)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5"/></svg><strong class="sm" style="color:var(--t3)">Data integrity report</strong></div><div id="integrity-body" class="xs" style="line-height:1.8"></div></div>
+</div>
+
+<!-- SETUP -->
+<div id="screen-setup" class="hidden syL">
+<div id="setup-modes" class="sy"></div>
+<div id="cat-info" class="hidden cd" style="border-color:var(--p500);background:var(--p50)"><p class="sm" style="color:var(--p700)"><strong>🎯 CAT Mode Detected</strong> — This exam uses Computer Adaptive Testing. Questions adapt to your ability level in real-time. Min <span id="cat-min">10</span>–Max <span id="cat-max">30</span> questions. Pass mark: <span id="cat-pass">70</span>%. No timer, no back navigation.</p></div>
+<div id="custom-panel" class="cd hidden"><div id="domain-cb-area" class="hidden mb3"><label>Select topics</label><div id="domain-list" class="dcg"></div></div><div class="g2"><div><label for="q-count-select">Questions</label><select id="q-count-select" onchange="E.onQC()"><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="50">50</option><option value="100">100</option><option value="custom">Custom...</option></select><input id="q-count-custom" type="number" min="1" class="hidden mt2" placeholder="Enter number" oninput="E.updSetup()"></div><div><label for="time-input">Time limit (min, 0=∞)</label><input id="time-input" type="number" min="0" value="60" oninput="E.updSetup()"></div></div></div>
+<label style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--a50);border:1px solid var(--a100);border-radius:12px;cursor:pointer"><input type="checkbox" id="time-warn-cb"><span class="sm" style="color:var(--a700)">Show time warning per question</span></label>
+<div id="setup-summary" class="sm fm" style="padding:14px 18px;background:var(--g50);border:1px solid var(--g200);border-radius:12px;color:var(--g800)"></div>
+<button id="start-btn" onclick="E.start()" class="btn bp wf" style="padding:14px;font-size:15px" disabled>Start Exam</button>
+</div>
+
+<!-- EXAM -->
+<div id="screen-exam" class="hidden syL">
+<div class="pt"><div id="pbar" class="pf" style="width:0%"></div></div>
+<div id="progress-area" class="fbt xs" style="color:var(--t5)"><span id="ptxt">Question 1 / 10</span><span id="tmr" class="tmr"></span></div>
+<div id="cat-progress" class="hidden cat-prog"></div>
+<div class="cd"><p id="qtxt" class="fb" style="font-size:16px;color:var(--t1);line-height:1.6"></p><div id="clist" class="sy mt4"></div></div>
+<div class="bg"><button id="bbtn" onclick="E.back()" class="btn bo" disabled>&#8592; Back</button><button id="nbtn" onclick="E.next()" class="btn bp">Next &#8594;</button><button id="sbtn" onclick="E.submit()" class="btn bsc hidden">&#10003; Submit</button></div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="hidden syL">
+<div class="shr au"><div class="xs up tw" style="opacity:.5">Your score</div><div id="sc-pct" class="sp"></div><div id="sc-bdg" class="sb"></div></div>
+<div id="cat-results" class="hidden g2 au"></div>
+<div class="g3 au"><div class="stc stg"><div class="sl">Correct</div><div id="st-c" class="sv"></div></div><div class="stc str"><div class="sl">Incorrect</div><div id="st-i" class="sv"></div></div><div class="stc stn"><div class="sl">Unanswered</div><div id="st-u" class="sv"></div></div></div>
+<div class="g2 au"><div class="cd" style="padding:14px"><div class="xs" style="color:var(--t5)">Confidence</div><div id="st-conf" class="lg fb" style="color:var(--g700)"></div></div><div class="cd" style="padding:14px"><div class="xs" style="color:var(--t5)">Avg. time/question</div><div id="st-avg" class="lg fb" style="color:var(--t3)"></div></div></div>
+<div class="cd au"><strong class="sm" style="color:var(--t3)">Results by domain (best → worst)</strong><div id="dom-res" class="mt3"></div></div>
+<div class="fw au"><button id="rv-c" onclick="E.review('c')" class="pill hidden" style="background:var(--g100);color:var(--g800)"></button><button id="rv-i" onclick="E.review('i')" class="pill hidden" style="background:var(--r100);color:var(--r700)"></button><button id="rv-u" onclick="E.review('u')" class="pill hidden" style="background:var(--bdr);color:var(--t3)"></button></div>
+<div class="bg"><button onclick="E.restart()" class="btn bo">&#8635; Restart</button><button onclick="E.newExam()" class="btn bs2">Load new exam</button></div>
+</div>
+
+<!-- REVIEW -->
+<div id="screen-review" class="hidden syL"><button onclick="E.backRes()" class="bgh">&#8592; Back to results</button><div id="rev-list" class="sy"></div></div>
+
+<!-- FOOTER -->
+<div style="margin-top:32px" class="syL">
+<details class="dtl"><summary>Terms of Use</summary><div class="body"><p>This software is provided free of charge and is intended for educational and informational purposes. By using this application, you agree to the following terms and conditions:</p><h4>1. AI-Generated Software</h4><p>Please be aware that this software is 100% generated by an Artificial Intelligence (AI) system. As such, it may contain unexpected behaviors, inaccuracies, or errors.</p><h4>2. Disclaimer of Warranty and Limitation of Liability</h4><p>This software is provided "as is," without any warranty of any kind. The developer makes no guarantees regarding the performance, correctness, or reliability of the software and assumes no responsibility for any output or results generated by it.</p><ul><li><strong>No Support:</strong> The developer provides no user support for this application.</li><li><strong>No Obligation:</strong> The developer has no obligation to provide maintenance, support, updates, or new features.</li></ul><h4>3. License and Usage Rights</h4><ul><li><strong>Permitted Use:</strong> This software is free for everyone to use for any purpose, including personal, educational, and commercial use.</li><li><strong>Distribution:</strong> You are free to distribute and share this software with others.</li><li><strong>Modification:</strong> You are encouraged to copy, modify, adapt, and improve the software. However, any modifications must not violate any applicable laws or regulations.</li><li><strong>Commercial Rights:</strong><ul><li>The original, unmodified version of this software may not be sold.</li><li>You may sell a modified version if you have added significant features or functionality.</li><li>The original test banks provided with this software are not for sale under any circumstances.</li></ul></li></ul><h4>4. Attribution</h4><p>If you modify this application, you must give appropriate credit to the original author, Worakorn Kuruwongwattana. Furthermore, if you use this application or any modified version of it for commercial or business purposes, you must include a visible and appropriate credit to Worakorn Kuruwongwattana.</p><h4>5. Privacy</h4><p>For users with privacy concerns, we recommend downloading the application from its official GitHub repository and running it locally on your own machine. Repository: <a href="https://github.com/worakorn/Open-Exam-Application" target="_blank" rel="noopener noreferrer">https://github.com/worakorn/Open-Exam-Application</a></p><h4>6. Contact</h4><p>LinkedIn: <a href="https://www.linkedin.com/in/kworakorn/" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/kworakorn/</a></p><h4>7. Contributors</h4><ul><li><strong>bank4500 (Aj. Bank)</strong> — Contributed 30+ bug fixes and major feature implementations across v1.9.1 through v3.1, including validation hardening, security improvements (CSP, XSS-safe DOM, URL sanitization), confidence score fixes, UI state resets, CAT mode bug fixes and integration, dark mode, mobile/tablet responsive design, global error handling, data integrity layer with duplicate detection, and keyboard accessibility.</li></ul></div></details>
+<details class="dtl"><summary>Version History</summary><div class="body"><p><span class="vtag cur">v3.1</span> <strong>2026-05-20 — CISSP Edition with CAT + Dark Mode (Current)</strong></p><ul><li>Complete rewrite with ISC² CISSP green/white color scheme, zero external dependencies</li><li>Computer Adaptive Testing (CAT) — CISSP-style adaptive difficulty with 10-level scale</li><li>CAT sliding window algorithm, early pass/fail/mastery stopping criteria, domain balancing</li><li>All 12+ bugs from v1.9.2/v2.0.1 audit fixed (restart/loadNew properly reset CAT state, CSS class conflicts, timer resets, confidence score logic)</li><li>Security hardening: CSP headers, XSS-safe DOM (textContent only), URL sanitization with localhost blocking, input sanitization</li><li>Data integrity layer: JSON validation, AnswerKey verification, duplicate question detection</li><li>Dark mode toggle with full theme system (persisted in localStorage)</li><li>Global error handler with visual error message box (runtime + async + manual)</li><li>Keyboard shortcuts: 1-9 select choices, Enter advances/submits</li><li>Page close guard (beforeunload) prevents accidental exit during exam</li><li>Accessible focus rings (:focus-visible) for keyboard navigation</li><li>Print-friendly results page (Ctrl+P)</li><li>Mobile/tablet responsive: 3 breakpoints (768/600/374px), iOS Safari zoom fix, touch-safe hover, 48px tap targets</li><li>Terms of Use and Version History sections</li><li>Performance: DocumentFragment batch DOM, debounced setup updates, IIFE module pattern</li></ul><p style="margin-top:12px"><span class="vtag old">v2.0.1</span> <strong>2025-04-19 — CAT Mode (exam-next.html)</strong></p><ul><li>Initial CAT implementation with adaptive difficulty</li><li>Known issues: restartExam/loadNew did not reset CAT state</li></ul><p style="margin-top:12px"><span class="vtag old">v1.9.2</span> <strong>2025-04-19 — Stable</strong></p><ul><li>Domain percentage-based question distribution</li><li>Confidence score system based on time per question</li><li>Time warning with pulsing animation</li><li>Review questions grouped by domain</li><li>Custom domain selection, back navigation toggle</li></ul><p style="margin-top:12px"><span class="vtag old">v1.9.1</span> <strong>2025 — Bug Fix Release</strong></p><ul><li>30+ bug fixes by bank4500 (Aj. Bank)</li><li>Validation hardening, XSS-safe DOM construction</li><li>CSS.escape polyfill fix</li></ul></div></details>
+</div></div>
+
+<script>
+"use strict";
+/* DARK MODE */
+function toggleDark(){const h=document.documentElement;const d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);document.querySelector('.dm-btn').textContent=d==='dark'?'🌙':'☀';try{localStorage.setItem('theme',d)}catch(e){}}
+try{const t=localStorage.getItem('theme');if(t){document.documentElement.setAttribute('data-theme',t);document.querySelector('.dm-btn').textContent=t==='dark'?'🌙':'☀'}}catch(e){}
+/* ERROR */
+let _et=null;function showError(t,m){const b=document.getElementById('error-box');document.getElementById('err-title').textContent=t;document.getElementById('err-msg').textContent=m;b.classList.remove('hidden');clearTimeout(_et);_et=setTimeout(dismissError,8000)}
+function dismissError(){document.getElementById('error-box').classList.add('hidden');clearTimeout(_et)}
+window.onerror=function(m,s,l){showError('Runtime error',m+(l?' (line '+l+')':''));return true};
+window.onunhandledrejection=function(e){showError('Async error',e.reason?String(e.reason):'Promise rejected')};
+/* SECURITY */
+const Sec={url(u){u=(u||'').trim();if(!u)return{ok:0,e:'URL is empty'};try{const p=new URL(u);if(p.protocol!=='http:'&&p.protocol!=='https:')return{ok:0,e:'Only http/https allowed'};if(/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(p.hostname))return{ok:0,e:'Local URLs blocked'};return{ok:1,u:p.href}}catch{return{ok:0,e:'Invalid URL format'}}}};
+/* INTEGRITY */
+const Chk={validate(d){const o=[];if(!d){o.push({l:'E',m:'Data is null'});return o}if(!d['Exam Name'])o.push({l:'E',m:"'Exam Name' missing"});if(typeof d['Number of Questions']!=='number'||d['Number of Questions']<=0)o.push({l:'E',m:"'Number of Questions' must be > 0"});if(typeof d['Default Time']!=='number'||d['Default Time']<0)o.push({l:'E',m:"'Default Time' must be >= 0"});if(!Array.isArray(d.Questions)||d.Questions.length===0){o.push({l:'E',m:"'Questions' must be non-empty array"});return o}for(let i=0;i<d.Questions.length;i++){const q=d.Questions[i],ex=q.Explanation||q.Explaination;if(!q.DomainOfKnowledge||!q.Question||!q.Choices||!q.AnswerKey||!ex){o.push({l:'E',m:'Q'+(i+1)+': missing required fields'});continue}if(!Array.isArray(q.Choices)||q.Choices.length<2)o.push({l:'E',m:'Q'+(i+1)+': needs >= 2 choices'});else if(!q.Choices.includes(q.AnswerKey))o.push({l:'E',m:'Q'+(i+1)+': AnswerKey not in Choices'})}return o},dupes(qs){const m=new Map(),d=[];for(let i=0;i<qs.length;i++){const k=qs[i].Question.trim().toLowerCase().replace(/\s+/g,' ');if(m.has(k))d.push(i+1);else m.set(k,i)}return d}};
+function debounce(fn,ms){let t;return function(){clearTimeout(t);t=setTimeout(fn,ms)}}
+/* ============ APP ENGINE ============ */
+const E=(()=>{
+let ED=null,RQ=[],CI=0,UA={},QS=0,QT=[],CS=[];
+let TI=null,TR=0,ES=0,STW=false,IBD=false,AVG=90;
+let CL=[],IL=[],UL=[];let _sub=false;
+/* CAT */
+let isCAT=false;
+const catCfg={minQ:10,maxQ:30,passP:70};
+const catSt={diff:4,asked:0,correct:0,used:null,pool:null,diffH:[],ansH:[],consec:0,lastD:4};
+const DN=['','Fundamental','Beginner','Novice','Intermediate','Proficient','Advanced','Hard','Very Hard','Expert','Insanely Hard'];
+function resetCAT(){catSt.diff=4;catSt.asked=0;catSt.correct=0;catSt.used=new Set();catSt.pool={};catSt.diffH=[];catSt.ansH=[];catSt.consec=0;catSt.lastD=4}
+function orgPool(qs){const p={};for(let i=1;i<=10;i++)p[i]=[];qs.forEach((q,idx)=>{const d=q.difficultyLevel||5;if(d>=1&&d<=10)p[d].push({q,idx})});return p}
+function avLv(){const a=[];for(let lv=1;lv<=10;lv++)if(catSt.pool[lv]&&catSt.pool[lv].some(it=>!catSt.used.has(it.idx)))a.push(lv);return a}
+function selCATQ(){const av=avLv();if(!av.length)return null;let tgt=catSt.diff;
+if(catSt.asked>=1){const w=catSt.ansH.slice(-3),rc=w.filter(Boolean).length;if(w.length>=3){if(rc===3)tgt=catSt.diff+(catSt.diff>=8?1:2);else if(rc<=1)tgt=catSt.diff-(catSt.diff<=3?1:2);else tgt=catSt.diff+(catSt.ansH[catSt.ansH.length-1]?1:-1)}else tgt=catSt.diff+(catSt.ansH[catSt.ansH.length-1]?1:-1)}
+tgt=Math.max(1,Math.min(10,tgt));let near=tgt;if(!av.includes(tgt)){let md=Infinity;av.forEach(lv=>{const d=Math.abs(lv-tgt);if(d<md){md=d;near=lv}})}
+const cands=catSt.pool[near].filter(it=>!catSt.used.has(it.idx));if(!cands.length)return null;
+const du={};RQ.forEach(q=>{du[q.DomainOfKnowledge]=(du[q.DomainOfKnowledge]||0)+1});
+cands.sort((a,b)=>(du[a.q.DomainOfKnowledge]||0)-(du[b.q.DomainOfKnowledge]||0));
+const minU=du[cands[0].q.DomainOfKnowledge]||0;const top=cands.filter(it=>(du[it.q.DomainOfKnowledge]||0)<=minU+1);
+const sel=top[Math.floor(Math.random()*top.length)];catSt.used.add(sel.idx);catSt.diff=near;catSt.diffH.push(near);
+if(near===catSt.lastD)catSt.consec++;else{catSt.consec=1;catSt.lastD=near}return sel.q}
+function catStop(){const{asked,correct,diffH,ansH}=catSt;const pct=asked>0?correct/asked*100:0;
+if(asked>=catCfg.minQ&&pct>=catCfg.passP)return true;
+if(asked>=catCfg.minQ){const rem=catCfg.maxQ-asked;if(((correct+rem)/catCfg.maxQ)*100<catCfg.passP)return true}
+if(asked>=catCfg.maxQ)return true;
+if(asked>=catCfg.minQ&&ansH.length>=5){if(ansH.slice(-5).every(Boolean)&&diffH.slice(-5).reduce((a,b)=>a+b,0)/5>=7)return true}return false}
+
+const DEMO={"Exam Name":"Demo Exam — CISSP Edition","Number of Questions":3,"Default Time":2,"BackNavigation":true,"Questions":[
+{DomainOfKnowledge:"Security & Risk Mgmt",Question:"Which is MOST important for a security awareness program?",Choices:["Budget allocation","Executive sponsorship","Technical complexity","Vendor selection"],AnswerKey:"Executive sponsorship",Explanation:"Executive sponsorship ensures organizational support and authority.",difficultyLevel:4},
+{DomainOfKnowledge:"Asset Security",Question:"Data classification is PRIMARILY the responsibility of?",Choices:["Data custodian","System admin","Data owner","Security analyst"],AnswerKey:"Data owner",Explanation:"The data owner classifies data based on sensitivity and value.",difficultyLevel:3},
+{DomainOfKnowledge:"Security Architecture",Question:"Primary purpose of network segmentation?",Choices:["Improve bandwidth","Reduce attack surface","Lower costs","Simplify routing"],AnswerKey:"Reduce attack surface",Explanation:"Segmentation limits lateral movement and reduces attack surface.",difficultyLevel:5}]};
+
+const $=id=>document.getElementById(id);
+function show(n){['load','setup','exam','results','review'].forEach(s=>$('screen-'+s).classList.toggle('hidden',s!==n))}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+
+function processData(data){try{
+const iss=Chk.validate(data);const errs=iss.filter(i=>i.l==='E'),warns=iss.filter(i=>i.l==='W');
+if(data&&Array.isArray(data.Questions)){const dp=Chk.dupes(data.Questions);if(dp.length)warns.push({l:'W',m:dp.length+' duplicate question(s)'})}
+const rep=$('integrity-report'),body=$('integrity-body');const frag=document.createDocumentFragment();
+if(errs.length){errs.forEach(e=>{const p=document.createElement('p');p.style.color='var(--r700)';p.textContent='✕ '+e.m;frag.appendChild(p)});body.innerHTML='';body.appendChild(frag);rep.classList.remove('hidden');showError('Validation failed',errs.length+' error(s)');return}
+if(warns.length)warns.forEach(w=>{const p=document.createElement('p');p.style.color='var(--a700)';p.textContent='⚠ '+w.m;frag.appendChild(p)});
+const ok=document.createElement('p');ok.style.color='var(--g700)';ok.textContent='✓ Validated — '+data.Questions.length+' questions'+(warns.length?'':' · no issues');frag.appendChild(ok);body.innerHTML='';body.appendChild(frag);rep.classList.remove('hidden');
+ED=data;IBD=ED.BackNavigation===false;
+// CAT detection
+isCAT=!!(ED.EnableCAT===true&&typeof ED.minQuestions==='number'&&ED.minQuestions>0&&typeof ED.maxQuestions==='number'&&ED.maxQuestions>=ED.minQuestions&&typeof ED.percentPass==='number');
+if(isCAT){catCfg.minQ=ED.minQuestions;catCfg.maxQ=ED.maxQuestions;catCfg.passP=ED.percentPass;IBD=true}
+$('exam-title').textContent=ED['Exam Name'];$('welcome-msg').textContent='';
+buildSetup();show('setup');
+}catch(e){showError('Processing error',e.message)}}
+
+function buildSetup(){
+const maxQ=ED.Questions.length,defQ=Math.min(ED['Number of Questions'],maxQ);
+const defT=ED['Default Time'],bs=IBD?'Disabled':'Enabled';
+// CAT info
+const ci=$('cat-info');
+if(isCAT){ci.classList.remove('hidden');$('cat-min').textContent=catCfg.minQ;$('cat-max').textContent=catCfg.maxQ;$('cat-pass').textContent=catCfg.passP}else{ci.classList.add('hidden')}
+const modes=isCAT?[{v:'cat',t:'🎯 Start CAT Exam (Adaptive)',d:'Difficulty adapts to your level · '+catCfg.minQ+'–'+catCfg.maxQ+' questions · Pass: '+catCfg.passP+'%'}]:[
+{v:'default',t:'Use default settings',d:defQ+' questions · '+(defT>0?defT+' min':'Unlimited')+' · Back nav: '+bs},
+{v:'quick',t:'Quick start — random from all topics',d:'Customize count and time'},
+{v:'custom',t:'Custom — choose specific topics',d:'Advanced topic selection'}];
+const md=$('setup-modes');md.innerHTML='';const frag=document.createDocumentFragment();
+modes.forEach((m,i)=>{const c=document.createElement('div');c.className='sc au'+(i===0?' act':'');const r=document.createElement('input');r.type='radio';r.name='st';r.value=m.v;if(i===0)r.checked=true;
+const d=document.createElement('div');const t1=document.createElement('div');t1.className='ti';t1.textContent=m.t;const t2=document.createElement('div');t2.className='de';t2.textContent=m.d;d.append(t1,t2);
+const row=document.createElement('div');row.className='fr';row.append(r,d);c.appendChild(row);
+c.addEventListener('click',()=>{md.querySelectorAll('.sc').forEach(x=>x.classList.remove('act'));c.classList.add('act');r.checked=true;updSetup()});frag.appendChild(c)});md.appendChild(frag);
+// Domains
+const doms=[...new Set(ED.Questions.map(q=>q.DomainOfKnowledge))].sort();const dl=$('domain-list');dl.innerHTML='';const df=document.createDocumentFragment();
+doms.forEach(d=>{const lb=document.createElement('label');lb.className='dci';const cb=document.createElement('input');cb.type='checkbox';cb.name='dcb';cb.value=d;cb.addEventListener('change',_ds);const sp=document.createElement('span');sp.textContent=d;lb.append(cb,sp);df.appendChild(lb)});dl.appendChild(df);updSetup()}
+const _ds=debounce(()=>updSetup(),80);
+function getType(){const r=document.querySelector('input[name="st"]:checked');return r?r.value:'default'}
+function updSetup(){if(!ED)return;const type=getType();
+$('custom-panel').classList.toggle('hidden',type==='default'||type==='cat');
+$('domain-cb-area').classList.toggle('hidden',type!=='custom');
+if(type==='cat'){$('setup-summary').textContent='CAT: '+catCfg.minQ+'–'+catCfg.maxQ+' adaptive questions · Pass: '+catCfg.passP+'%';$('start-btn').disabled=false;return}
+let nQ,tM;if(type==='default'){nQ=Math.min(ED['Number of Questions'],ED.Questions.length);tM=ED['Default Time']}else{const sel=$('q-count-select');nQ=sel.value==='custom'?(parseInt($('q-count-custom').value)||0):parseInt(sel.value);let pool=ED.Questions.length;if(type==='custom'){const ck=Array.from(document.querySelectorAll('input[name="dcb"]:checked')).map(c=>c.value);pool=ED.Questions.filter(q=>ck.includes(q.DomainOfKnowledge)).length}nQ=Math.max(0,Math.min(nQ,pool));tM=parseInt($('time-input').value)||0;if(tM<0)tM=0}
+const bt=IBD?' (back nav disabled)':'';$('setup-summary').textContent=nQ>0?nQ+' questions · '+(tM>0?tM+' min':'unlimited')+bt:'Configure questions to continue';$('start-btn').disabled=nQ<=0}
+function onQC(){$('q-count-custom').classList.toggle('hidden',$('q-count-select').value!=='custom');updSetup()}
+
+function start(){try{if(!ED)return;clearInterval(TI);_sub=false;STW=$('time-warn-cb').checked;const type=getType();
+if(type==='cat')return startCAT();
+let nQ,tM;if(type==='default'){nQ=Math.min(ED['Number of Questions'],ED.Questions.length);tM=ED['Default Time']}else{const sel=$('q-count-select');nQ=sel.value==='custom'?(parseInt($('q-count-custom').value)||0):parseInt(sel.value);tM=parseInt($('time-input').value)||0}
+let pool=JSON.parse(JSON.stringify(ED.Questions));if(type==='custom'){const ck=Array.from(document.querySelectorAll('input[name="dcb"]:checked')).map(c=>c.value);pool=pool.filter(q=>ck.includes(q.DomainOfKnowledge))}
+shuffle(pool);RQ=pool.slice(0,nQ);if(!RQ.length){showError('No questions','No questions match.');return}
+CI=0;UA={};QT=[];CS=[];ES=Date.now();CL=[];IL=[];UL=[];AVG=(tM>0&&nQ>0)?(tM*60)/nQ:90;
+$('sbtn').disabled=false;$('progress-area').classList.remove('hidden');$('cat-progress').classList.add('hidden');
+$('pbar').parentElement.classList.remove('hidden');
+if(tM>0){TR=tM*60;updTmr();TI=setInterval(()=>{TR--;updTmr();if(STW)$('tmr').classList.toggle('wrn',(Date.now()-QS)/1000>AVG);if(TR<=0){clearInterval(TI);showError('Time up','Auto-submitted.');submit()}},1000)}else{$('tmr').textContent='Unlimited'}
+show('exam');showQ()}catch(e){showError('Start error',e.message)}}
+
+function startCAT(){
+resetCAT();catSt.pool=orgPool(ED.Questions);
+RQ=[];CI=0;UA={};QT=[];CS=[];ES=Date.now();CL=[];IL=[];UL=[];AVG=90;
+$('sbtn').disabled=false;$('progress-area').classList.add('hidden');
+$('cat-progress').classList.remove('hidden');$('pbar').parentElement.classList.add('hidden');
+$('bbtn').classList.add('hidden');
+show('exam');showCATQ()}
+
+function showCATQ(){
+QS=Date.now();
+if(catStop()){submit();return}
+const nq=selCATQ();if(!nq){submit();return}
+RQ.push(nq);CI=RQ.length-1;
+// CAT progress display
+const pct=catSt.asked>0?(catSt.correct/catSt.asked*100).toFixed(0):'0';
+const dName=DN[catSt.diff]||'Level '+catSt.diff;
+const bars='█'.repeat(catSt.diff)+'░'.repeat(10-catSt.diff);
+const cp=$('cat-progress');cp.innerHTML='';
+const t=document.createElement('span');t.textContent='🎯 CAT: Q'+(catSt.asked+1)+' | Range: '+catCfg.minQ+'–'+catCfg.maxQ+' | Score: '+pct+'% | Difficulty: ';
+const b=document.createElement('span');b.className='diff-bar';b.textContent=bars+' ';
+const s=document.createElement('strong');s.textContent=dName;cp.append(t,b,s);
+// Show question
+$('qtxt').textContent=(catSt.asked+1)+'. '+nq.Question;
+const cl=$('clist');cl.innerHTML='';const frag=document.createDocumentFragment();
+nq.Choices.forEach(ch=>{const c=document.createElement('div');c.className='cc'+(UA[CI]===ch?' sel':'');const r=document.createElement('div');r.className='cr';const d=document.createElement('div');d.className='crd';r.appendChild(d);const l=document.createElement('span');l.className='cl';l.textContent=ch;c.append(r,l);c.addEventListener('click',()=>{cl.querySelectorAll('.cc').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');UA[CI]=ch});frag.appendChild(c)});cl.appendChild(frag);
+// Nav: CAT always has Next, show Submit after minQ
+const nb=$('nbtn'),sb=$('sbtn');
+nb.classList.remove('hidden');sb.classList.toggle('hidden',catSt.asked+1<catCfg.minQ)}
+
+function updTmr(){const m=Math.floor(TR/60),s=TR%60;$('tmr').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+
+function showQ(){QS=Date.now();$('tmr').classList.remove('wrn');const q=RQ[CI],tot=RQ.length;
+$('ptxt').textContent='Question '+(CI+1)+' / '+tot;$('pbar').style.width=((CI+1)/tot*100)+'%';
+$('qtxt').textContent=(CI+1)+'. '+q.Question;
+const cl=$('clist');cl.innerHTML='';const frag=document.createDocumentFragment();
+q.Choices.forEach(ch=>{const c=document.createElement('div');c.className='cc'+(UA[CI]===ch?' sel':'');const r=document.createElement('div');r.className='cr';const d=document.createElement('div');d.className='crd';r.appendChild(d);const l=document.createElement('span');l.className='cl';l.textContent=ch;c.append(r,l);c.addEventListener('click',()=>{cl.querySelectorAll('.cc').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');UA[CI]=ch});frag.appendChild(c)});cl.appendChild(frag);
+const bb=$('bbtn'),nb=$('nbtn'),sb=$('sbtn');
+if(IBD)bb.classList.add('hidden');else{bb.classList.remove('hidden');bb.disabled=CI===0}
+const last=CI===tot-1;nb.classList.toggle('hidden',last);sb.classList.toggle('hidden',!last)}
+
+function calcConf(){const t=(Date.now()-QS)/1000;QT[CI]=t;if(UA[CI]===undefined){CS[CI]=0;return}const ok=UA[CI]===RQ[CI].AnswerKey;CS[CI]=(ok&&t<AVG&&AVG>0)?Math.max(0,Math.min(100,Math.round(100*(1-t/AVG)))):0}
+
+function next(){calcConf();
+if(isCAT){const wasOk=UA[CI]!==undefined&&UA[CI]===RQ[CI].AnswerKey;const wasUnanswered=UA[CI]===undefined;catSt.asked++;if(wasOk)catSt.correct++;catSt.ansH.push(wasUnanswered?false:wasOk);showCATQ()}
+else{CI++;showQ()}}
+function back(){if(IBD||isCAT)return;const t=(Date.now()-QS)/1000;QT[CI]=(QT[CI]||0)+t;if(CS[CI]===undefined)calcConf();CI--;showQ()}
+
+function submit(){try{if(_sub)return;_sub=true;$('sbtn').disabled=true;
+if(isCAT&&UA[CI]!==undefined){calcConf();const wasOk=UA[CI]===RQ[CI].AnswerKey;if(catSt.asked<RQ.length){catSt.asked++;if(wasOk)catSt.correct++;catSt.ansH.push(wasOk)}}else{calcConf()}
+clearInterval(TI);show('results');const tot=RQ.length;let co=0,ic=0,un=0;CL=[];IL=[];UL=[];const dr={};const elapsed=ES?(Date.now()-ES)/1000:0;
+RQ.forEach((q,i)=>{const a=UA[i],d=q.DomainOfKnowledge;if(!dr[d])dr[d]={c:0,t:0};dr[d].t++;if(a===undefined){un++;UL.push(i)}else if(a===q.AnswerKey){co++;CL.push(i);dr[d].c++}else{ic++;IL.push(i)}});
+const pct=tot>0?co/tot*100:0;$('sc-pct').textContent=pct.toFixed(1)+'%';
+$('sc-bdg').textContent=pct>=90?'Excellent! Outstanding performance':pct>=80?'Great job! Well done':pct>=70?'Good work — keep it up':pct>=60?'Fair — room for improvement':'Keep practicing!';
+$('st-c').textContent=co+'/'+tot;$('st-i').textContent=ic+'/'+tot;$('st-u').textContent=un+'/'+tot;
+$('st-avg').textContent=(tot>0&&elapsed>0?(elapsed/tot).toFixed(1):'0')+'s';
+const tc=CS.reduce((a,b)=>a+(b||0),0);$('st-conf').textContent=(tot>0?(tc/(tot*100)*100).toFixed(1):'0')+'%';
+// CAT results
+const cr=$('cat-results');if(isCAT){cr.classList.remove('hidden');cr.innerHTML='';const frag=document.createDocumentFragment();
+const passed=pct>=catCfg.passP;
+const items=[
+{l:'Status',v:passed?'✓ PASSED':'✗ FAILED',c:passed?'var(--g700)':'var(--r600)'},
+{l:'Questions Asked',v:catSt.asked+' of '+catCfg.minQ+'–'+catCfg.maxQ,c:'var(--t2)'},
+{l:'Avg Difficulty',v:catSt.diffH.length>0?(catSt.diffH.reduce((a,b)=>a+b,0)/catSt.diffH.length).toFixed(1)+'/10':'N/A',c:'var(--p700)'},
+{l:'Highest Level',v:catSt.diffH.length>0?DN[Math.max(...catSt.diffH)]||'Level '+Math.max(...catSt.diffH):'N/A',c:'var(--p700)'}];
+items.forEach(it=>{const d=document.createElement('div');d.className='cat-card';d.style.textAlign='center';const sl=document.createElement('div');sl.className='sl xs';sl.textContent=it.l;const sv=document.createElement('div');sv.className='sv';sv.textContent=it.v;sv.style.color=it.c;d.append(sl,sv);frag.appendChild(d)});cr.appendChild(frag)}else{cr.classList.add('hidden')}
+// Domain bars
+const dEl=$('dom-res');dEl.innerHTML='';const frag=document.createDocumentFragment();
+Object.entries(dr).map(([d,v])=>({d,...v,p:v.t>0?v.c/v.t*100:0})).sort((a,b)=>b.p-a.p||a.d.localeCompare(b.d)).forEach(it=>{const row=document.createElement('div');row.className='dr';const nm=document.createElement('span');nm.className='dn';nm.textContent=it.d;nm.title=it.d;const bar=document.createElement('div');bar.className='db';const fl=document.createElement('div');fl.className='dfl '+(it.p>=70?'go':it.p>=50?'mi':'lo');fl.style.width=Math.max(it.p,2)+'%';bar.appendChild(fl);const st=document.createElement('span');st.className='ds';st.textContent=it.c+'/'+it.t+' ('+it.p.toFixed(0)+'%)';row.append(nm,bar,st);frag.appendChild(row)});dEl.appendChild(frag);
+const rc=$('rv-c'),ri=$('rv-i'),ru=$('rv-u');rc.classList.toggle('hidden',!CL.length);rc.textContent='Review correct ('+CL.length+')';ri.classList.toggle('hidden',!IL.length);ri.textContent='Review incorrect ('+IL.length+')';ru.classList.toggle('hidden',!UL.length);ru.textContent='Review unanswered ('+UL.length+')';
+}catch(e){showError('Submit error',e.message)}}
+
+function review(type){const list=type==='c'?CL:type==='i'?IL:UL;if(!list.length)return;show('review');const c=$('rev-list');c.innerHTML='';const groups={};list.forEach(i=>{const d=RQ[i].DomainOfKnowledge;if(!groups[d])groups[d]=[];groups[d].push(i)});const frag=document.createDocumentFragment();Object.entries(groups).forEach(([dom,idxs])=>{const h=document.createElement('h4');h.style.cssText='font-size:13px;font-weight:700;color:var(--t4);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--bdr)';h.textContent=dom;frag.appendChild(h);idxs.forEach(idx=>{const q=RQ[idx],ua=UA[idx]!==undefined?UA[idx]:'Not answered';const expl=q.Explanation||q.Explaination||'No explanation';const item=document.createElement('div');item.className='ri';const head=document.createElement('div');head.className='rh';const txt=document.createElement('span');txt.className='qt';txt.textContent='Q'+(idx+1)+': '+q.Question;const arrow=document.createElement('span');arrow.className='ra';arrow.textContent='▼';head.append(txt,arrow);const body=document.createElement('div');body.className='rb hidden';const p1=document.createElement('p');const s1=document.createElement('strong');s1.textContent='Your answer: ';p1.append(s1,document.createTextNode(ua));const p2=document.createElement('p');const s2=document.createElement('strong');s2.textContent='Correct: ';p2.append(s2,document.createTextNode(q.AnswerKey));const ex=document.createElement('div');ex.className='exb';const s3=document.createElement('strong');s3.textContent='Explanation: ';ex.append(s3,document.createTextNode(expl));body.append(p1,p2,ex);head.addEventListener('click',()=>{body.classList.toggle('hidden');arrow.style.transform=body.classList.contains('hidden')?'':'rotate(180deg)'});item.append(head,body);frag.appendChild(item)})});c.appendChild(frag)}
+function backRes(){show('results')}
+function restart(){if(!ED){showError('Error','No exam data');return}clearInterval(TI);start()}
+function newExam(){ED=null;CI=0;UA={};RQ=[];CS=[];QT=[];CL=[];IL=[];UL=[];clearInterval(TI);IBD=false;STW=false;AVG=90;_sub=false;isCAT=false;resetCAT();$('tmr').textContent='';$('tmr').classList.remove('wrn');$('url-input').value='';$('file-input').value='';$('file-name').textContent='No file selected';$('url-error').classList.add('hidden');$('time-warn-cb').checked=false;$('q-count-select').value='5';$('q-count-custom').classList.add('hidden');$('q-count-custom').value='';$('time-input').value='60';$('integrity-report').classList.add('hidden');$('cat-info').classList.add('hidden');$('exam-title').textContent='Open Exam Application';$('welcome-msg').textContent='';show('load')}
+return{loadUrl(){const err=$('url-error');err.classList.add('hidden');const r=Sec.url($('url-input').value);if(!r.ok){err.textContent=r.e;err.classList.remove('hidden');return}fetch(r.u).then(res=>{if(!res.ok)throw new Error('HTTP '+res.status);return res.json()}).then(processData).catch(e=>{err.textContent='Failed: '+e.message;err.classList.remove('hidden')})},loadFile(ev){const f=ev.target.files[0];if(!f)return;$('file-name').textContent=f.name;const r=new FileReader();r.onload=e=>{try{processData(JSON.parse(e.target.result))}catch(x){showError('JSON Error',x.message)}};r.onerror=()=>showError('File Error','Could not read file');r.readAsText(f)},loadDemo(){processData(JSON.parse(JSON.stringify(DEMO)))},onQC,updSetup,start,next,back,submit,review,backRes,restart,newExam}
+})();
+window.addEventListener('beforeunload',function(e){if(!document.getElementById('screen-exam').classList.contains('hidden')){e.preventDefault();e.returnValue=''}});
+document.addEventListener('keydown',function(e){if(document.getElementById('screen-exam').classList.contains('hidden'))return;if(e.key>='1'&&e.key<='9'){const idx=parseInt(e.key)-1;const cards=document.querySelectorAll('#clist .cc');if(idx<cards.length)cards[idx].click()}if(e.key==='Enter'){const nb=document.getElementById('nbtn'),sb=document.getElementById('sbtn');if(!nb.classList.contains('hidden'))nb.click();else if(!sb.classList.contains('hidden')&&!sb.disabled)sb.click()}});
+</script>
+</body>
+</html>
