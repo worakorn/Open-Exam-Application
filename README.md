@@ -1,81 +1,90 @@
-*   # Open Exam Application
+# Open Exam Application
 
 ## Introduction
 
-The "Open Exam Application" is a standalone, offline-capable exam system built entirely within a single HTML file. Crafted with vanilla HTML, CSS, and JavaScript—and significantly accelerated with Google Gemini—it provides a highly flexible platform for creating and taking multiple-choice exams. It features timed tests, advanced user-driven exam configuration, and immediate, detailed results with performance analytics.
+The "Open Exam Application" is a standalone, offline-capable exam system built entirely within single HTML files. It provides a highly flexible platform for creating and taking multiple-choice exams with timed tests, advanced configuration, Computerized Adaptive Testing (CAT), and immediate detailed results with performance analytics.
 
-There are currently two actively maintained versions of the application:
-1. **`exam.html` (v1.9.2 - Stable):** The classic, standard exam application with robust fixed-length testing.
-2. **`exam-next.html` (v2.0.1 - Cutting Edge):** The advanced application featuring a full Computerized Adaptive Testing (CAT) engine that dynamically scales difficulty based on real-time performance.
+**Current Version: v3.1 — CISSP Edition with CAT + Dark Mode**
+
+| File | Description |
+|------|-------------|
+| `exam.html` | Main exam application (v3.1) — ISC² CISSP themed, CAT engine, dark mode |
+| `exam-builder.html` | Exam authoring tool (v3.1) — Create and edit JSON exam files |
+| `bank/` | Collection of pre-built exam JSON files (CISSP, CC, PDPA, etc.) |
+
+> **Note:** Previous versions (`exam.html` v1.9.2 and `exam-next.html` v2.0.1) have been superseded by the unified v3.1 release which combines and improves all features from both.
 
 ## Features
 
-*   **Single File Portability:** The entire application runs from a single HTML file, making it highly portable and suitable for offline use on any modern web browser.
-*   **Custom Exam Banks (JSON):**
-    *   Load external exam question banks from a local JSON file.
-    *   Load exam banks from a publicly accessible URL hosting a JSON file.
-    *   Supports a defined [JSON schema](./bank/README.md) for creating custom exams, including domain-specific questions, answer explanations, and configurable exam parameters.
-*   **Advanced Exam Setup:**
-    *   **Default Settings Mode:** Uses the settings from the JSON file. It uses a highly accurate **proportional distribution algorithm (Largest Remainder Method)** to follow the `DomainPercentages`.
-    *   **Quick Start Mode:** Allows users to start an exam quickly with a specific number of questions chosen randomly from the entire question bank.
-    *   **Custom Selection Mode:** Empowers users to build their own exam by:
-        *   Selecting one or more specific topics (Domains of Knowledge).
-        *   Choosing the number of questions to be drawn randomly *only from the selected topics*.
-*   **Modern Exam Experience:**
-    *   Clean, **responsive user interface** that works on both **desktop and mobile devices**.
-    *   Optional, user-configurable timer with automatic submission when time expires.
-    *   Navigation (Next/Back buttons), with an option in the JSON (`"BackNavigation": false`) to disable the "Back" button.
-    *   Progress bar indicating the user's current position in the exam.
-*   **Performance Analytics:**
-    *   **Confidence Score:** A unique metric that scores your performance based on both the correctness of your answer and the time taken to respond. Faster, correct answers yield a higher score.
-    *   **Time Warnings:** An optional feature that provides a visual indicator during the exam if you are spending longer than the average time on a single question.
-*   **Computerized Adaptive Testing (CAT) Engine *(exam-next.html only)*:**
-    *   Intelligently scales question difficulty up or down using a sliding window algorithm based on your real-time performance.
-    *   Prioritizes under-represented topics to ensure balanced domain coverage.
-    *   Stops the exam dynamically upon mastery (consecutive high-level passes) or when a passing score is statistically unachievable.
-*   **Immediate Results & Enhanced Review:**
-    *   Instant scoring upon submission, including correct, incorrect, and **unanswered** counts, overall percentage, and the new Confidence Score.
-    *   Detailed CAT statistics including hardest level reached and efficiency grade.
-    *   Results are broken down by knowledge domain and **sorted by performance** (best to worst) to provide clear insights.
-    *   Option to review **correct, incorrect, and unanswered** questions.
-    *   The review screen now includes icons to flag specific questions:
-        *   A **clock icon (🕰️)** appears next to any answered question where the time taken was significantly above average.
-        *   An **'x' icon (❌)** appears next to any question that was left unanswered.
-*   **Authoring Tool:** Includes `exam-builder.html` to easily create properly formatted JSON banks.
-*   **Developer Debug Mode:**
-    *   A `DEBUG` flag is available in the script to output detailed logs to the developer console.
-*   **Demo Mode:** Includes a built-in demo exam for quick testing and demonstration of all features.
+### Core Exam Features
+- **Single File Portability:** Entire application in one HTML file — fully offline, zero external dependencies
+- **Custom Exam Files (JSON):** Load from local file, URL, or use built-in demo
+- **Advanced Setup:** Default, Quick Start, or Custom Domain selection modes
+- **Configurable Timer:** Optional time limit with per-question time warnings
+- **Back Navigation:** Configurable forward-only or free navigation
+- **Progress Tracking:** Visual progress bar with question counter
+
+### Computer Adaptive Testing (CAT)
+- **CISSP-Style Adaptive Difficulty:** 10-level difficulty scale (Fundamental → Insanely Hard)
+- **Sliding Window Algorithm:** 3-question window adjusts difficulty based on recent performance
+- **Smart Stopping Criteria:** Early pass, early fail, mastery detection, max questions
+- **Domain Balancing:** Ensures balanced coverage across knowledge domains
+- **Real-Time Analytics:** Live difficulty indicator and score tracking during exam
+
+### Performance Analytics
+- **Confidence Score:** Rewards fast, correct answers — measures test-taking confidence
+- **Domain Breakdown:** Results sorted best-to-worst by knowledge domain
+- **Review System:** Review correct, incorrect, and unanswered questions with explanations
+
+### Security & Quality
+- **CSP Headers:** Content Security Policy restricting script/style sources
+- **XSS-Safe DOM:** All user data rendered via textContent — zero innerHTML injection
+- **URL Sanitization:** Protocol validation, localhost blocking
+- **Data Integrity:** JSON schema validation, AnswerKey verification, duplicate question detection
+- **Dead Code Free:** Audited and cleaned — no unused CSS, JS functions, or polyfills
+
+### User Experience
+- **Dark Mode:** Toggle with persistent preference (localStorage)
+- **Keyboard Shortcuts:** 1-9 select choices, Enter advances/submits
+- **Mobile/Tablet Responsive:** 3 breakpoints (768/600/374px), iOS zoom fix, touch-safe hover, 48px tap targets
+- **Mobile-Safe File Input:** Uses native `<label for="">` pattern — works reliably on all mobile browsers including iOS Safari
+- **Page Close Guard:** Prevents accidental tab close during exam
+- **Accessible:** Focus-visible rings for keyboard navigation
+- **Print-Friendly:** Clean results page for Ctrl+P
+
+### Exam Builder
+- **Visual Editor:** Create questions with domain, difficulty, choices, and explanations
+- **Sectioned Sidebar Layout:** Settings section and question list clearly separated with proper spacing
+- **CAT Configuration:** Set min/max questions, pass percentage, enable adaptive mode
+- **Domain Percentage Setup:** Configure proportional question distribution with live total indicator
+- **Import/Export:** Load existing JSON files and export validated exam packs
+- **XSS-Safe:** All rendering via safe DOM construction (textContent + createElement)
+- **Dark Mode + Responsive:** Matching theme system, 3 breakpoints (900/768/480px)
 
 ## How to Use
 
-1.  **Download:** Get the `exam.html` or `exam-next.html` file.
-2.  **Open:** Open the file in a modern web browser (like Chrome, Firefox, Edge, or Safari).
-3.  **Load an Exam:**
-    *   **From URL:** Enter the URL of a JSON exam file and click "Load from URL".
-    *   **From Local File:** Click "Browse File", select your local JSON exam file.
-    *   **Run Demo:** Click "Run Demo Exam" to use the built-in sample questions.
-4.  **Configure Your Exam:** Once an exam bank is loaded, choose your preferred setup (Default, Quick Start, or Custom Selection) and configure options like question count, time limit, and time warnings.
-5.  **Start Exam:** Click the "Start Exam" button.
-6.  **Take Exam:** Answer the questions. Use the navigation buttons as needed.
-7.  **View Results:** After submitting, your results will be displayed instantly.
-8.  **Review:** Click on the review links to see details for your correct, incorrect, and unanswered questions, complete with performance flags.
+1. **Download** the `exam.html` file
+2. **Open** in any modern browser (Chrome, Firefox, Edge, Safari)
+3. **Load an exam** via URL, local file, or built-in demo
+4. **Configure** your preferred setup mode
+5. **Take the exam** — answer questions, navigate with buttons or keyboard
+6. **View results** — score, confidence, domain breakdown
+7. **Review** — check explanations for incorrect/unanswered questions
 
 ## Exam JSON Format
 
-For instructions on creating your own exam bank files, please refer to the **[bank/README.md](./bank/README.md)** file for the detailed JSON schema and field explanations.
+See **[bank/README.md](./bank/README.md)** for the detailed JSON schema including CAT configuration fields.
 
-## Download
+## Disclaimer
 
-*   The latest stable version can always be found as `exam.html` in the root of the project repository.
-*   To test the latest adaptive algorithms, download `exam-next.html`.
+**This software is 100% AI-generated.** While extensively tested and hardened, there are no guarantees of perfect functionality. This project is intended primarily for educational purposes. See the Terms of Use within the application for full details.
 
-## ⚠️ Disclaimer & AI-Generated Content Notice
+## Contact
 
-**This project was primarily generated with Google Gemini.**
+- **Author:** Worakorn Kuruwongwattana
+- **LinkedIn:** [https://www.linkedin.com/in/kworakorn/](https://www.linkedin.com/in/kworakorn/)
+- **Repository:** [https://github.com/worakorn/Open-Exam-Application](https://github.com/worakorn/Open-Exam-Application)
 
-While Gemini is a powerful tool for accelerating development, it's important to remember that AI-generated code is a starting point.
-*   **No Guarantees:** There are no guarantees of perfect functionality, security, or absence of bugs.
-*   **Educational Purpose:** This project is intended primarily for educational and demonstrative purposes.
-*   **Verify and Test:** If you intend to use or modify this application, thorough review, testing, and validation of the code are strongly recommended.
+## Contributors
 
-**By using this software, you acknowledge and accept these disclaimers.**
+- **bank4500 (Aj. Bank)** — Contributed 30+ bug fixes and major feature implementations across v1.9.1 through v3.1, including security hardening, CAT integration, dark mode, mobile responsive design, data integrity layer, dead code cleanup, and keyboard accessibility.

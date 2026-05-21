@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+<title>Exam Builder v3.1</title>
+<style>
+:root,[data-theme="light"]{
+  --bg:#F0F4F0;--bg2:#FFF;--bg3:#F8FAF8;
+  --bdr:#DCE4DD;--bdr-f:#00A651;
+  --t1:#0F1A12;--t2:#354038;--t3:#6B7C72;--t4:#94A39A;
+  --pri:#00A651;--pri-h:#2E7D32;--pri-lt:#E8F5E9;
+  --dan:#DC2626;--dan-lt:#FEF2F2;
+  --suc:#2E7D32;
+  --sh:0 1px 3px rgba(0,0,0,.06);--sh2:0 4px 12px rgba(0,0,0,.08);
+}
+[data-theme="dark"]{
+  --bg:#0F1A12;--bg2:#1A2B1E;--bg3:#152219;
+  --bdr:#2A3D2E;--bdr-f:#00A651;
+  --t1:#E8F5E9;--t2:#A5D6A7;--t3:#6B7C72;--t4:#4A5950;
+  --pri:#00A651;--pri-h:#66BB6A;--pri-lt:#0A1F0E;
+  --dan:#F87171;--dan-lt:#2A1215;
+  --suc:#66BB6A;
+  --sh:0 1px 3px rgba(0,0,0,.2);--sh2:0 4px 12px rgba(0,0,0,.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column;transition:background .3s,color .3s}
+
+/* HEADER */
+header{
+  padding:12px 20px;display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg2);border-bottom:1px solid var(--bdr);
+  position:sticky;top:0;z-index:10;box-shadow:var(--sh);
+  transition:background .3s;gap:12px;flex-wrap:wrap;
+}
+.logo{display:flex;align-items:center;gap:8px}
+.logo h1{font-size:1.25rem;font-weight:800;color:var(--pri);white-space:nowrap}
+.vbadge{font-size:.65rem;background:var(--pri);color:#FFF;padding:2px 8px;border-radius:12px;font-weight:700}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;border:none;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-p{background:var(--pri);color:#FFF}.btn-p:hover{background:var(--pri-h)}
+.btn-d{background:var(--dan);color:#FFF}
+.btn-s{background:var(--suc);color:#FFF}.btn-s:hover{opacity:.9}
+.btn-o{background:var(--bg2);border:1.5px solid var(--bdr);color:var(--t2)}.btn-o:hover{border-color:var(--pri);color:var(--pri)}
+.btn-sm{padding:4px 10px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn-icon{padding:4px;width:28px;height:28px;border-radius:6px;justify-content:center;font-size:14px}
+.dm-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--bdr);background:var(--bg2);color:var(--t1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .3s}
+
+/* LAYOUT */
+main{display:grid;grid-template-columns:320px 1fr;gap:0;flex-grow:1;height:calc(100vh - 57px)}
+.sidebar{display:flex;flex-direction:column;border-right:1px solid var(--bdr);background:var(--bg2);overflow-y:auto;transition:background .3s}
+.sidebar::-webkit-scrollbar{width:5px}.sidebar::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+
+/* SIDEBAR SECTIONS */
+.s-section{padding:16px;border-bottom:1px solid var(--bdr)}
+.s-section:last-child{border-bottom:none;flex-grow:1;display:flex;flex-direction:column}
+.s-hdr{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+
+/* FORM */
+.fg{margin-bottom:12px}
+.fg:last-child{margin-bottom:0}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.fg label .req{color:var(--dan)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg-cb{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fg-cb label{margin:0;text-transform:none;font-size:13px;color:var(--t2);cursor:pointer}
+input[type="text"],input[type="number"],textarea,select{
+  width:100%;background:var(--bg3);border:1.5px solid var(--bdr);color:var(--t1);
+  border-radius:8px;padding:8px 12px;font-family:inherit;font-size:14px;
+  transition:border-color .2s,background .3s;outline:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--bdr-f);box-shadow:0 0 0 2px rgba(0,166,81,.15)}
+textarea{resize:vertical;min-height:64px;line-height:1.5}
+input[type="checkbox"],input[type="radio"]{width:16px;height:16px;accent-color:var(--pri);cursor:pointer;flex-shrink:0}
+
+/* DOMAIN PERCENTAGES */
+.dp-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.dp-row input[type="text"]{flex:1;padding:6px 10px;font-size:13px}
+.dp-row input[type="number"]{width:56px;padding:6px 8px;font-size:13px;text-align:center}
+.dp-total{font-size:11px;color:var(--t3);font-weight:400;margin-left:6px}
+
+/* QUESTION LIST */
+.q-list{flex-grow:1;overflow-y:auto;padding:0 16px 16px}
+.q-list::-webkit-scrollbar{width:5px}.q-list::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.qi{padding:10px 12px;background:var(--bg3);border:1.5px solid var(--bdr);border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.qi:hover{border-color:var(--t4)}
+.qi.active{border-color:var(--pri);background:var(--pri-lt)}
+.qi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.qi-top strong{font-size:12px;color:var(--t2)}
+.qi-tag{font-size:10px;background:var(--bdr);padding:1px 6px;border-radius:10px;color:var(--t3);white-space:nowrap}
+.qi-prev{font-size:12px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* EDITOR AREA */
+.editor{background:var(--bg);overflow-y:auto;padding:24px;transition:background .3s}
+.editor::-webkit-scrollbar{width:6px}.editor::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.editor-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:24px;box-shadow:var(--sh2);transition:background .3s;max-width:720px}
+.editor-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bdr)}
+.editor-hdr h2{font-size:16px;font-weight:700;color:var(--t1)}
+
+/* CHOICES */
+.ch-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ch-row input[type="radio"]{width:18px;height:18px}
+.ch-row input[type="text"]{flex:1;padding:8px 12px;font-size:14px}
+
+/* EMPTY STATE */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--t3);text-align:center;padding:40px}
+.empty h2{font-size:18px;margin-bottom:6px;color:var(--t2)}
+.empty p{font-size:14px;max-width:300px;line-height:1.5}
+
+.hidden{display:none!important}
+
+/* FILE INPUT (mobile-safe) */
+.file-input-sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  main{grid-template-columns:280px 1fr}
+}
+@media(max-width:768px){
+  main{grid-template-columns:1fr;height:auto}
+  .sidebar{border-right:none;border-bottom:1px solid var(--bdr);max-height:50vh;overflow-y:auto}
+  .editor{padding:16px}
+  input[type="text"],input[type="number"],textarea,select{font-size:16px}
+  header{padding:10px 16px}
+  .logo h1{font-size:1.1rem}
+  .btn{padding:8px 12px;font-size:12px}
+  .s-section{padding:12px}
+  .editor-card{padding:16px}
+}
+@media(max-width:480px){
+  .fg-row{grid-template-columns:1fr}
+  .acts{width:100%;justify-content:flex-end}
+  header{gap:8px}
+  .editor-card{border-radius:8px;padding:14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <h1>Exam Builder</h1>
+    <span class="vbadge">v3.1</span>
+  </div>
+  <div class="acts">
+    <input type="file" id="imp-file" accept=".json" class="file-input-sr">
+    <label for="imp-file" class="btn btn-o" style="cursor:pointer;margin:0">Import</label>
+    <button class="btn btn-s" onclick="exportExam()">Export JSON</button>
+    <button class="dm-btn" onclick="toggleDark()" title="Toggle dark mode">☀</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <!-- EXAM SETTINGS -->
+    <div class="s-section">
+      <div class="s-hdr">Exam Settings</div>
+
+      <div class="fg">
+        <label>Exam Name <span class="req">*</span></label>
+        <input type="text" id="ex-name" oninput="upCfg('Exam Name',this.value)" placeholder="e.g. CISSP Practice Exam">
+      </div>
+
+      <div class="fg-row">
+        <div class="fg">
+          <label>Questions per Test <span class="req">*</span></label>
+          <input type="number" id="ex-total" min="1" oninput="upCfg('Number of Questions',parseInt(this.value)||0)">
+        </div>
+        <div class="fg">
+          <label>Passing % <span class="req">*</span></label>
+          <input type="number" id="ex-pass" min="1" max="100" oninput="upCfg('percentPass',parseInt(this.value)||0)">
+        </div>
+      </div>
+
+      <div class="fg-row hidden" id="cat-row">
+        <div class="fg">
+          <label>CAT Min Qs <span class="req">*</span></label>
+          <input type="number" id="ex-min" min="1" oninput="upCfg('minQuestions',parseInt(this.value)||0)">
+        </div>
+        <div class="fg">
+          <label>CAT Max Qs</label>
+          <input type="number" id="ex-max" disabled style="opacity:.6;cursor:not-allowed">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Time limit (min, 0 = off) <span class="req">*</span></label>
+        <input type="number" id="ex-time" min="0" oninput="upCfg('Default Time',parseInt(this.value)||0)">
+      </div>
+
+      <div class="fg">
+        <label>Instructions</label>
+        <textarea id="ex-instr" oninput="upCfg('Instructions',this.value)" placeholder="Optional exam instructions..."></textarea>
+      </div>
+
+      <!-- Domain Percentages -->
+      <div class="fg" style="background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <label style="margin:0">Domains <span class="req">*</span> <span id="dp-total" class="dp-total">(0%)</span></label>
+          <button type="button" class="btn btn-p btn-xs" onclick="addDP()">+ Add</button>
+        </div>
+        <div id="dp-list"></div>
+      </div>
+
+      <div class="fg-cb">
+        <input type="checkbox" id="ex-cat" onchange="upCfg('EnableCAT',this.checked)">
+        <label for="ex-cat">Enable CAT (Adaptive Testing)</label>
+      </div>
+      <div class="fg-cb">
+        <input type="checkbox" id="ex-nav" onchange="upCfg('BackNavigation',this.checked)">
+        <label for="ex-nav">Allow Back Navigation</label>
+      </div>
+    </div>
+
+    <!-- QUESTION LIST -->
+    <div class="s-section">
+      <div class="s-hdr">
+        <span id="q-count">Questions (0)</span>
+        <button class="btn btn-p btn-sm" onclick="addQ()">+ Add</button>
+      </div>
+      <div class="q-list" id="q-list"></div>
+    </div>
+  </aside>
+
+  <!-- EDITOR -->
+  <section class="editor">
+    <div id="empty" class="empty">
+      <h2>No Question Selected</h2>
+      <p>Select a question from the sidebar or click "+ Add" to create one.</p>
+    </div>
+
+    <div id="q-editor" class="editor-card hidden">
+      <div class="editor-hdr">
+        <h2>Edit Question</h2>
+        <button class="btn btn-d btn-sm" onclick="delQ()">Delete</button>
+      </div>
+
+      <div class="fg-row">
+        <div class="fg">
+          <label>Domain of Knowledge</label>
+          <select id="q-dom" onchange="upQ('DomainOfKnowledge',this.value)"></select>
+        </div>
+        <div class="fg">
+          <label>Difficulty Level</label>
+          <select id="q-diff" onchange="upQ('difficultyLevel',parseInt(this.value))">
+            <option value="1">1 — Fundamental</option>
+            <option value="2">2 — Beginner</option>
+            <option value="3">3 — Novice</option>
+            <option value="4">4 — Intermediate</option>
+            <option value="5">5 — Proficient</option>
+            <option value="6">6 — Advanced</option>
+            <option value="7">7 — Hard</option>
+            <option value="8">8 — Very Hard</option>
+            <option value="9">9 — Expert</option>
+            <option value="10">10 — Insanely Hard</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Question Text <span class="req">*</span></label>
+        <textarea id="q-txt" oninput="upQ('Question',this.value)" placeholder="Enter your question here..."></textarea>
+      </div>
+
+      <div class="fg">
+        <label>Choices — select the correct answer <span class="req">*</span></label>
+        <div id="ch-con"></div>
+        <button type="button" class="btn btn-p btn-sm" style="margin-top:8px" onclick="addCh()">+ Add Choice</button>
+      </div>
+
+      <div class="fg">
+        <label>Explanation <span class="req">*</span></label>
+        <textarea id="q-expl" oninput="upQ('Explanation',this.value)" placeholder="Explain why the answer is correct..."></textarea>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+/* DARK MODE */
+function toggleDark(){const h=document.documentElement,d=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',d);document.querySelector('.dm-btn').textContent=d==='dark'?'🌙':'☀';try{localStorage.setItem('builder-theme',d)}catch(e){}}
+try{const t=localStorage.getItem('builder-theme');if(t){document.documentElement.setAttribute('data-theme',t);document.querySelector('.dm-btn').textContent=t==='dark'?'🌙':'☀'}}catch(e){}
+
+let ED={"Exam Name":"New Exam","EnableCAT":false,"minQuestions":10,"maxQuestions":30,"percentPass":70,"Number of Questions":50,"Default Time":0,"BackNavigation":false,"Instructions":"","DomainPercentages":{},"Questions":[]};
+let CQI=-1;
+renderCfg();renderQL();showEditor();
+
+function renderCfg(){
+  document.getElementById('ex-name').value=ED["Exam Name"]||'';
+  document.getElementById('ex-total').value=ED["Number of Questions"]||0;
+  document.getElementById('ex-pass').value=ED["percentPass"]||0;
+  ED["maxQuestions"]=ED["Number of Questions"];
+  document.getElementById('ex-min').value=ED["minQuestions"]||0;
+  document.getElementById('ex-max').value=ED["maxQuestions"]||0;
+  document.getElementById('ex-time').value=ED["Default Time"]||0;
+  document.getElementById('ex-instr').value=ED["Instructions"]||'';
+  document.getElementById('ex-cat').checked=!!ED["EnableCAT"];
+  document.getElementById('cat-row').classList.toggle('hidden',!ED["EnableCAT"]);
+  document.getElementById('ex-nav').checked=!!ED["BackNavigation"];
+  renderDP();
+}
+
+/* XSS-SAFE Domain Percentages */
+function renderDP(){
+  const list=document.getElementById('dp-list');list.innerHTML='';
+  if(!ED["DomainPercentages"])ED["DomainPercentages"]={};
+  Object.entries(ED["DomainPercentages"]).forEach(([dom,pct])=>{
+    const row=document.createElement('div');row.className='dp-row';
+    const ni=document.createElement('input');ni.type='text';ni.value=dom;ni.placeholder='Domain name';
+    ni.addEventListener('change',function(){updateDN(dom,this.value)});
+    const pi=document.createElement('input');pi.type='number';pi.value=pct;pi.min=0;pi.max=100;
+    pi.addEventListener('input',function(){updateDPct(dom,parseInt(this.value)||0)});
+    const db=document.createElement('button');db.type='button';db.className='btn btn-d btn-icon';db.textContent='✕';
+    db.addEventListener('click',function(){delete ED["DomainPercentages"][dom];renderDP()});
+    row.append(ni,pi,db);list.appendChild(row);
+  });
+  updDPTotal();
+}
+
+function updDPTotal(){
+  let t=0;for(const k in ED["DomainPercentages"]||{})t+=ED["DomainPercentages"][k];
+  const l=document.getElementById('dp-total');l.textContent='('+t+'%)';l.style.color=t>100?'var(--dan)':'var(--t3)';
+}
+function updateDN(old,nw){old=(old||'').trim();nw=(nw||'').trim();if(old===nw||!nw)return;const p=ED["DomainPercentages"][old];delete ED["DomainPercentages"][old];ED["DomainPercentages"][nw]=p;if(ED.Questions)ED.Questions.forEach(q=>{if(q.DomainOfKnowledge&&q.DomainOfKnowledge.trim()===old)q.DomainOfKnowledge=nw});renderDP();renderQL();showEditor()}
+function updateDPct(d,p){ED["DomainPercentages"][d]=p;updDPTotal()}
+function addDP(){if(!ED["DomainPercentages"])ED["DomainPercentages"]={};let s=0;for(const k in ED["DomainPercentages"])s+=ED["DomainPercentages"][k];let r=Math.max(0,100-s),n="New Domain",c=1;while(ED["DomainPercentages"].hasOwnProperty(n)){n="New Domain "+c;c++}ED["DomainPercentages"][n]=r;renderDP()}
+
+function upCfg(k,v){
+  if(k==='minQuestions'){const mx=ED.maxQuestions||ED["Number of Questions"]||0;v=Math.max(1,Math.min(v,mx));document.getElementById('ex-min').value=v}
+  if(k==='percentPass'&&v>100){v=100;document.getElementById('ex-pass').value=100}
+  ED[k]=v;
+  if(k==='Number of Questions'){ED.maxQuestions=v;document.getElementById('ex-max').value=v;if(ED.EnableCAT&&(ED.minQuestions||0)>v){ED.minQuestions=v;document.getElementById('ex-min').value=v}}
+  if(k==='EnableCAT')document.getElementById('cat-row').classList.toggle('hidden',!v);
+}
+
+/* XSS-SAFE Question List */
+function renderQL(){
+  const list=document.getElementById('q-list');list.innerHTML='';
+  const cnt=ED.Questions.length;
+  document.getElementById('q-count').textContent='Questions ('+cnt+')';
+  const frag=document.createDocumentFragment();
+  ED.Questions.forEach((q,i)=>{
+    const el=document.createElement('div');el.className='qi'+(i===CQI?' active':'');
+    el.addEventListener('click',()=>selQ(i));
+    const top=document.createElement('div');top.className='qi-top';
+    const st=document.createElement('strong');st.textContent='Q'+(i+1);
+    const tag=document.createElement('span');tag.className='qi-tag';tag.textContent=(q.difficultyLevel||1)+' · '+(q.DomainOfKnowledge||'No Domain');
+    top.append(st,tag);
+    const prev=document.createElement('div');prev.className='qi-prev';prev.textContent=q.Question||'(empty question)';
+    el.append(top,prev);frag.appendChild(el);
+  });
+  list.appendChild(frag);
+}
+
+function addQ(){
+  if(!ED["DomainPercentages"]||Object.keys(ED["DomainPercentages"]).length===0){ED["DomainPercentages"]={"General":100};renderDP()}
+  const fd=Object.keys(ED["DomainPercentages"])[0]||"General";
+  ED.Questions.push({DomainOfKnowledge:fd,Question:"",Choices:["",""],AnswerKey:"",Explanation:"",difficultyLevel:1});
+  selQ(ED.Questions.length-1);renderQL();
+}
+function selQ(i){CQI=i;renderQL();showEditor()}
+function delQ(){if(CQI>-1&&confirm('Delete this question?')){ED.Questions.splice(CQI,1);CQI=-1;renderQL();showEditor()}}
+
+/* XSS-SAFE Editor */
+function showEditor(){
+  const ed=document.getElementById('q-editor'),em=document.getElementById('empty');
+  if(CQI===-1||!ED.Questions[CQI]){ed.classList.add('hidden');em.classList.remove('hidden');return}
+  ed.classList.remove('hidden');em.classList.add('hidden');
+  const q=ED.Questions[CQI];
+
+  const ds=document.getElementById('q-dom');ds.innerHTML='';
+  const avail=Object.keys(ED["DomainPercentages"]||{});const cur=q.DomainOfKnowledge||'';
+  avail.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;ds.appendChild(o)});
+  if(cur&&!avail.includes(cur)){const o=document.createElement('option');o.value=cur;o.textContent=cur+' (Not in Settings)';ds.appendChild(o)}
+  ds.value=cur;
+
+  document.getElementById('q-diff').value=q.difficultyLevel||1;
+  document.getElementById('q-txt').value=q.Question||'';
+  document.getElementById('q-expl').value=q.Explanation||'';
+
+  const cc=document.getElementById('ch-con');cc.innerHTML='';
+  q.Choices.forEach((ch,i)=>{
+    const row=document.createElement('div');row.className='ch-row';
+    const radio=document.createElement('input');radio.type='radio';radio.name='answer';radio.id='ans-'+i;
+    radio.checked=!!(q.AnswerKey!==''&&q.AnswerKey===ch&&ch.trim()!=='');
+    radio.addEventListener('change',()=>upAns(i));
+    const txt=document.createElement('input');txt.type='text';txt.id='ch-'+i;txt.placeholder='Choice '+(i+1);txt.value=ch;
+    txt.addEventListener('input',function(){upCh(i,this.value)});
+    const del=document.createElement('button');del.type='button';del.className='btn btn-d btn-icon';del.textContent='✕';del.title='Remove';
+    del.addEventListener('click',()=>rmCh(i));
+    row.append(radio,txt,del);cc.appendChild(row);
+  });
+}
+
+function addCh(){if(CQI>-1){ED.Questions[CQI].Choices.push("");showEditor()}}
+function rmCh(i){if(CQI>-1){ED.Questions[CQI].Choices.splice(i,1);showEditor()}}
+function upQ(k,v){if(CQI>-1){ED.Questions[CQI][k]=v;if(['Question','DomainOfKnowledge','difficultyLevel'].includes(k))renderQL()}}
+function upCh(i,v){if(CQI>-1){const q=ED.Questions[CQI];const wa=document.getElementById('ans-'+i).checked;q.Choices[i]=v;if(wa)q.AnswerKey=v}}
+function upAns(i){if(CQI>-1)ED.Questions[CQI].AnswerKey=document.getElementById('ch-'+i).value}
+
+function exportExam(){
+  if(!ED["Exam Name"]||!ED["Exam Name"].trim()){alert("Exam Name is required.");return}
+  const rq0=ED["Number of Questions"];if(rq0<=0){alert("Questions per Test must be > 0.");return}
+  const tot=ED.Questions.length;if(!tot){alert("Add at least one question.");return}
+  for(let i=0;i<tot;i++){const q=ED.Questions[i];
+    if(!q.Question||!q.Question.trim()){alert("Q"+(i+1)+": question text is empty.");selQ(i);return}
+    const vc=q.Choices.filter(c=>c&&c.trim());
+    if(vc.length<2){alert("Q"+(i+1)+": needs at least 2 choices.");selQ(i);return}
+    if(!q.AnswerKey||!q.AnswerKey.trim()||!vc.includes(q.AnswerKey)){alert("Q"+(i+1)+": select a correct answer.");selQ(i);return}
+    if(!q.Explanation||!q.Explanation.trim()){alert("Q"+(i+1)+": explanation is required.");selQ(i);return}
+  }
+  if(ED.percentPass<=0||ED.percentPass>100){alert("Passing % must be 1–100.");return}
+  let rq=rq0;
+  if(ED.EnableCAT){if(ED.minQuestions<=0){alert("CAT Min Questions must be > 0.");return}if(ED.maxQuestions<ED.minQuestions){alert("CAT Max < Min.");return}rq=ED.maxQuestions}
+  if(tot<rq){alert("Need at least "+rq+" questions in the file (have "+tot+").");return}
+  const clean=JSON.parse(JSON.stringify(ED));
+  clean.Questions.forEach(q=>{q.Choices=q.Choices.filter(c=>c&&c.trim())});
+  const a=document.createElement('a');a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(clean,null,4));
+  a.download=(clean["Exam Name"].replace(/[^a-z0-9]/gi,'_').toLowerCase()||'exam')+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+}
+
+document.getElementById('imp-file').addEventListener('change',function(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=function(e){try{
+    const p=JSON.parse(e.target.result);
+    if(!p.Questions||!Array.isArray(p.Questions)){alert("Invalid JSON: 'Questions' missing.");return}
+    p.Questions.forEach(q=>{if(q&&'Explaination' in q){q.Explanation=q.Explaination;delete q.Explaination}});
+    ED=p;CQI=-1;renderCfg();renderQL();showEditor();
+  }catch(err){alert("JSON error: "+err.message)}};
+  r.readAsText(f);ev.target.value=null;
+});
+</script>
+</body>
+</html>
