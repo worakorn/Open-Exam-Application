@@ -12626,15 +12626,15 @@
         },
         {
             "DomainOfKnowledge": "Domain 3: Access Controls Concepts",
-            "Question": "A new Multi-Factor Authentication (MFA) policy requires employees to use both a Time-based One-Time Password (TOTP) from an authenticator app and a separate challenge-response code derived from a set of security questions only the user should know. Why is this specific combination considered a weak implementation of true MFA?",
+            "Question": "An organization implements a login policy requiring employees to enter both their standard account password and a response to a pre-set security question. Why is this specific combination considered a weak implementation of Multi-Factor Authentication (MFA)?",
             "Choices": [
-                "Both factors are susceptible to replay attacks if network traffic is intercepted.",
-                "Both factors are classified as 'Something You Know,' failing the distinct category rule.",
-                "The authenticator app is a Possession factor, but the security questions are Knowledge factors, resulting in single-factor security.",
-                "TOTP codes are easily compromised via phishing, weakening the overall security."
+                "Both factors are classified as 'Something You Know,' failing the rule that MFA must use distinct categories.",
+                "Security questions are considered an Inherence ('Something You Are') factor, which conflicts with passwords.",
+                "A password is a Possession factor, so combining it with a security question results in single-factor security.",
+                "This combination relies entirely on physical hardware, making it vulnerable to equipment failure."
             ],
-            "AnswerKey": "Both factors are classified as 'Something You Know,' failing the distinct category rule.",
-            "Explaination": "The security questions (answers only the user knows) are a Knowledge factor. The PIN/password used to unlock the TOTP app is also often a Knowledge factor, or the challenge/response itself relies on shared knowledge. For strong MFA, factors must come from two distinct categories (Know, Have, Are). Using two methods that rely on memorized secrets from the same category is insufficient for robust MFA."
+            "AnswerKey": "Both factors are classified as 'Something You Know,' failing the rule that MFA must use distinct categories.",
+            "Explanation": "For Multi-Factor Authentication to be effective, it must combine factors from different categories: what you know (passwords/PINs), what you have (tokens/devices), or what you are (biometrics). Because both a standard password and security questions rely entirely on memorized secrets, they belong to the same 'Something You Know' category, failing to provide true multi-factor security."
         },
         {
             "DomainOfKnowledge": "Domain 3: Access Controls Concepts",

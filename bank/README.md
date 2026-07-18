@@ -17,7 +17,7 @@ The JSON format allows for a comprehensive definition of an exam, including its 
     "Instructions": "Welcome to the exam! Please read each question carefully. Good luck!",
     "BackNavigation": true, // Optional: true (default) or false. If false, the 'Back' button is disabled during the exam.
     
-    // CAT Engine configuration (exam-next.html only)
+    // CAT Engine configuration (integrated in exam.html v3.1+)
     "EnableCAT": true,
     "minQuestions": 10,
     "maxQuestions": 30,
@@ -72,7 +72,7 @@ The JSON format allows for a comprehensive definition of an exam, including its 
     *   If set to `false`, the "Back" button will be disabled during the exam, preventing users from returning to previously answered questions.
     *   If set to `true` or if the field is omitted, back navigation is allowed (default behavior).
 *   **`EnableCAT`**: (Boolean, Optional)
-    Required for `exam-next.html` to run in Computerized Adaptive Testing mode. If true, the system dynamically scales difficulty based on history.
+    Required for `exam.html` (v3.1+) to run in Computerized Adaptive Testing mode. If true, the system dynamically scales difficulty based on history.
 *   **`minQuestions`** / **`maxQuestions`**: (Integer, Optional)
     Used only when CAT is enabled. Represents the minimum number of questions to ask before stopping rules can trigger, and the absolute maximum number of questions allowable.
 *   **`percentPass`**: (Integer, Optional)
@@ -95,7 +95,7 @@ The JSON format allows for a comprehensive definition of an exam, including its 
     *   **`Explanation`**: (String, Required)
         An explanation for why the `AnswerKey` is correct. This is shown during the review. *(Note: The legacy spelling `Explaination` is also fully supported for backwards compatibility).*
     *   **`difficultyLevel`**: (Integer, Optional)
-        Used specifically by `exam-next.html` for CAT processing. Integer 1-10 where 1 is the easiest (Fundamental) and 10 is the hardest (Insanely Hard).
+        Used by `exam.html` (v3.1+) for CAT processing. Integer 1-10 where 1 is the easiest (Fundamental) and 10 is the hardest (Insanely Hard).
 
 ## Application Behavior Notes
 

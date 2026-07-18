@@ -3,8 +3,9 @@
 ## Version 3.1 (Current)
 **Files:** `exam.html` (436 lines), `exam-builder.html` (441 lines)
 **Date:** 2026-05-20
+**Developer:** bank4500 (Aj. Bank)
 
-**Summary:** Complete rewrite combining exam.html (v1.9.2) and exam-next.html (v2.0.1) into a unified, security-hardened application with ISC² CISSP theming, integrated CAT engine, dark mode, responsive mobile/tablet design, and zero dead code.
+**Summary:** A ground-up complete rewrite and modernization driven by Aj. Bank. This milestone release consolidates the classic standard test engine (`exam.html` v1.9.2) and the advanced computerized adaptive testing engine (`exam-next.html` v2.0.1) into a single, high-performance, responsive HTML file (`exam.html`). Legacy code was moved to the `legacy/` directory, reducing the application's overall code footprint by over 80% while introducing security hardening (CSP headers, XSS prevention, URL validation), native dark mode support, and a complete UI overhaul matching the ISC² CISSP design language.
 
 ### Key Features & Enhancements
 

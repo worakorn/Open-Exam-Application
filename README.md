@@ -1,90 +1,82 @@
-# Open Exam Application
+# 🎓 Open Exam Application
 
-## Introduction
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-3.1--CISSP-green.svg)](#)
+[![Offline Capability](https://img.shields.io/badge/offline-100%25-blue.svg)](#)
 
-The "Open Exam Application" is a standalone, offline-capable exam system built entirely within single HTML files. It provides a highly flexible platform for creating and taking multiple-choice exams with timed tests, advanced configuration, Computerized Adaptive Testing (CAT), and immediate detailed results with performance analytics.
+A standalone, offline-capable exam system built entirely within single HTML files. Crafted with vanilla HTML, CSS, and JavaScript, it provides a highly flexible platform for creating, customizing, and taking multiple-choice exams.
 
-**Current Version: v3.1 — CISSP Edition with CAT + Dark Mode**
+Featuring timed tests, advanced user-driven configurations, Computerized Adaptive Testing (CAT), and in-depth performance analytics.
 
-| File | Description |
-|------|-------------|
-| `exam.html` | Main exam application (v3.1) — ISC² CISSP themed, CAT engine, dark mode |
-| `exam-builder.html` | Exam authoring tool (v3.1) — Create and edit JSON exam files |
-| `bank/` | Collection of pre-built exam JSON files (CISSP, CC, PDPA, etc.) |
+---
 
-> **Note:** Previous versions (`exam.html` v1.9.2 and `exam-next.html` v2.0.1) have been superseded by the unified v3.1 release which combines and improves all features from both.
+## 🌟 Key Contributors
 
-## Features
+This application is co-authored and maintained by:
 
-### Core Exam Features
-- **Single File Portability:** Entire application in one HTML file — fully offline, zero external dependencies
-- **Custom Exam Files (JSON):** Load from local file, URL, or use built-in demo
-- **Advanced Setup:** Default, Quick Start, or Custom Domain selection modes
-- **Configurable Timer:** Optional time limit with per-question time warnings
-- **Back Navigation:** Configurable forward-only or free navigation
-- **Progress Tracking:** Visual progress bar with question counter
+*   **Worakorn Kuruwongwattana** (Original Creator) — LinkedIn: [kworakorn](https://www.linkedin.com/in/kworakorn/)
+*   **bank4500 (Aj. Bank)** (Core Contributor) — Architected the unified **v3.1 CISSP Edition**, consolidated the Stable/CAT engines, established strict CSP & XSS safety patterns, and built the responsive dark mode interface.
 
-### Computer Adaptive Testing (CAT)
-- **CISSP-Style Adaptive Difficulty:** 10-level difficulty scale (Fundamental → Insanely Hard)
-- **Sliding Window Algorithm:** 3-question window adjusts difficulty based on recent performance
-- **Smart Stopping Criteria:** Early pass, early fail, mastery detection, max questions
-- **Domain Balancing:** Ensures balanced coverage across knowledge domains
-- **Real-Time Analytics:** Live difficulty indicator and score tracking during exam
+---
 
-### Performance Analytics
-- **Confidence Score:** Rewards fast, correct answers — measures test-taking confidence
-- **Domain Breakdown:** Results sorted best-to-worst by knowledge domain
-- **Review System:** Review correct, incorrect, and unanswered questions with explanations
+## 🚀 Version 3.1 — CISSP Edition with CAT + Dark Mode
 
-### Security & Quality
-- **CSP Headers:** Content Security Policy restricting script/style sources
-- **XSS-Safe DOM:** All user data rendered via textContent — zero innerHTML injection
-- **URL Sanitization:** Protocol validation, localhost blocking
-- **Data Integrity:** JSON schema validation, AnswerKey verification, duplicate question detection
-- **Dead Code Free:** Audited and cleaned — no unused CSS, JS functions, or polyfills
+The latest release merges the stable fixed-length exam features and the cutting-edge Computerized Adaptive Testing (CAT) engines into a single, high-performance, responsive HTML file (`exam.html`), deprecating all previous dual-file setups.
 
-### User Experience
-- **Dark Mode:** Toggle with persistent preference (localStorage)
-- **Keyboard Shortcuts:** 1-9 select choices, Enter advances/submits
-- **Mobile/Tablet Responsive:** 3 breakpoints (768/600/374px), iOS zoom fix, touch-safe hover, 48px tap targets
-- **Mobile-Safe File Input:** Uses native `<label for="">` pattern — works reliably on all mobile browsers including iOS Safari
-- **Page Close Guard:** Prevents accidental tab close during exam
-- **Accessible:** Focus-visible rings for keyboard navigation
-- **Print-Friendly:** Clean results page for Ctrl+P
+| File | Type | Description |
+| :--- | :--- | :--- |
+| **[`exam.html`](./exam.html)** | Web App | Main exam application — ISC² CISSP themed, CAT engine, dark mode, zero dependencies. |
+| **[`exam-builder.html`](./exam-builder.html)** | Authoring | Exam builder tool — Visual editor to create, configure, and export JSON exam banks. |
+| **[`bank/`](./bank/)** | Directory | Collection of pre-built exam JSON banks (CISSP, CC, PDPA, etc.). |
+| **[`legacy/`](./legacy/)** | Directory | Superseded standalone versions (`exam.html` v1.9.2 and `exam-next.html` v2.0.1) kept for reference. |
 
-### Exam Builder
-- **Visual Editor:** Create questions with domain, difficulty, choices, and explanations
-- **Sectioned Sidebar Layout:** Settings section and question list clearly separated with proper spacing
-- **CAT Configuration:** Set min/max questions, pass percentage, enable adaptive mode
-- **Domain Percentage Setup:** Configure proportional question distribution with live total indicator
-- **Import/Export:** Load existing JSON files and export validated exam packs
-- **XSS-Safe:** All rendering via safe DOM construction (textContent + createElement)
-- **Dark Mode + Responsive:** Matching theme system, 3 breakpoints (900/768/480px)
+---
 
-## How to Use
+## ✨ Features
 
-1. **Download** the `exam.html` file
-2. **Open** in any modern browser (Chrome, Firefox, Edge, Safari)
-3. **Load an exam** via URL, local file, or built-in demo
-4. **Configure** your preferred setup mode
-5. **Take the exam** — answer questions, navigate with buttons or keyboard
-6. **View results** — score, confidence, domain breakdown
-7. **Review** — check explanations for incorrect/unanswered questions
+### 📦 Core Exam Engine
+*   **Single-File Portability:** Runs entirely in the browser with no server, CDNs, or Google Fonts dependencies. Fully offline-first.
+*   **Custom Exam Loader:** Drag and drop or browse any local JSON exam file, or load it from a remote URL.
+*   **Advanced Exam Setup:** Choose from **Default Settings**, **Quick Start** (random selection), or **Custom Selection** (by specific knowledge domains).
+*   **Adaptive Navigation Control:** Supports backward-compatible forward-only or free-navigation mode (`BackNavigation` property).
+*   **Keyboard Accessibility:** Full keyboard navigation (1-9 to select choices, Enter to submit/advance) and focus indicators.
 
-## Exam JSON Format
+### 🎯 Computer Adaptive Testing (CAT)
+*   **CISSP-Style Difficulty Scaling:** Implements a 10-level difficulty scale (Fundamental to Insanely Hard) adapting to performance in real time.
+*   **Sliding Window Algorithm:** Evaluates the last 3 questions to dynamically step difficulty up, down, or maintain.
+*   **Smart Stopping Criteria:** Exam terminates dynamically upon mastery verification, early fail prediction, or maximum question cap.
+*   **Topic Balancing:** Prioritizes under-represented domains in selection to ensure comprehensive coverage.
 
-See **[bank/README.md](./bank/README.md)** for the detailed JSON schema including CAT configuration fields.
+### 📊 Performance & Review Analytics
+*   **Confidence Score:** Evaluates answering speed versus accuracy to calculate a test-taking confidence rating.
+*   **Domain Analysis:** Immediate breakdown of performance sorted best-to-worst by knowledge domain.
+*   **Targeted Review:** Filter and review correct, incorrect, or unanswered questions, including written rationales and explanations.
 
-## Disclaimer
+### 🔒 Security & Quality Hardening
+*   **Strict Content Security Policy (CSP):** Header limits execution to `self` + `unsafe-inline` scripts and styles only.
+*   **XSS Protection:** Direct DOM node creation (`textContent` and `createElement`) ensures absolute immunity to HTML injections.
+*   **Data Integrity Check:** Schema validator checks default timers, question counts, and verifies that `AnswerKey` exactly matches choice options.
+*   **Optimized Footprint:** Clean code with zero unused functions, variables, or polyfills (code reduced by >80%).
 
-**This software is 100% AI-generated.** While extensively tested and hardened, there are no guarantees of perfect functionality. This project is intended primarily for educational purposes. See the Terms of Use within the application for full details.
+---
 
-## Contact
+## 🛠️ How to Use
 
-- **Author:** Worakorn Kuruwongwattana
-- **LinkedIn:** [https://www.linkedin.com/in/kworakorn/](https://www.linkedin.com/in/kworakorn/)
-- **Repository:** [https://github.com/worakorn/Open-Exam-Application](https://github.com/worakorn/Open-Exam-Application)
+1.  **Download** [`exam.html`](./exam.html) and [`exam-builder.html`](./exam-builder.html).
+2.  **Open** either file directly in any modern browser.
+3.  **Load a JSON bank** by browsing a local file, inserting a URL, or testing the built-in **CISSP Demo Exam**.
+4.  **Configure** your exam type and start taking questions.
+5.  **Review** results, domain metrics, and detailed question explanations.
 
-## Contributors
+---
 
-- **bank4500 (Aj. Bank)** — Contributed 30+ bug fixes and major feature implementations across v1.9.1 through v3.1, including security hardening, CAT integration, dark mode, mobile responsive design, data integrity layer, dead code cleanup, and keyboard accessibility.
+## 📂 Custom Exam Banks
+
+Create, edit, and export custom test banks using the visual editor in **`exam-builder.html`**. 
+For details on the underlying schema and fields, see the **[bank/README.md](./bank/README.md)** documentation.
+
+---
+
+## ⚖️ Disclaimer
+
+**This software is 100% AI-generated.** While carefully structured, tested, and security-hardened, it is provided "as is" without warranty of any kind. Please refer to the in-app *Terms of Use* footer section for licenses, modifications, and usage policies.
